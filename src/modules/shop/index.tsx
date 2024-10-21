@@ -2,11 +2,15 @@ import { useGetProducts } from '@/apis'
 import { useGetPrice } from '@/apis/price'
 import { Button } from '@/components/common/Button'
 import { BSC, USDT } from '@/components/icons'
-import { cn } from '@/utils'
+import { SHOP_PAYMENT_ADDRESS, cn } from '@/utils'
 import { ShoppingCartIcon, XMarkIcon } from '@heroicons/react/16/solid'
 import { useCartState } from './states'
+import { toast } from 'react-toastify'
+import { useAccount, useWatchContractEvent } from 'wagmi'
+import { SHOP_PAYMENT_ABI } from '@/abi/shopPayment'
 
 export const ShopPage = () => {
+  const { address } = useAccount()
   const { add, remove, itemList } = useCartState()
   const idsList = new Set(itemList.map((item) => item.product_id))
 
@@ -14,6 +18,20 @@ export const ShopPage = () => {
   const { data: products } = useGetProducts({
     params: { page: 1 },
     options: { enabled: true }
+  })
+
+  useWatchContractEvent({
+    address: SHOP_PAYMENT_ADDRESS,
+    abi: SHOP_PAYMENT_ABI,
+    eventName: 'OrderCreated',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onLogs(logs: any) {
+      const args = logs[0].args
+      if (args.buyer === address) {
+        console.log('New logs!', logs)
+        toast.info('Payment success')
+      }
+    }
   })
 
   return (

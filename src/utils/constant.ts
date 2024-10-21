@@ -81,3 +81,10 @@ export type TokenOption = (typeof TOKENS)[number]
 
 export const LOGIN_MESSAGE =
   'Welcome to Yushaku! Please sign this message to verify account ownership.'
+
+// prettier-ignore
+export const TOPICS = {
+  ORDER_PAID: '0x48da3edde46115c63addf11fd46fbab76bbb24d17301d4befd6a8311e3c5dc49',
+  ORDER_CANCELLED: '0x4c8b41436ecae77f25d6995ace6a2e753636dac3c8ae00ff0160c745c03d06d1',
+  ORDER_DELIVERED: 'ORDER_DELIVERED',
+}
