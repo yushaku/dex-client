@@ -1,4 +1,4 @@
-import { Theme } from '@uniswap/widgets'
+// import { Theme } from '@uniswap/widgets'
 
 export const connectModalStyle = {
   '--ck-accent-text-color': '#ffffff',
@@ -11,20 +11,20 @@ export const connectModalStyle = {
   '--ck-tertiary-button-hover-background': '#2d3549'
 }
 
-export const uniTheme: Theme = {
-  primary: '#FFF',
-  secondary: '#E7E7E7',
-  interactive: '#3a78ff',
-  accent: '#3a78ff',
-  container: '#1e2431',
-  dialog: '#1e2431',
-  module: '#2d3549',
-  fontFamily: 'poppins',
-  deepShadow: '#fff',
-  borderRadius: {
-    large: 0.5,
-    medium: 0.5,
-    small: 0.5,
-    xsmall: 0.5
-  }
-}
+// export const uniTheme: Theme = {
+//   primary: '#FFF',
+//   secondary: '#E7E7E7',
+//   interactive: '#3a78ff',
+//   accent: '#3a78ff',
+//   container: '#1e2431',
+//   dialog: '#1e2431',
+//   module: '#2d3549',
+//   fontFamily: 'poppins',
+//   deepShadow: '#fff',
+//   borderRadius: {
+//     large: 0.5,
+//     medium: 0.5,
+//     small: 0.5,
+//     xsmall: 0.5
+//   }
+// }

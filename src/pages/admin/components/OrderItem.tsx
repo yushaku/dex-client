@@ -1,8 +1,8 @@
 import { OrderInfo, useDeleteOrders } from '@/apis'
+import { ConfirmModal } from '@/components/Modal'
 import { Button } from '@/components/common/Button'
 import { BSC, USDT } from '@/components/icons'
 import { Card } from '@/components/warper'
-import { ConfirmModal } from '@/modules/Shares'
 import { cn } from '@/utils'
 import { TrashIcon } from '@heroicons/react/16/solid'
 import { DateTime } from 'luxon'
@@ -13,7 +13,7 @@ type Props = {
   handleCancel: (_orderId: string) => void
 }
 
-export const HistoryItem = ({ item, handleCancel }: Props) => {
+export const OrderItem = ({ item, handleCancel }: Props) => {
   const { mutate: deleteOrders } = useDeleteOrders()
 
   const [payin] = useState<'usdt' | 'native'>('native')

@@ -6,7 +6,7 @@ import { routes } from '@/utils'
 import { CartList } from '../common/CartList'
 import createAvatar from '@/utils/avatar'
 import { MobileSidebar } from './MobileSidebar'
-import { ShopCartList } from '@/modules/shop/components/shopCartList'
+import { ShopCartList } from '@/pages/shop/components/shopCartList'
 
 type Props = {
   theme: string
@@ -109,5 +109,7 @@ const headTitle = {
   [routes.history]: 'History',
   [routes.nfts]: 'NFTs Marketplace',
   [routes.nftStudio]: 'NFTs Studio',
-  [routes.myNFTs]: 'Your NFTs Collection'
+  [routes.myNFTs]: 'Your NFTs Collection',
+  [routes.shop]: 'My store',
+  [routes.admin]: 'Admin Dashboard'
 }

@@ -6,10 +6,10 @@ import {
   BanknotesIcon,
   CalendarIcon,
   HomeIcon,
-  PaperClipIcon,
   PhotoIcon,
   ScissorsIcon,
   ShoppingBagIcon,
+  UserIcon,
   WalletIcon
 } from '@heroicons/react/16/solid'
 import { useEffect, useState } from 'react'
@@ -148,13 +148,13 @@ export const navlinks = [
     href: routes.history
   },
   {
-    icon: PaperClipIcon,
-    title: 'Bridge',
-    href: routes.bridge
-  },
-  {
     icon: ShoppingBagIcon,
     title: 'Shop',
     href: routes.shop
+  },
+  {
+    icon: UserIcon,
+    title: 'Admin',
+    href: routes.admin
   }
 ]

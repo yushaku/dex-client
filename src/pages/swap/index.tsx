@@ -1,5 +1,4 @@
 import { TOKENS, TokenOption } from '@/utils'
-import { Tab } from './tab'
 import { useState } from 'react'
 import {
   AdvancedRealTimeChart,
@@ -9,6 +8,7 @@ import {
   Timeline
 } from 'react-ts-tradingview-widgets'
 import { SelectToken } from '@/components/common/SelectToken'
+import { Tab } from '@/components/layout/tab'
 
 type Feature = 'chart' | 'analysis' | 'heatmap' | 'bubble' | 'news'
 const listFeature: Array<Feature> = [

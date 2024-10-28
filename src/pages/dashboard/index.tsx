@@ -2,13 +2,13 @@ import { ERC20_ABI } from '@/abi/erc20.ts'
 import { NativeBalance } from '@/components/common/NativeTokenBalance'
 import { USDT } from '@/components/icons'
 import { Card } from '@/components/warper'
-import { LogTX, YSK_ADDRESS, cn, shortenAddress } from '@/utils'
+import { YSK_ADDRESS, cn, shortenAddress } from '@/utils'
 import { useState } from 'react'
 import { Address, formatEther } from 'viem'
 import { useAccount, useEnsName, useReadContract } from 'wagmi'
-import { StakedValueLockChart } from './Chart'
-import { StakeForm } from './stakeForm'
-import { HelloGuy } from './Hello'
+import { StakedValueLockChart } from './components/Chart'
+import { HelloGuy } from './components/Hello'
+import { StakeForm } from './components/stakeForm'
 
 export const Dashboard = () => {
   const { address } = useAccount()
@@ -17,7 +17,6 @@ export const Dashboard = () => {
     stake: false,
     claim: false
   })
-  const [logs, setLogs] = useState<Array<LogTX>>([])
 
   const yskRes = useReadContract({
     abi: ERC20_ABI,
@@ -29,24 +28,10 @@ export const Dashboard = () => {
 
   const totalStaked = { data: 10000000n }
 
-  //
   // const totalStaked = useReadContract({
   //   abi: stakeModuleABI,
   //   address: STAKE_ADRESS,
   //   functionName: 'totalStakedAmount'
-  // })
-
-  // useWatchContractEvent({
-  //   address: YSK_ADDRESS,
-  //   abi: ERC20_ABI,
-  //   eventName: 'Transfer',
-  //   onLogs(logs) {
-  //     console.log('New logs!', logs)
-  //     setLogs((prev) => [...prev, ...logs])
-  //   },
-  //   onError(error) {
-  //     console.error('Error', error)
-  //   }
   // })
 
   return (
@@ -201,24 +186,24 @@ export const Dashboard = () => {
         </section>
       )}
 
-      <ul className={`${logs.length === 0 && 'hidden'} mt-10`}>
-        <li className="mb-5 text-xl font-bold">logs of transactions</li>
-        <li className="flex justify-between text-lg font-bold text-accent">
-          <span>From</span>
-          <span>To</span>
-          <span>value</span>
-        </li>
-
-        {logs.map((tx, index) => {
-          return (
-            <li key={index} className="flex justify-between text-gray-500">
-              <span>{shortenAddress(tx.args.from)}</span>
-              <span>{shortenAddress(tx.args.to)}</span>
-              <span>{formatEther(tx.args.value)}</span>
-            </li>
-          )
-        })}
-      </ul>
+      {/* <ul className={`${logs.length === 0 && 'hidden'} mt-10`}> */}
+      {/*   <li className="mb-5 text-xl font-bold">logs of transactions</li> */}
+      {/*   <li className="flex justify-between text-lg font-bold text-accent"> */}
+      {/*     <span>From</span> */}
+      {/*     <span>To</span> */}
+      {/*     <span>value</span> */}
+      {/*   </li> */}
+      {/**/}
+      {/*   {logs.map((tx, index) => { */}
+      {/*     return ( */}
+      {/*       <li key={index} className="flex justify-between text-gray-500"> */}
+      {/*         <span>{shortenAddress(tx.args.from)}</span> */}
+      {/*         <span>{shortenAddress(tx.args.to)}</span> */}
+      {/*         <span>{formatEther(tx.args.value)}</span> */}
+      {/*       </li> */}
+      {/*     ) */}
+      {/*   })} */}
+      {/* </ul> */}
 
       <StakedValueLockChart />
 

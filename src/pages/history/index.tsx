@@ -4,8 +4,8 @@ import { SHOP_PAYMENT_ADDRESS, TOPICS } from '@/utils'
 import { toast } from 'react-toastify'
 import { useAccount, useWatchContractEvent, useWriteContract } from 'wagmi'
 import { HistoryItem } from './components/HistoryItem'
-import { LoadingModal } from '../Shares/Modal/LoadingModal'
 import { useGetTx } from '@/hooks/useGetTx'
+import { LoadingModal } from '@/components/Modal'
 
 export const HistoryPage = () => {
   const { address } = useAccount()

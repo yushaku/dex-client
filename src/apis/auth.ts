@@ -5,7 +5,8 @@ import instance from './client'
 export async function checkUser(address?: string) {
   if (!address) return
 
-  const signedMessage = await signMessage(config, {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const signedMessage = await signMessage(config as any, {
     message: LOGIN_MESSAGE,
     account: address
   })

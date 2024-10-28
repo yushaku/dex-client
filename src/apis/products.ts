@@ -208,3 +208,20 @@ export const useDeleteOrders = () => {
     }
   })
 }
+
+const orderKeyAdmin = '/order/admin'
+export const useGetAllOrders = ({ params, options }: GetOrderProps) => {
+  return useQuery({
+    queryKey: [orderKeyAdmin, JSON.stringify(params)],
+    queryFn: async () => {
+      const res = await instance.get(orderKeyAdmin, {
+        params: {
+          page: params?.page || 1,
+          perPage: params?.perPage || 10
+        }
+      })
+      return res.data
+    },
+    ...options
+  })
+}

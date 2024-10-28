@@ -12,7 +12,8 @@ export const env = cleanEnv(import.meta.env, {
   VITE_GRAPHQL_CMS_TOKEN: str(),
   VITE_PINATA_KEY: str(),
   VITE_PINATA_SECRET: str(),
-  VITE_API_ENPOINT: str({ default: 'http://localhost:8080' })
+  VITE_API_ENPOINT: str({ default: 'http://localhost:8080' }),
+  VITE_ENV: str({ default: 'development' })
 })
 
 export const routes = {
@@ -24,11 +25,10 @@ export const routes = {
   nftLaunchpad: '/nfts/launchpad',
   vaults: '/vaults',
   history: '/history',
-  bridge: '/bridge',
+  admin: '/admin',
   dashboard: '/dashboard',
   shop: '/shop',
-  order: '/shop/order',
-  admin: '/admin'
+  order: '/shop/order'
 } as const
 
 export const GATEWAY_URL = 'https://ipfs.io/ipfs/'
