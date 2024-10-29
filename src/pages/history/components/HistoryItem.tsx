@@ -7,6 +7,7 @@ import { cn } from '@/utils'
 import { TrashIcon } from '@heroicons/react/16/solid'
 import { DateTime } from 'luxon'
 import { useState } from 'react'
+import { toast } from 'react-toastify'
 
 type Props = {
   item: OrderInfo
@@ -93,7 +94,11 @@ export const HistoryItem = ({ item, handleCancel }: Props) => {
               isPending={false}
               icon={TrashIcon}
               handleSubmit={() => {
-                deleteOrders([item.order_id])
+                deleteOrders([item.order_id], {
+                  onSuccess: async () => {
+                    toast.info('Deleted successfully')
+                  }
+                })
               }}
               isDisabled={item.status !== 'pending'}
             />

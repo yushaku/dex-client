@@ -1,11 +1,11 @@
 import { SHOP_PAYMENT_ABI } from '@/abi/shopPayment'
 import { useGetOrders } from '@/apis'
+import { LoadingModal } from '@/components/Modal'
+import { useGetTx } from '@/hooks/useGetTx'
 import { SHOP_PAYMENT_ADDRESS, TOPICS } from '@/utils'
 import { toast } from 'react-toastify'
 import { useAccount, useWatchContractEvent, useWriteContract } from 'wagmi'
 import { HistoryItem } from './components/HistoryItem'
-import { useGetTx } from '@/hooks/useGetTx'
-import { LoadingModal } from '@/components/Modal'
 
 export const HistoryPage = () => {
   const { address } = useAccount()

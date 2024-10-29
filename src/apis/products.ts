@@ -100,6 +100,7 @@ export const useGetAddresses = ({ params, options }: GetAddressProps) => {
 
 export type CreateOrder = {
   address_id: number
+  token_address: string
   products: Array<{
     product_id: number
     quantity: number
@@ -203,7 +204,6 @@ export const useDeleteOrders = () => {
       return res.data
     },
     onSuccess: async () => {
-      toast.info('Deleted successfully')
       await queryClient.invalidateQueries({ queryKey: [orderKey] })
     }
   })

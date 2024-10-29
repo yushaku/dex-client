@@ -11,6 +11,7 @@ import {
 import { useState } from 'react'
 import { useCartState } from '../states'
 import { PaymentForm } from './PaymemtForm'
+import { USDT } from '@/components/icons'
 
 export const ShopCartList = () => {
   const [toggle, setToggle] = useState(false)
@@ -83,10 +84,15 @@ export const ShopCartList = () => {
         </ul>
 
         <article className="absolute bottom-0 left-0 w-full bg-focus p-5">
-          <h3 className="mb-5 flex justify-between">
+          <h3 className="flex-center mb-5 gap-2">
             <span>Total:</span>
             <span className="text-xl font-bold text-lighterAccent">
               {bnbPrice ? totalBnb.toFixed(5) : <Spinner />} <NativeToken />
+            </span>
+            |
+            <span className="flex-center gap-2 text-xl font-bold text-lighterAccent">
+              {totalUsdt.toFixed(5)}
+              <USDT className="size-5" />
             </span>
           </h3>
 
