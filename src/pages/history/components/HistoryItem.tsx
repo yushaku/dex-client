@@ -108,7 +108,7 @@ export const HistoryItem = ({ item, handleCancel }: Props) => {
               variant="outline"
               className={cn(
                 'w-full hover:bg-red-400',
-                item.status === 'processing' ? 'block' : 'hidden'
+                item.status === 'paid' ? 'block' : 'hidden'
               )}
               icon={TrashIcon}
               onClick={() => handleCancel(item.order_id)}

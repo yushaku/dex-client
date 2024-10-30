@@ -139,9 +139,9 @@ export const useCreateOrder = () => {
 
 export type OrderStatus =
   | 'pending'
-  | 'processing'
+  | 'paid'
+  | 'delivering'
   | 'shipped'
-  | 'delivered'
   | 'cancelled'
 
 export type OrderInfo = {

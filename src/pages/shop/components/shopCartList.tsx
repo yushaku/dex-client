@@ -2,6 +2,8 @@ import { useGetPrice } from '@/apis/price'
 import { Button } from '@/components/common/Button'
 import { Spinner } from '@/components/common/Loading'
 import { NativeToken } from '@/components/common/NativeTokenBalance'
+import { USDT } from '@/components/icons'
+import { useCartState } from '@/stores'
 import { cn } from '@/utils'
 import {
   ShoppingBagIcon,
@@ -9,9 +11,7 @@ import {
   XMarkIcon
 } from '@heroicons/react/16/solid'
 import { useState } from 'react'
-import { useCartState } from '../states'
 import { PaymentForm } from './PaymemtForm'
-import { USDT } from '@/components/icons'
 
 export const ShopCartList = () => {
   const [toggle, setToggle] = useState(false)
@@ -30,6 +30,7 @@ export const ShopCartList = () => {
         icon={ShoppingBagIcon}
         title={itemList.length.toString()}
         onClick={() => setToggle(!toggle)}
+        className="text-sm font-semibold"
       />
 
       <div

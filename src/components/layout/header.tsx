@@ -7,6 +7,7 @@ import { CartList } from '../common/CartList'
 import createAvatar from '@/utils/avatar'
 import { MobileSidebar } from './MobileSidebar'
 import { ShopCartList } from '@/pages/shop/components/shopCartList'
+import { NotificationDropdown } from './Notification'
 
 type Props = {
   theme: string
@@ -42,6 +43,10 @@ export const Header = ({ theme, switchTheme }: Props) => {
 
         <span className={`${location.includes('shop') ? '' : 'hidden'}`}>
           <ShopCartList />
+        </span>
+
+        <span className="hidden md:block">
+          <NotificationDropdown />
         </span>
 
         <span className="hidden md:block">

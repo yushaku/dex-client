@@ -1,18 +1,21 @@
+import { SHOP_PAYMENT_ABI } from '@/abi/shopPayment'
 import { useGetProducts } from '@/apis'
 import { useGetPrice } from '@/apis/price'
 import { Button } from '@/components/common/Button'
 import { BSC, USDT } from '@/components/icons'
-import { SHOP_PAYMENT_ADDRESS, cn } from '@/utils'
+import { useGetTx } from '@/hooks/useGetTx'
+import { useCartState, useNotificationsState } from '@/stores'
+import { SHOP_PAYMENT_ADDRESS, TOPICS, cn } from '@/utils'
 import { ShoppingCartIcon, XMarkIcon } from '@heroicons/react/16/solid'
-import { useCartState } from './states'
 import { toast } from 'react-toastify'
-import { useAccount, useWatchContractEvent } from 'wagmi'
-import { SHOP_PAYMENT_ABI } from '@/abi/shopPayment'
+import { useWatchContractEvent } from 'wagmi'
 
 export const ShopPage = () => {
-  const { address } = useAccount()
+  // const { address } = useAccount()
   const { add, remove, itemList } = useCartState()
+  const { add: addNoti } = useNotificationsState()
   const idsList = new Set(itemList.map((item) => item.product_id))
+  const { transactionHref } = useGetTx()
 
   const { data: price } = useGetPrice({ params: { symbol: 'BNB' } })
   const { data: products } = useGetProducts({
@@ -23,13 +26,43 @@ export const ShopPage = () => {
   useWatchContractEvent({
     address: SHOP_PAYMENT_ADDRESS,
     abi: SHOP_PAYMENT_ABI,
-    eventName: 'OrderCreated',
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onLogs(logs: any) {
-      const args = logs[0].args
-      if (args.buyer === address) {
-        console.log('New logs!', logs)
-        toast.info('Payment success')
+      // const args = logs[0].args
+      console.log('New logs!', logs)
+
+      switch (logs[0].topics[0]) {
+        case TOPICS.ORDER_PAID:
+          addNoti({
+            txHash: logs[0].transactionHash,
+            title: 'Payment success',
+            description: 'Thanks for your purchase',
+            link: transactionHref(logs[0].transactionHash)
+          })
+          toast.info(
+            <a href={transactionHref(logs[0].transactionHash)}>
+              Payment success. Click here to view.
+            </a>
+          )
+          break
+
+        case TOPICS.ORDER_CANCELLED: {
+          addNoti({
+            txHash: logs[0].transactionHash,
+            title: 'Canceled order success',
+            description: 'You canceled order successfully',
+            link: transactionHref(logs[0].transactionHash)
+          })
+          toast.info(
+            <a href={transactionHref(logs[0].transactionHash)}>
+              Order canceled. Click here to view.
+            </a>
+          )
+          break
+        }
+
+        default:
+          break
       }
     }
   })

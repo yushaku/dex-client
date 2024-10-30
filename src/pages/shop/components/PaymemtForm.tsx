@@ -8,6 +8,7 @@ import { useGetPrice } from '@/apis/price'
 import { Button } from '@/components/common/Button'
 import { SelectPayToken } from '@/components/common/SelectPayToken'
 import { BSC, USDT } from '@/components/icons'
+import { useCartState } from '@/stores/shopCart'
 import { SHOP_PAYMENT_ADDRESS, ZERO_ADDRESS, cn } from '@/utils'
 import {
   Description,
@@ -24,7 +25,6 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { parseEther } from 'viem'
 import { useSendTransaction } from 'wagmi'
-import { useCartState } from '../states'
 import { AddressForm } from './AddressForm'
 
 type Step = 'address' | 'confirm'
