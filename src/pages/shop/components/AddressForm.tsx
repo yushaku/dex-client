@@ -59,7 +59,7 @@ export const AddressForm = ({ disabled = false }: { disabled?: boolean }) => {
       <Button
         onClick={() => setIsOpen(true)}
         title="Add new address"
-        className={cn('w-auto', disabled && 'hidden')}
+        className={cn('w-full', disabled && 'hidden')}
       />
 
       <Dialog

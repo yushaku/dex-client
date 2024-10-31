@@ -1,20 +1,60 @@
-import { OrderInfo, useDeleteOrders } from '@/apis'
-import { ConfirmModal } from '@/components/Modal'
+import { SHOP_PAYMENT_ABI } from '@/abi/shopPayment'
+import { OrderInfo, useDeliverOrders } from '@/apis'
 import { Button } from '@/components/common/Button'
 import { BSC, USDT } from '@/components/icons'
 import { Card } from '@/components/warper'
-import { cn } from '@/utils'
-import { TrashIcon } from '@heroicons/react/16/solid'
+import { SHOP_PAYMENT_ADDRESS, cn } from '@/utils'
+import { CheckCircleIcon, GiftIcon, TrashIcon } from '@heroicons/react/16/solid'
 import { DateTime } from 'luxon'
 import { useState } from 'react'
+import { toast } from 'react-toastify'
+import { useWriteContract } from 'wagmi'
 
 type Props = {
   item: OrderInfo
-  handleCancel: (_orderId: string) => void
 }
 
-export const OrderItem = ({ item, handleCancel }: Props) => {
-  const { mutate: deleteOrders } = useDeleteOrders()
+export const OrderItem = ({ item }: Props) => {
+  const { writeContract, isPending: isCallContract } = useWriteContract()
+  const { mutate: deliverOrders, isPending: isDelivering } = useDeliverOrders()
+
+  const handleForceCancel = (orderIds: Array<string>) => {
+    writeContract(
+      {
+        address: SHOP_PAYMENT_ADDRESS,
+        abi: SHOP_PAYMENT_ABI,
+        functionName: 'forceCancelOrder',
+        args: [orderIds]
+      },
+      {
+        onError: async (e) => {
+          const msg = e.message.includes('User rejected')
+            ? 'User denied transaction signature'
+            : 'Error: Transaction failed'
+          toast.error(msg)
+        }
+      }
+    )
+  }
+
+  const handleDelivered = (orderIds: Array<string>) => {
+    writeContract(
+      {
+        address: SHOP_PAYMENT_ADDRESS,
+        abi: SHOP_PAYMENT_ABI,
+        functionName: 'deliverOrder',
+        args: [orderIds]
+      },
+      {
+        onError: async (e) => {
+          const msg = e.message.includes('User rejected')
+            ? 'User denied transaction signature'
+            : 'Error: Transaction failed'
+          toast.error(msg)
+        }
+      }
+    )
+  }
 
   const [payin] = useState<'usdt' | 'native'>('native')
 
@@ -79,45 +119,53 @@ export const OrderItem = ({ item, handleCancel }: Props) => {
             })}
           </ul>
 
-          <div className="mt-4 flex gap-2">
+          <div
+            id="BUTTONS LIST FOR PAID ORDER"
+            className={cn(
+              'mt-4 hidden gap-2 ',
+              item.status === 'paid' && 'flex'
+            )}
+          >
             <Button
-              title="Perchase"
-              className={cn(
-                'w-full',
-                item.status === 'pending' ? 'block' : 'hidden'
-              )}
-              icon={TrashIcon}
-            />
-
-            <ConfirmModal
-              isPending={false}
-              icon={TrashIcon}
-              handleSubmit={() => {
-                deleteOrders([item.order_id])
-              }}
-              isDisabled={item.status !== 'pending'}
-            />
-
-            <Button
-              title="Cancel and refund order"
+              loading={isCallContract}
+              title="Cancel and refund"
               variant="outline"
-              className={cn(
-                'w-full hover:bg-red-400',
-                item.status === 'processing' ? 'block' : 'hidden'
-              )}
               icon={TrashIcon}
-              onClick={() => handleCancel(item.order_id)}
+              className={cn('w-full')}
+              onClick={() => handleForceCancel([item.order_id])}
             />
 
             <Button
-              title="Buy again <3"
-              variant="filled"
-              className={cn(
-                'w-full',
-                item.status === 'cancelled' ? 'block' : 'hidden'
-              )}
+              loading={isDelivering}
+              title="Shipping"
+              className={cn('w-full')}
+              icon={GiftIcon}
+              onClick={() => deliverOrders([item.order_id])}
+            />
+          </div>
+
+          <div
+            id="BUTTONS LIST FOR DELIVERING ORDER"
+            className={cn(
+              'mt-4 hidden gap-2 ',
+              item.status === 'delivering' && 'flex'
+            )}
+          >
+            <Button
+              loading={isCallContract}
+              title="Cancel and refund"
+              variant="outline"
               icon={TrashIcon}
-              onClick={() => handleCancel(item.order_id)}
+              className={cn('w-full')}
+              onClick={() => handleForceCancel([item.order_id])}
+            />
+
+            <Button
+              loading={isCallContract}
+              title="Delivered"
+              className={cn('w-full')}
+              icon={CheckCircleIcon}
+              onClick={() => handleDelivered([item.order_id])}
             />
           </div>
         </div>

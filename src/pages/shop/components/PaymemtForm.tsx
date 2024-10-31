@@ -326,7 +326,8 @@ const SelectAddress = ({
 
         <Button
           title="Next"
-          className={cn('grow')}
+          className={cn('w-full')}
+          disabled={!selected?.address_id}
           onClick={() => {
             if (!selected?.address_id) return
             setStep('confirm')

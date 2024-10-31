@@ -1,26 +1,45 @@
 import { useGetAllOrders } from '@/apis'
+import { NativeBalance } from '@/components/common/NativeTokenBalance'
+import { Tab } from '@/components/layout/tab'
 import { SHOP_PAYMENT_ADDRESS, env } from '@/utils'
+import { useMemo, useState } from 'react'
 import { useAccount } from 'wagmi'
 import { OnlyAdmin } from './components/OnlyAdmin'
 import { OrderItem } from './components/OrderItem'
-import { NativeBalance } from '@/components/common/NativeTokenBalance'
-import { Tab } from '@/components/layout/tab'
-import { useMemo, useState } from 'react'
+import { EmptyBox } from '@/components/common/EmptyBox'
 
 const listFeature = ['Paid', 'Shipping', 'Deliverd'] as const
 
 export const AdminPage = () => {
-  const [type, setType] = useState<(typeof listFeature)[number]>('Paid')
+  // GLOBAL STATE
   const { address } = useAccount()
 
-  const { data: orders } = useGetAllOrders({})
+  // LOCAL STATE
+  const [type, setType] = useState<(typeof listFeature)[number]>('Paid')
+  // const [selectToDiliver, setSelectToDiliver] = useState<Array<number>>([])
+
+  // API
+  const { data: orders } = useGetAllOrders({
+    params: {
+      page: 1,
+      perPage: 50
+    },
+    options: {
+      enabled: address === env.VITE_OWNER_ADDRESS
+    }
+  })
 
   const paiedOrders = useMemo(
-    () => orders?.data.filter((item) => item.status === 'processing'),
+    () => orders?.data.filter((item) => item.status === 'paid'),
     [orders]
   )
 
   const shippingOrders = useMemo(
+    () => orders?.data.filter((item) => item.status === 'delivering'),
+    [orders]
+  )
+
+  const shippedOrder = useMemo(
     () => orders?.data.filter((item) => item.status === 'shipped'),
     [orders]
   )
@@ -53,31 +72,30 @@ export const AdminPage = () => {
 
       <div className="mt-6 flex h-1/2">
         <Tab isOpen={type === 'Paid'}>
-          <ul className="grid grid-cols-3 gap-4">
+          <ul className="grid grid-cols-2 gap-4">
             {paiedOrders?.map((item) => {
-              return (
-                <OrderItem
-                  key={item.order_id}
-                  item={item}
-                  handleCancel={() => {}}
-                />
-              )
+              return <OrderItem key={item.order_id} item={item} />
             })}
           </ul>
+          <EmptyBox isShow={paiedOrders?.length === 0} />
         </Tab>
 
         <Tab isOpen={type === 'Shipping'}>
-          <ul className="grid grid-cols-3 gap-4">
+          <ul className="grid grid-cols-2 gap-4">
             {shippingOrders?.map((item) => {
-              return (
-                <OrderItem
-                  key={item.order_id}
-                  item={item}
-                  handleCancel={() => {}}
-                />
-              )
+              return <OrderItem key={item.order_id} item={item} />
             })}
           </ul>
+          <EmptyBox isShow={shippingOrders?.length === 0} />
+        </Tab>
+
+        <Tab isOpen={type === 'Deliverd'}>
+          <ul className="grid grid-cols-2 gap-4">
+            {shippedOrder?.map((item) => {
+              return <OrderItem key={item.order_id} item={item} />
+            })}
+          </ul>
+          <EmptyBox isShow={shippedOrder?.length === 0} />
         </Tab>
       </div>
     </div>

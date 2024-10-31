@@ -9,10 +9,12 @@ export const NotificationDropdown = () => {
   const { itemList, remove, clearAll } = useNotificationsState()
 
   const Title = (
-    <button className="relative flex gap-2 text-textSecondary">
+    <button className="relative flex gap-1">
       <BellIcon className="size-5" />
 
-      {itemList.length > 0 ? <span>{itemList.length}</span> : null}
+      {itemList.length > 0 ? (
+        <span className="text-textSecondary">{itemList.length}</span>
+      ) : null}
     </button>
   )
 
@@ -27,7 +29,7 @@ export const NotificationDropdown = () => {
           </button>
         </div>
 
-        {itemList.map(({ txHash, title, description, link }) => {
+        {itemList.reverse().map(({ txHash, title, description, link }) => {
           return (
             <Menu.Item key={txHash}>
               {() => (

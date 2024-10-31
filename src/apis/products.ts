@@ -225,3 +225,19 @@ export const useGetAllOrders = ({ params, options }: GetOrderProps) => {
     ...options
   })
 }
+
+export const useDeliverOrders = () => {
+  const queryClient = new QueryClient()
+
+  return useMutation({
+    mutationFn: async (order_ids: Array<string>) => {
+      const res = await instance.put('/order/deliver', {
+        order_ids
+      })
+      return res.data
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: [orderKeyAdmin] })
+    }
+  })
+}

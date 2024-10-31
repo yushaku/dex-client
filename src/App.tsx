@@ -26,7 +26,7 @@ function App() {
   const { address, isConnected } = useAccount()
 
   useEffect(() => {
-    if (isConnected && env.VITE_ENV !== 'development') {
+    if (isConnected) {
       checkUser(address)
     }
   }, [address, isConnected])
