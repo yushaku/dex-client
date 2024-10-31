@@ -18,12 +18,22 @@ export const HistoryPage = () => {
   })
 
   const handleCancel = (orderId: string) => {
-    writeContract({
-      address: SHOP_PAYMENT_ADDRESS,
-      abi: SHOP_PAYMENT_ABI,
-      functionName: 'cancelOrder',
-      args: [orderId]
-    })
+    writeContract(
+      {
+        address: SHOP_PAYMENT_ADDRESS,
+        abi: SHOP_PAYMENT_ABI,
+        functionName: 'cancelOrder',
+        args: [orderId]
+      },
+      {
+        onError: async (e) => {
+          const msg = e.message.includes('User rejected')
+            ? 'User denied transaction signature'
+            : 'Error: Transaction failed'
+          toast.error(msg)
+        }
+      }
+    )
   }
 
   useWatchContractEvent({

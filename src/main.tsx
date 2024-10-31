@@ -27,7 +27,19 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             customTheme={connectModalStyle}
           >
             <App />
-            <ToastContainer />
+
+            <ToastContainer
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+            />
           </ConnectKitProvider>
         </QueryClientProvider>
       </ThirdwebProvider>

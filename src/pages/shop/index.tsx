@@ -39,7 +39,7 @@ export const ShopPage = () => {
             description: 'Thanks for your purchase',
             link: transactionHref(logs[0].transactionHash)
           })
-          toast.info(
+          toast.success(
             <a href={transactionHref(logs[0].transactionHash)}>
               Payment success. Click here to view.
             </a>
@@ -53,7 +53,7 @@ export const ShopPage = () => {
             description: 'You canceled order successfully',
             link: transactionHref(logs[0].transactionHash)
           })
-          toast.info(
+          toast.success(
             <a href={transactionHref(logs[0].transactionHash)}>
               Order canceled. Click here to view.
             </a>

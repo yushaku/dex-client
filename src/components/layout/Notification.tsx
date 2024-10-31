@@ -12,7 +12,7 @@ export const NotificationDropdown = () => {
     <button className="relative flex gap-2 text-textSecondary">
       <BellIcon className="size-5" />
 
-      {itemList.length > 0 ? <span>itemList.length</span> : null}
+      {itemList.length > 0 ? <span>{itemList.length}</span> : null}
     </button>
   )
 
@@ -22,7 +22,7 @@ export const NotificationDropdown = () => {
         <div className="my-2 flex items-center justify-between px-4">
           <h3 className="text-lg font-bold">Notifications</h3>
 
-          <button onClick={clearAll} className="text-sm text-accent">
+          <button onClick={clearAll} className="text-sm hover:text-red-400">
             Clear all
           </button>
         </div>
@@ -40,7 +40,7 @@ export const NotificationDropdown = () => {
                     <span>{title}</span>
                     <button
                       onClick={() => remove(txHash)}
-                      className="hidden font-normal group-hover:block"
+                      className="hidden font-normal hover:text-red-400 group-hover:block"
                     >
                       remove
                     </button>
@@ -59,6 +59,15 @@ export const NotificationDropdown = () => {
             </Menu.Item>
           )
         })}
+
+        <div
+          className={cn(
+            'px-4 py-2 text-sm text-textSecondary',
+            itemList.length > 0 && 'hidden'
+          )}
+        >
+          <p>Notification is empty</p>
+        </div>
       </Fragment>
     </Dropdown>
   )
