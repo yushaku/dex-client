@@ -1,7 +1,7 @@
 import {
-  QueryClient,
   useMutation,
   useQuery,
+  useQueryClient,
   UseQueryOptions
 } from '@tanstack/react-query'
 import instance from './client'
@@ -55,7 +55,7 @@ export type CreateAddress = {
 
 const addressKey = '/users/address'
 export const useCreateAddress = () => {
-  const queryClient = new QueryClient()
+  const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: (data: CreateAddress) => {
@@ -174,7 +174,7 @@ type GetOrderProps = {
   >
 }
 
-const orderKey = '/order'
+export const orderKey = '/order'
 export const useGetOrders = ({ params, options }: GetOrderProps) => {
   return useQuery({
     queryKey: [orderKey, JSON.stringify(params)],
@@ -192,7 +192,7 @@ export const useGetOrders = ({ params, options }: GetOrderProps) => {
 }
 
 export const useDeleteOrders = () => {
-  const queryClient = new QueryClient()
+  const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: async (order_ids: Array<string>) => {
@@ -209,7 +209,7 @@ export const useDeleteOrders = () => {
   })
 }
 
-const orderKeyAdmin = '/order/admin'
+export const orderKeyAdmin = '/order/admin'
 export const useGetAllOrders = ({ params, options }: GetOrderProps) => {
   return useQuery({
     queryKey: [orderKeyAdmin, JSON.stringify(params)],
@@ -227,7 +227,7 @@ export const useGetAllOrders = ({ params, options }: GetOrderProps) => {
 }
 
 export const useDeliverOrders = () => {
-  const queryClient = new QueryClient()
+  const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: async (order_ids: Array<string>) => {

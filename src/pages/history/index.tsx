@@ -1,5 +1,5 @@
 import { SHOP_PAYMENT_ABI } from '@/abi/shopPayment'
-import { useDeleteOrders, useGetOrders } from '@/apis'
+import { orderKey, useDeleteOrders, useGetOrders } from '@/apis'
 import { LoadingModal } from '@/components/Modal'
 import { Button } from '@/components/common/Button'
 import { EmptyBox } from '@/components/common/EmptyBox'
@@ -12,10 +12,12 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { useWatchContractEvent, useWriteContract } from 'wagmi'
 import { HistoryItem } from './components/HistoryItem'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const HistoryPage = () => {
   const { transactionHref } = useGetTx()
   const { writeContract, isPending } = useWriteContract()
+  const queryClient = useQueryClient()
   const { mutate: deleteOrders, isPending: isDeleting } = useDeleteOrders()
   const { add: addNoti } = useNotificationsState()
   const [selected, setSelected] = useState<Array<string>>([])
@@ -56,7 +58,7 @@ export const HistoryPage = () => {
     address: SHOP_PAYMENT_ADDRESS,
     abi: SHOP_PAYMENT_ABI,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onLogs(logs: any) {
+    async onLogs(logs: any) {
       // const args = logs[0].args
       console.log('New logs!', logs)
 
@@ -73,6 +75,7 @@ export const HistoryPage = () => {
               Payment success. Click here to view.
             </a>
           )
+          await queryClient.invalidateQueries({ queryKey: [orderKey] })
           break
 
         case TOPICS.ORDER_CANCELLED: {
@@ -87,6 +90,7 @@ export const HistoryPage = () => {
               Order canceled. Click here to view.
             </a>
           )
+          await queryClient.invalidateQueries({ queryKey: [orderKey] })
           break
         }
 

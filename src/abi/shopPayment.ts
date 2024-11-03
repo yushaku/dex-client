@@ -48,6 +48,17 @@ export const SHOP_PAYMENT_ABI = [
     type: 'error'
   },
   {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'token',
+        type: 'address'
+      }
+    ],
+    name: 'InvalidPaymentToken',
+    type: 'error'
+  },
+  {
     inputs: [],
     name: 'NotInitializing',
     type: 'error'
@@ -178,6 +189,12 @@ export const SHOP_PAYMENT_ABI = [
         type: 'string'
       },
       {
+        indexed: true,
+        internalType: 'address',
+        name: 'buyer',
+        type: 'address'
+      },
+      {
         indexed: false,
         internalType: 'uint256',
         name: 'refundAmount',
@@ -195,6 +212,12 @@ export const SHOP_PAYMENT_ABI = [
         internalType: 'string',
         name: 'orderId',
         type: 'string'
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'buyer',
+        type: 'address'
       }
     ],
     name: 'OrderDelivered',
