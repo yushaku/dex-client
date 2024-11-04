@@ -13,6 +13,7 @@ import { toast } from 'react-toastify'
 import { useWatchContractEvent, useWriteContract } from 'wagmi'
 import { HistoryItem } from './components/HistoryItem'
 import { useQueryClient } from '@tanstack/react-query'
+import { toastContractError } from '@/utils/error'
 
 export const HistoryPage = () => {
   const { transactionHref } = useGetTx()
@@ -35,12 +36,7 @@ export const HistoryPage = () => {
         args: [orderId]
       },
       {
-        onError: async (e) => {
-          const msg = e.message.includes('User rejected')
-            ? 'User denied transaction signature'
-            : 'Error: Transaction failed'
-          toast.error(msg)
-        }
+        onError: toastContractError
       }
     )
   }

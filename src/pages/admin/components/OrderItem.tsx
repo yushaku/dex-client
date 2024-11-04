@@ -4,10 +4,10 @@ import { Button } from '@/components/common/Button'
 import { BSC, USDT } from '@/components/icons'
 import { Card } from '@/components/warper'
 import { SHOP_PAYMENT_ADDRESS, cn } from '@/utils'
+import { toastContractError } from '@/utils/error'
 import { CheckCircleIcon, GiftIcon, TrashIcon } from '@heroicons/react/16/solid'
 import { DateTime } from 'luxon'
 import { useState } from 'react'
-import { toast } from 'react-toastify'
 import { useWriteContract } from 'wagmi'
 
 type Props = {
@@ -27,12 +27,7 @@ export const OrderItem = ({ item }: Props) => {
         args: [orderIds]
       },
       {
-        onError: async (e) => {
-          const msg = e.message.includes('User rejected')
-            ? 'User denied transaction signature'
-            : 'Error: Transaction failed'
-          toast.error(msg)
-        }
+        onError: toastContractError
       }
     )
   }
@@ -46,12 +41,7 @@ export const OrderItem = ({ item }: Props) => {
         args: [orderIds]
       },
       {
-        onError: async (e) => {
-          const msg = e.message.includes('User rejected')
-            ? 'User denied transaction signature'
-            : 'Error: Transaction failed'
-          toast.error(msg)
-        }
+        onError: toastContractError
       }
     )
   }

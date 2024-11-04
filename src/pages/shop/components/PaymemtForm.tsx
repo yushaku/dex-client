@@ -10,6 +10,7 @@ import { SelectPayToken } from '@/components/common/SelectPayToken'
 import { BSC, USDT } from '@/components/icons'
 import { useCartState } from '@/stores/shopCart'
 import { SHOP_PAYMENT_ADDRESS, ZERO_ADDRESS, cn } from '@/utils'
+import { toastContractError } from '@/utils/error'
 import {
   Description,
   Dialog,
@@ -22,7 +23,6 @@ import {
 import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/16/solid'
 import { shortenString } from '@thirdweb-dev/react'
 import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 import { parseEther } from 'viem'
 import { useSendTransaction } from 'wagmi'
 import { AddressForm } from './AddressForm'
@@ -138,12 +138,8 @@ const ConfirmTab = ({
           clearCart()
         },
         onError: async (e) => {
-          const msg = e.message.includes('User rejected')
-            ? 'User denied transaction signature'
-            : 'Error: Transaction failed'
-          toast.error(msg)
+          toastContractError(e)
           await deleteOrder([data.order.order_id])
-          // setStep('address')
         }
       }
     )

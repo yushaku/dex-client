@@ -27,11 +27,8 @@ export const HistoryItem = ({
 
   return (
     <li key={item.order_id} className="group">
-      <Card
-        onClick={() => toggleSelected(item.order_id)}
-        className={selected ? 'border-focus' : ''}
-      >
-        <div>
+      <Card className={selected ? 'border-focus' : ''}>
+        <div onClick={() => toggleSelected(item.order_id)}>
           <i className="text-sm text-textSecondary">
             {selected ? (
               <CheckIcon className="mr-2 inline size-5 stroke-green-500" />
@@ -65,7 +62,7 @@ export const HistoryItem = ({
           </p>
         </div>
 
-        <div className="mt-4">
+        <div onClick={() => toggleSelected(item.order_id)} className="mt-4">
           <ul className="flex flex-wrap gap-4 ">
             {item?.order_items?.map((order) => {
               return (
@@ -95,62 +92,62 @@ export const HistoryItem = ({
               )
             })}
           </ul>
+        </div>
 
-          <div className="mt-4 flex gap-2">
-            <Button
-              title="Perchase"
-              className={cn(
-                'w-full',
-                item.status === 'pending' ? 'block' : 'hidden'
-              )}
-              icon={TrashIcon}
-            />
+        <div className="mt-4 flex gap-2">
+          <Button
+            title="Perchase"
+            className={cn(
+              'w-full',
+              item.status === 'pending' ? 'block' : 'hidden'
+            )}
+            icon={TrashIcon}
+          />
 
-            <ConfirmModal
-              isPending={false}
-              icon={TrashIcon}
-              handleSubmit={() => {
-                deleteOrders([item.order_id], {
-                  onSuccess: async () => {
-                    toast.info('Deleted successfully')
-                  }
-                })
-              }}
-              isDisabled={item.status !== 'pending'}
-            />
+          <ConfirmModal
+            isPending={false}
+            icon={TrashIcon}
+            handleSubmit={() => {
+              deleteOrders([item.order_id], {
+                onSuccess: async () => {
+                  toast.info('Deleted successfully')
+                }
+              })
+            }}
+            isDisabled={item.status !== 'pending'}
+          />
 
-            <Button
-              title="Cancel and refund order"
-              variant="outline"
-              className={cn(
-                'w-full hover:bg-red-400',
-                item.status === 'paid' ? 'block' : 'hidden'
-              )}
-              icon={BanknotesIcon}
-              onClick={() => handleCancel(item.order_id)}
-            />
+          <Button
+            title="Cancel and refund order"
+            variant="outline"
+            className={cn(
+              'w-full hover:bg-red-400',
+              item.status === 'paid' ? 'block' : 'hidden'
+            )}
+            icon={BanknotesIcon}
+            onClick={() => handleCancel(item.order_id)}
+          />
 
-            <Button
-              title="Remove"
-              variant="outline"
-              className={cn(
-                'w-full',
-                item.status === 'cancelled' ? 'block' : 'hidden'
-              )}
-              icon={TrashIcon}
-              onClick={() => deleteOrders([item.order_id])}
-            />
+          <Button
+            title="Remove"
+            variant="outline"
+            className={cn(
+              'w-full',
+              item.status === 'cancelled' ? 'block' : 'hidden'
+            )}
+            icon={TrashIcon}
+            onClick={() => deleteOrders([item.order_id])}
+          />
 
-            {/* <Button */}
-            {/*   title="Buy again <3" */}
-            {/*   variant="filled" */}
-            {/*   className={cn( */}
-            {/*     'w-full', */}
-            {/*     item.status === 'cancelled' ? 'block' : 'hidden' */}
-            {/*   )} */}
-            {/*   onClick={() => handleCancel(item.order_id)} */}
-            {/* /> */}
-          </div>
+          {/* <Button */}
+          {/*   title="Buy again <3" */}
+          {/*   variant="filled" */}
+          {/*   className={cn( */}
+          {/*     'w-full', */}
+          {/*     item.status === 'cancelled' ? 'block' : 'hidden' */}
+          {/*   )} */}
+          {/*   onClick={() => handleCancel(item.order_id)} */}
+          {/* /> */}
         </div>
       </Card>
     </li>
