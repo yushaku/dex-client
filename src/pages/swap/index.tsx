@@ -9,18 +9,19 @@ import {
 } from 'react-ts-tradingview-widgets'
 import { SelectToken } from '@/components/common/SelectToken'
 import { Tab } from '@/components/layout/tab'
+import { SwapPane } from './components/SwapPane'
 
-type Feature = 'chart' | 'analysis' | 'heatmap' | 'bubble' | 'news'
-const listFeature: Array<Feature> = [
+const listFeature = [
+  'swap',
   'chart',
   'analysis',
   'heatmap',
   'bubble',
   'news'
-]
+] as const
 
 export const Swap = () => {
-  const [type, setType] = useState<Feature>('chart')
+  const [type, setType] = useState<(typeof listFeature)[number]>('swap')
   const [token, setToken] = useState<TokenOption>(TOKENS[0])
 
   return (
@@ -43,6 +44,10 @@ export const Swap = () => {
       </div>
 
       <div className="mt-6 flex h-1/2">
+        <Tab isOpen={type === 'swap'} className="flex">
+          <SwapPane />
+        </Tab>
+
         <Tab isOpen={type === 'chart'} className="flex">
           <article className="flex-1">
             <AdvancedRealTimeChart
@@ -56,28 +61,6 @@ export const Swap = () => {
               autosize
             />
           </article>
-
-          {/* <article className="grid gap-3"> */}
-          {/* <SwapWidget */}
-          {/*   theme={uniTheme} */}
-          {/*   onTokenChange={(e) => console.log(JSON.stringify(e))} */}
-          {/*   hideConnectionUI={true} */}
-          {/*   tokenList={TOKEN_LIST} */}
-          {/*   jsonRpcUrlMap={JSON_RPC} */}
-          {/*   defaultChainId={1} */}
-          {/*   defaultInputAmount="1" */}
-          {/*   defaultInputTokenAddress="NATIVE" */}
-          {/*   defaultOutputTokenAddress={UNI} */}
-          {/* /> */}
-
-          {/* <Timeline */}
-          {/*   colorTheme="dark" */}
-          {/*   feedMode="market" */}
-          {/*   market="crypto" */}
-          {/*   height={400} */}
-          {/*   width="100%" */}
-          {/* /> */}
-          {/* </article> */}
         </Tab>
 
         <Tab isOpen={type === 'analysis'} className="flex">

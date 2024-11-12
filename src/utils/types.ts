@@ -1,4 +1,5 @@
 import { Log } from 'viem'
+import { assets } from './assets'
 
 export type Data = {
   address: string
@@ -22,3 +23,5 @@ export type ItemNft = {
   cip: number
   url: string
 }
+
+export type Asset = (typeof assets)[number]

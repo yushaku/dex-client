@@ -1,0 +1,179 @@
+import { Card } from '@/components/warper/Card'
+import { cn } from '@/utils'
+import { Cog6ToothIcon } from '@heroicons/react/16/solid'
+import { formatUnits } from 'viem'
+
+export const OrderSwap = () => {
+  return (
+    <Card className="col-span-1">
+      <h4 className="flex items-center justify-between">
+        <span>Swap</span>
+
+        <button className="rounded-md p-2 hover:bg-focus">
+          <Cog6ToothIcon className="size-5" />
+        </button>
+      </h4>
+
+      <ul className="mt-5 flex justify-end gap-3">
+        {[10, 20, 50, 100].map((number) => {
+          return (
+            <li key={number}>
+              <button
+                onClick={() => handleSetAmount(number)}
+                className={cn(
+                  'px-4 py-2 text-sm rounded border border-focus hover:bg-focus'
+                )}
+              >
+                {number}%
+              </button>
+            </li>
+          )
+        })}
+      </ul>
+
+      <article className="relative mt-10">
+        <div
+          id="TOKEN-A"
+          className={cn(
+            'mt-5 space-y-1 rounded-lg border border-focus bg-background p-4',
+            'focus-within:border-lighterAccent hover:border-lighterAccent'
+          )}
+        >
+          <div className="flex justify-between">
+            <input
+              placeholder="0.0"
+              type="number"
+              value={fromAmount}
+              onChange={(e) => setFromAmount(e.target.value)}
+              className="no-spinner flex-1 bg-transparent text-2xl focus:outline-none"
+              style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+            />
+
+            <div className="flex items-center gap-3 rounded-full bg-focus p-2">
+              <img
+                src={fromAsset?.logoURI}
+                alt="icon logo"
+                className="size-8"
+              />
+              {fromAsset?.symbol}
+              <ChevronDownIcon className="size-5" />
+            </div>
+          </div>
+
+          <div className="flex justify-between">
+            <p className="text-textSecondary">$0</p>
+            <p className="space-x-2 text-textSecondary">
+              <span>Balance:</span>
+
+              {tokenFromBalance?.value !== undefined ? (
+                <span>
+                  <strong className="mr-1">
+                    {formatUnits(
+                      tokenFromBalance.value,
+                      toAsset?.decimals ?? 18
+                    )}
+                  </strong>
+                  {toAsset?.symbol}
+                </span>
+              ) : (
+                <span>--</span>
+              )}
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={handleSwapPosition}
+          id="SWAP-PANE-A-TO-B"
+          className="group absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg border border-focus bg-focus p-3 hover:bg-focus"
+        >
+          <ArrowPathIcon className="animate size-5 hover:stroke-lighterAccent group-hover:rotate-180" />
+        </button>
+
+        <div
+          id="TOKEN-B"
+          className={cn(
+            'mt-5 space-y-1 rounded-lg border border-focus bg-background p-4',
+            'focus-within:border-lighterAccent hover:border-lighterAccent'
+          )}
+        >
+          <div className="flex justify-between">
+            <input
+              value={bestTrade?.outValues[0]}
+              disabled
+              placeholder="0.0"
+              type="number"
+              className="no-spinner flex-1 bg-transparent text-2xl focus:outline-none"
+              style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
+            />
+
+            <div className="flex items-center gap-3 rounded-full bg-focus p-2">
+              <img src={toAsset?.logoURI} alt="icon logo" className="size-8" />
+              {toAsset?.symbol}
+              <ChevronDownIcon className="size-5" />
+            </div>
+          </div>
+
+          <div className="flex justify-between">
+            <p className="text-textSecondary">$0</p>
+            <p className="space-x-2 text-textSecondary">
+              <span>Balance:</span>
+
+              {tokenToBalance?.value !== undefined ? (
+                <span>
+                  <strong className="mr-1">
+                    {formatUnits(
+                      tokenToBalance.value ?? 0n,
+                      toAsset?.decimals ?? 18
+                    )}
+                  </strong>
+                  {toAsset?.symbol}
+                </span>
+              ) : (
+                <span>--</span>
+              )}
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <button className="mt-5 h-10 w-full rounded-lg bg-accent hover:bg-lighterAccent">
+        Swap
+      </button>
+
+      {bestTrade && (
+        <ul className="mt-5 space-y-3 text-sm text-textSecondary">
+          <li className="flex justify-between">
+            <span>Rate</span>
+            <span>
+              {Number(
+                BigInt(bestTrade.outAmounts[0] ?? 0n) /
+                  BigInt(bestTrade.inAmounts[0] ?? 0n)
+              )}{' '}
+              {toAsset?.symbol} per {fromAsset?.symbol}
+            </span>
+          </li>
+
+          <li className="flex justify-between">
+            <span>Network cost</span>
+            <span>{bestTrade.gasEstimate} gwei</span>
+          </li>
+
+          <li className="flex justify-between">
+            <span>Order routing</span>
+            <span>Odos</span>
+          </li>
+
+          <li className="flex justify-between">
+            <span>Price impact</span>
+            <span>
+              {Number(bestTrade.priceImpact ?? 0) > 0.001
+                ? bestTrade?.priceImpact
+                : '< 0.001%'}
+            </span>
+          </li>
+        </ul>
+      )}
+    </Card>
+  )
+}
