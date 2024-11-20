@@ -13,7 +13,7 @@ export const env = cleanEnv(import.meta.env, {
   VITE_PINATA_KEY: str(),
   VITE_PINATA_SECRET: str(),
   VITE_API_ENPOINT: str({ default: 'http://localhost:8080' }),
-  VITE_ENV: str({ default: 'development' })
+  VITE_ENV: str({ default: 'development' }),
 })
 
 export const routes = {
@@ -28,7 +28,7 @@ export const routes = {
   admin: '/admin',
   dashboard: '/dashboard',
   shop: '/shop',
-  order: '/shop/order'
+  order: '/shop/order',
 } as const
 
 export const GATEWAY_URL = 'https://ipfs.io/ipfs/'
@@ -37,7 +37,7 @@ export const UNI = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
 export const JSON_RPC_URL = 'https://cloudflare-eth.com'
 export const JSON_RPC = {
   1: [`https://mainnet.infura.io/v3/${env.VITE_INFURA_KEY}`],
-  5: [`https://goerli.infura.io/v3/${env.VITE_INFURA_KEY}`]
+  5: [`https://goerli.infura.io/v3/${env.VITE_INFURA_KEY}`],
 }
 
 export const YSK_ADDRESS = '0x7AFa15757A8012C3ECc0948154AD0f99c3b3c116'
@@ -58,26 +58,26 @@ export const TOKENS = [
     tradingview: 'BTCUSD',
     icon: BTC,
     name: 'BTC',
-    address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
+    address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
   },
   {
     tradingview: 'ETHUSD',
     icon: ETH,
     name: 'ETH',
-    address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
+    address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
   },
   {
     tradingview: 'BNBUSD',
     icon: BSC,
     name: 'BNB',
-    address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
+    address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
   },
   {
     tradingview: 'AVAXUSD',
     icon: AVAX,
     name: 'AVAX',
-    address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
-  }
+    address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
+  },
 ]
 export type TokenOption = (typeof TOKENS)[number]
 
@@ -89,4 +89,12 @@ export const TOPICS = {
   ORDER_PAID: '0x90e1d0c46d2502169585bdac3bfaab23d6d93307febf995c863d64dafc6ab886',
   ORDER_CANCELLED: '0x7238c54289856123baca2546d37161f2e0b6967231fc8d004dd849d1f4f987e6',
   ORDER_DELIVERED: '0x0428dc7031c0c35b6cfc8c2573c1f2eecf691dcffacf2a33fd549f311ae5f29d',
+}
+
+export const TXN_STATUS = {
+  START: 'start',
+  WAITING: 'waiting',
+  PENDING: 'pending',
+  SUCCESS: 'success',
+  FAILED: 'failed',
 }

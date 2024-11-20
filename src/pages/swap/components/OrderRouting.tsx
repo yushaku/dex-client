@@ -1,35 +1,39 @@
 import { Card } from '@/components/warper/Card'
 import { OdosData } from '@/hooks'
 import { Asset, cn } from '@/utils'
-import { formatAmount } from '@/utils/odos'
 
 type Props = {
+  fromAmount: string
+  toAmount: string
   fromAsset?: Asset | null
   toAsset?: Asset | null
   bestTrade?: OdosData
   isLoadingOdos: boolean
 }
 export const OrderRouting = ({
+  fromAmount,
+  toAmount,
   fromAsset,
   toAsset,
   bestTrade,
-  isLoadingOdos
+  isLoadingOdos,
 }: Props) => {
   return (
     <Card className="col-span-2">
       <h4 className="mx-10 text-lg font-bold text-lighterAccent">
         Order Routing
       </h4>
+
       <article className="mx-10 mt-10 flex justify-between">
         <div className="flex w-fit flex-1 items-center gap-1">
           <img src={fromAsset?.logoURI} className="size-5" alt="from token" />
-          <strong>{formatAmount(bestTrade?.inAmounts[0])}</strong>
+          <strong>{fromAmount}</strong>
           <span>{fromAsset?.symbol}</span>
         </div>
 
         <div className="flex w-fit items-center gap-1">
           <img src={toAsset?.logoURI} className="size-5" alt="from token" />
-          <strong>{formatAmount(bestTrade?.outAmounts[0])}</strong>
+          <strong>{toAmount}</strong>
           <span>{toAsset?.symbol}</span>
         </div>
       </article>

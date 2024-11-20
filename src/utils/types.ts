@@ -1,4 +1,3 @@
-import { Log } from 'viem'
 import { assets } from './assets'
 
 export type Data = {
@@ -6,12 +5,8 @@ export type Data = {
 }
 
 export enum LOCAL_STORAGE {
-  SHOP_NFT = 'SHOP_NFT'
+  SHOP_NFT = 'SHOP_NFT',
 }
-
-export type Address = `0x${string}`
-
-export type LogTX = Log & { args: any }
 
 export type NftCart = Record<string, ItemNft>
 

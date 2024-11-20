@@ -1,15 +1,15 @@
-import { Button } from '@/components/common/Button'
-import { useDebounce } from '@/hooks'
-import { Asset, cn } from '@/utils'
-import { assets, topAssets } from '@/utils/assets'
+import { Button } from "@/components/common/Button"
+import { useDebounce } from "@/hooks"
+import { Asset, cn } from "@/utils"
+import { assets, topAssets } from "@/utils/assets"
 import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
   DialogTitle
-} from '@headlessui/react'
-import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/16/solid'
-import { useMemo, useState } from 'react'
+} from "@headlessui/react"
+import { ChevronDownIcon, XMarkIcon } from "@heroicons/react/16/solid"
+import { useMemo, useState } from "react"
 
 type Props = {
   asset: Asset | null
@@ -18,7 +18,7 @@ type Props = {
 export const OrderToken = ({ asset, handleSetToken }: Props) => {
   const [tokenList, setTokenList] = useState(assets)
   const [isOpen, setIsOpen] = useState(false)
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("")
   const deboundSearch = useDebounce(search)
 
   useMemo(() => {
@@ -79,9 +79,9 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
                   return (
                     <li
                       className={cn(
-                        'flex grid-cols-1 items-center gap-2 cursor-pointer rounded-lg bg-background p-2',
-                        'hover:bg-focus hover:text-lighterAccent',
-                        asset?.address === token.address && 'bg-focus'
+                        "flex grid-cols-1 items-center gap-2 cursor-pointer rounded-lg bg-background p-2",
+                        "hover:bg-focus hover:text-lighterAccent",
+                        asset?.address === token.address && "bg-focus"
                       )}
                       onClick={() => {
                         handleSetToken(token)
@@ -99,7 +99,7 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
             <div className="h-0.5 w-full bg-focus" />
 
             <div id="token list">
-              <h6 className="mb-2">Token List</h6>
+              <h6 className="mb-2 text-textSecondary">Token List</h6>
 
               <ul className="h-96 space-y-2 overflow-y-scroll">
                 {tokenList.map((token) => {
@@ -111,9 +111,9 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
                         setIsOpen(false)
                       }}
                       className={cn(
-                        'flex justify-between rounded-lg p-2 cursor-pointer',
-                        'hover:bg-focus hover:text-lighterAccent',
-                        asset?.address === token.address && 'bg-focus'
+                        "flex justify-between rounded-lg p-2 cursor-pointer",
+                        "hover:bg-focus hover:text-lighterAccent",
+                        asset?.address === token.address && "bg-focus"
                       )}
                     >
                       <div className="flex items-center gap-2">

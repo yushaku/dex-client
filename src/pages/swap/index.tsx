@@ -1,14 +1,12 @@
-import { TOKENS, TokenOption } from '@/utils'
+import { Tab } from '@/components/layout/tab'
 import { useState } from 'react'
 import {
   AdvancedRealTimeChart,
   CryptoCoinsHeatmap,
   FundamentalData,
   TechnicalAnalysis,
-  Timeline
+  Timeline,
 } from 'react-ts-tradingview-widgets'
-import { SelectToken } from '@/components/common/SelectToken'
-import { Tab } from '@/components/layout/tab'
 import { SwapPane } from './components/SwapPane'
 
 const listFeature = [
@@ -17,18 +15,15 @@ const listFeature = [
   'analysis',
   'heatmap',
   'bubble',
-  'news'
+  'news',
 ] as const
 
 export const Swap = () => {
   const [type, setType] = useState<(typeof listFeature)[number]>('swap')
-  const [token, setToken] = useState<TokenOption>(TOKENS[0])
 
   return (
     <section className="">
       <div className="flex w-fit rounded-lg border-4 border-layer bg-layer">
-        <SelectToken token={token} setToken={setToken} />
-
         {listFeature.map((feat) => {
           const pickedStyle = type === feat && 'bg-background'
           return (
@@ -51,7 +46,7 @@ export const Swap = () => {
         <Tab isOpen={type === 'chart'} className="flex">
           <article className="flex-1">
             <AdvancedRealTimeChart
-              symbol={token.tradingview}
+              symbol="BTCUSD"
               theme="dark"
               interval="D"
               calendar={false}
@@ -65,13 +60,13 @@ export const Swap = () => {
 
         <Tab isOpen={type === 'analysis'} className="flex">
           <TechnicalAnalysis
-            symbol={token.tradingview}
+            symbol="BTCUSD"
             colorTheme="dark"
             width="100%"
           ></TechnicalAnalysis>
 
           <FundamentalData
-            symbol={token.tradingview}
+            symbol="BTCUSD"
             colorTheme="dark"
             width="100%"
           ></FundamentalData>

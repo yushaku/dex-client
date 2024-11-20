@@ -35,6 +35,7 @@
     "react-ts-tradingview-widgets": "^1.2.4",
     "typeit-react": "^2.7.1",
     "use-local-storage": "^3.0.0",
+    "uuid": "^11.0.3",
     "viem": "2.x",
     "wagmi": "^2.5.7",
     "yup": "^1.4.0",

@@ -1,7 +1,7 @@
 {
   "singleQuote": true,
   "endOfLine": "auto",
-  "trailingComma": "none",
+  "trailingComma": "all",
   "semi": false,
   "bracketSpacing": true,
   "jsxBracketSameLine": false,

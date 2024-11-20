@@ -10,6 +10,7 @@ import { checkUser } from './apis'
 import './styles/index.css'
 import { config, connectModalStyle, env } from './utils'
 import { ThirdwebProvider } from '@thirdweb-dev/react'
+import { TxModalLoading } from './components/Modal'
 
 const queryClient = new QueryClient()
 
@@ -40,9 +41,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
               pauseOnHover
               theme="dark"
             />
+
+            <TxModalLoading />
           </ConnectKitProvider>
         </QueryClientProvider>
       </ThirdwebProvider>
     </WagmiProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 )

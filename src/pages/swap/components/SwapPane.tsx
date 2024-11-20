@@ -1,15 +1,16 @@
-import { Card } from '@/components/warper'
-import { useDebounce, useOdosQuoteSwap } from '@/hooks'
-import { useSettingState } from '@/stores'
-import { Asset, cn } from '@/utils'
-import { findAsset } from '@/utils/odos'
 import { ArrowPathIcon } from '@heroicons/react/16/solid'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { formatUnits } from 'viem'
 import { bsc } from 'viem/chains'
-import { useAccount, useBalance } from 'wagmi'
+import { useAccount, useBalance, useSwitchChain } from 'wagmi'
 
+import { Spinner } from '@/components/common/Loading'
+import { Card } from '@/components/warper'
+import { useDebounce, useOdosQuoteSwap, useOdosSwap } from '@/hooks'
+import { useSettingState } from '@/stores'
+import { Asset, cn } from '@/utils'
+import { findAsset } from '@/utils/odos'
 import { OrderChart } from './OrderChart'
 import { OrderRouting } from './OrderRouting'
 import { OrderSetting } from './OrderSetting'
@@ -17,7 +18,8 @@ import { OrderToken } from './OrderToken'
 
 export const SwapPane = () => {
   // GLOBAL state
-  const { address } = useAccount()
+  const { address, chainId } = useAccount()
+  const { switchChain } = useSwitchChain()
   const { setting } = useSettingState()
   const [searchParams, setSearchParams] = useSearchParams()
   const [fromAsset, setFromAsset] = useState<Asset | null>(null)
@@ -32,8 +34,8 @@ export const SwapPane = () => {
     address,
     chainId: bsc.id,
     query: {
-      enabled: Boolean(fromToken && address)
-    }
+      enabled: Boolean(fromToken && address),
+    },
   })
 
   const { data: tokenToBalance } = useBalance({
@@ -41,19 +43,20 @@ export const SwapPane = () => {
     chainId: bsc.id,
     address,
     query: {
-      enabled: Boolean(fromToken && address)
-    }
+      enabled: Boolean(fromToken && address),
+    },
   })
 
   // LOCAL STATE
   const [fromAmount, setFromAmount] = useState('0')
+  const [toAmount, setToAmount] = useState('0')
   const amountA = useDebounce(fromAmount)
 
   useEffect(() => {
     if (!fromToken) {
       setSearchParams({
         from: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
-        to: '0x55d398326f99059ff775485246999027b3197955' //USDT
+        to: '0x55d398326f99059ff775485246999027b3197955', //USDT
       })
     }
   }, [fromToken, setSearchParams])
@@ -73,13 +76,14 @@ export const SwapPane = () => {
   }, [toToken])
 
   // CALL API ODOS
+  const { onOdosSwap, pending: isSwapping } = useOdosSwap(true)
   const { data: bestTrade, isLoading: isLoadingOdos } = useOdosQuoteSwap({
     fromAsset,
     toAsset,
     account: address,
     amount: amountA,
     networkId: bsc.id,
-    slippage: setting.slippage
+    slippage: setting.slippage,
   })
 
   const handleSwapPosition = () => {
@@ -90,13 +94,13 @@ export const SwapPane = () => {
 
     setSearchParams({
       from: tokenA?.address ?? '',
-      to: tokenB?.address ?? ''
+      to: tokenB?.address ?? '',
     })
 
     if (bestTrade && toAsset) {
       const amountSwaped = formatUnits(
         BigInt(bestTrade.outAmounts[0]),
-        toAsset.decimals
+        toAsset.decimals,
       )
       setFromAmount(amountSwaped)
     }
@@ -113,6 +117,9 @@ export const SwapPane = () => {
 
   const handleSetToken = (type: 'from' | 'to', asset: Asset) => {
     if (type === 'from') {
+      setFromAmount('0')
+      setToAmount('0')
+
       const newParams = new URLSearchParams(searchParams)
       newParams.set('from', asset.address)
       setSearchParams(newParams)
@@ -127,38 +134,43 @@ export const SwapPane = () => {
     }
   }
 
+  useEffect(() => {
+    if (bestTrade) {
+      setToAmount(bestTrade.outValues[0].toString())
+    }
+  }, [bestTrade])
+
   return (
     <div className="grid w-full grid-cols-2">
-      <Card className="col-span-1">
+      <Card className="col-span-2 lg:col-span-1">
         <h4 className="flex items-center justify-between">
-          <span>Swap</span>
+          <strong className="text-lighterAccent">Swap</strong>
 
-          <OrderSetting />
+          <ul className="flex justify-end gap-3">
+            {[10, 20, 50, 100].map((number) => {
+              return (
+                <li key={number}>
+                  <button
+                    onClick={() => handleSetAmount(number)}
+                    className={cn(
+                      'px-4 py-2 text-sm rounded border border-focus hover:bg-focus',
+                    )}
+                  >
+                    {number}%
+                  </button>
+                </li>
+              )
+            })}
+            <OrderSetting />
+          </ul>
         </h4>
-
-        <ul className="mt-5 flex justify-end gap-3">
-          {[10, 20, 50, 100].map((number) => {
-            return (
-              <li key={number}>
-                <button
-                  onClick={() => handleSetAmount(number)}
-                  className={cn(
-                    'px-4 py-2 text-sm rounded border border-focus hover:bg-focus'
-                  )}
-                >
-                  {number}%
-                </button>
-              </li>
-            )
-          })}
-        </ul>
 
         <article className="relative mt-10">
           <div
             id="TOKEN-A"
             className={cn(
               'mt-5 space-y-1 rounded-lg border border-focus bg-background p-4',
-              'focus-within:border-lighterAccent hover:border-lighterAccent'
+              'focus-within:border-lighterAccent hover:border-lighterAccent',
             )}
           >
             <div className="flex justify-between">
@@ -166,7 +178,13 @@ export const SwapPane = () => {
                 placeholder="0.0"
                 type="number"
                 value={fromAmount}
-                onChange={(e) => setFromAmount(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value
+                  setFromAmount(Number(value).toString())
+                  if (Number(value) === 0) {
+                    setToAmount('0')
+                  }
+                }}
                 className="no-spinner flex-1 bg-transparent text-2xl focus:outline-none"
                 style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
               />
@@ -187,7 +205,7 @@ export const SwapPane = () => {
                     <strong className="mr-1">
                       {formatUnits(
                         tokenFromBalance.value,
-                        fromAsset?.decimals ?? 18
+                        fromAsset?.decimals ?? 18,
                       )}
                     </strong>
                     {fromAsset?.symbol}
@@ -211,12 +229,12 @@ export const SwapPane = () => {
             id="TOKEN-B"
             className={cn(
               'mt-5 space-y-1 rounded-lg border border-focus bg-background p-4',
-              'focus-within:border-lighterAccent hover:border-lighterAccent'
+              'focus-within:border-lighterAccent hover:border-lighterAccent',
             )}
           >
             <div className="flex justify-between">
               <input
-                value={bestTrade?.outValues[0]}
+                value={toAmount}
                 disabled
                 placeholder="0.0"
                 type="number"
@@ -240,7 +258,7 @@ export const SwapPane = () => {
                     <strong className="mr-1">
                       {formatUnits(
                         tokenToBalance.value ?? 0n,
-                        toAsset?.decimals ?? 18
+                        toAsset?.decimals ?? 18,
                       )}
                     </strong>
                     {toAsset?.symbol}
@@ -253,9 +271,44 @@ export const SwapPane = () => {
           </div>
         </article>
 
-        <button className="mt-5 h-10 w-full rounded-lg bg-accent hover:bg-lighterAccent">
-          Swap
-        </button>
+        <article id="BUTTON_GROUP">
+          <button
+            onClick={() => {
+              if (!fromAsset || !toAsset || !bestTrade) return
+
+              onOdosSwap({
+                fromAsset,
+                toAsset,
+                fromAmount,
+                quote: bestTrade,
+              })
+            }}
+            className={cn(
+              'mt-5 flex-center h-10 w-full rounded-lg bg-accent hover:bg-lighterAccent',
+              {
+                hidden: chainId !== bsc.id,
+                'bg-gray-400': isSwapping || !bestTrade,
+              },
+            )}
+            disabled={!bestTrade || isSwapping}
+          >
+            {isSwapping ? <Spinner /> : 'Swap'}
+          </button>
+
+          <button
+            onClick={() => {
+              switchChain({ chainId: bsc.id })
+            }}
+            className={cn(
+              'mt-5 h-10 w-full rounded-lg bg-accent hover:bg-lighterAccent',
+              {
+                hidden: chainId === bsc.id,
+              },
+            )}
+          >
+            Connect to BSC
+          </button>
+        </article>
 
         {bestTrade && (
           <ul className="mt-5 space-y-3 text-sm text-textSecondary">
@@ -264,7 +317,7 @@ export const SwapPane = () => {
               <span>
                 {Number(
                   BigInt(bestTrade.outAmounts[0] ?? 0n) /
-                    BigInt(bestTrade.inAmounts[0] ?? 0n)
+                    BigInt(bestTrade.inAmounts[0] ?? 0n),
                 )}{' '}
                 {toAsset?.symbol} per {fromAsset?.symbol}
               </span>
@@ -277,7 +330,12 @@ export const SwapPane = () => {
 
             <li className="flex justify-between">
               <span>Order routing</span>
-              <span>Odos</span>
+              <a
+                className="text-lighterAccent underline"
+                href="https://www.odos.xyz/"
+              >
+                Odos
+              </a>
             </li>
 
             <li className="flex justify-between">
@@ -292,9 +350,14 @@ export const SwapPane = () => {
         )}
       </Card>
 
-      <OrderChart />
+      <OrderChart
+        className={cn('hidden lg:block lg:col-span-1')}
+        symbol={'BNBUSDT'}
+      />
 
       <OrderRouting
+        fromAmount={fromAmount}
+        toAmount={toAmount}
         fromAsset={fromAsset}
         toAsset={toAsset}
         bestTrade={bestTrade}
