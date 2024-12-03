@@ -9,7 +9,7 @@ export const Comming = () => {
   )
 }
 
-const Vector = (props: React.SVGProps<SVGSVGElement>) => (
+export const Vector = (props: React.SVGProps<SVGSVGElement>) => (
   <svg width="1440" height="654" viewBox="0 0 1440 654" fill="none" {...props}>
     <path
       opacity="0.2"

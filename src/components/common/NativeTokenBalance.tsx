@@ -1,6 +1,7 @@
 import { Address } from 'viem'
 import { useBalance, useChainId } from 'wagmi'
 import { BSC, ETH, Matic } from '../icons'
+import { cn } from '@/utils'
 
 export const NativeBalance = ({ address }: { address?: Address }) => {
   const balance = useBalance({ address })
@@ -13,7 +14,10 @@ export const NativeBalance = ({ address }: { address?: Address }) => {
   )
 }
 
-export const NativeToken = (props: React.SVGProps<SVGSVGElement>) => {
+export const NativeToken = ({
+  className,
+  ...rest
+}: React.SVGProps<SVGSVGElement>) => {
   const chainId: number = useChainId()
   let Token: (_props: React.SVGProps<SVGSVGElement>) => JSX.Element
 
@@ -36,5 +40,7 @@ export const NativeToken = (props: React.SVGProps<SVGSVGElement>) => {
       break
   }
 
-  return <Token className="ml-3 inline-block size-5" {...props} />
+  return (
+    <Token className={cn('ml-3 inline-block size-5', className)} {...rest} />
+  )
 }

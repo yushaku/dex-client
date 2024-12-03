@@ -6,10 +6,11 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { WagmiProvider } from 'wagmi'
 import App from './App.tsx'
-import { checkUser } from './hooks'
+import { checkUser } from './apis'
 import './styles/index.css'
 import { config, connectModalStyle, env } from './utils'
 import { ThirdwebProvider } from '@thirdweb-dev/react'
+import { TxModalLoading } from './components/Modal'
 
 const queryClient = new QueryClient()
 
@@ -23,14 +24,28 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <QueryClientProvider client={queryClient}>
           <ConnectKitProvider
             theme="midnight"
-            onConnect={({ address }) => checkUser({ address })}
+            onConnect={({ address }) => checkUser(address)}
             customTheme={connectModalStyle}
           >
             <App />
-            <ToastContainer />
+
+            <ToastContainer
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+            />
+
+            <TxModalLoading />
           </ConnectKitProvider>
         </QueryClientProvider>
       </ThirdwebProvider>
     </WagmiProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 )

@@ -1,23 +1,36 @@
+import { useEffect } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { useAccount } from 'wagmi'
+import { checkUser } from './apis'
 import { Layout } from './components/layout'
-import { Comming } from './components/pages/Comming'
-import { Dashboard } from './components/pages/Dashboard'
 import {
+  AdminPage,
   CollectionNFTs,
+  Comming,
+  Dashboard,
   DetailNFT,
+  HistoryPage,
+  Home,
   NFTsStudio,
   NftMarket,
+  NotMatch,
+  ShopPage,
+  Swap,
   UserCollection,
   UserNftDetail,
   UserNfts
-} from './components/pages/Nft'
-import { NotMatch } from './components/pages/Notmatch'
-import { ShopPage } from './components/pages/Shop'
-import { Swap } from './components/pages/Swap'
-import { Home } from './components/pages/home'
-import { routes } from './utils'
+} from './pages'
+import { env, routes } from './utils'
 
 function App() {
+  const { address, isConnected } = useAccount()
+
+  useEffect(() => {
+    if (isConnected) {
+      checkUser(address)
+    }
+  }, [address, isConnected])
+
   return (
     <BrowserRouter>
       <Layout>
@@ -39,9 +52,9 @@ function App() {
             element={<UserNftDetail />}
           />
 
-          <Route path={routes.history} element={<Comming />} />
+          <Route path={routes.history} element={<HistoryPage />} />
           <Route path={routes.vaults} element={<Comming />} />
-          <Route path={routes.bridge} element={<Comming />} />
+          <Route path={routes.admin} element={<AdminPage />} />
           <Route path={routes.shop} element={<ShopPage />} />
           <Route path="*" element={<NotMatch />} />
         </Routes>

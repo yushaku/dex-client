@@ -10,7 +10,7 @@ import { Address, formatEther, parseUnits } from 'viem'
 import {
   useReadContract,
   useWaitForTransactionReceipt as useWaitTx,
-  useWriteContract
+  useWriteContract,
 } from 'wagmi'
 import * as yup from 'yup'
 
@@ -22,7 +22,7 @@ type Inputs = {
 const schema = yup
   .object({
     amount: yup.number().positive().required(),
-    lockType: yup.number().default(0)
+    lockType: yup.number().default(0),
   })
   .required()
 
@@ -37,14 +37,17 @@ export const StakeForm = ({ isOpen, setOpen, address, balance }: Props) => {
   const [apy, setApy] = useState(lockType[0].apy)
   const { data: hash, isPending, writeContractAsync } = useWriteContract()
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitTx({
-    hash: hash
+    hash: hash,
   })
 
   const allowance = useReadContract({
     abi: ERC20_ABI,
     address: YSK_ADDRESS,
     functionName: 'allowance',
-    args: [address, STAKE_ADRESS]
+    args: [address, STAKE_ADRESS],
+    query: {
+      enabled: true,
+    },
   })
 
   const allowanceData = formatEther(allowance.data ?? 0n)
@@ -54,7 +57,7 @@ export const StakeForm = ({ isOpen, setOpen, address, balance }: Props) => {
     handleSubmit,
     setValue,
     getValues,
-    formState: { errors }
+    formState: { errors },
   } = useForm<Inputs>({ resolver: yupResolver(schema) })
 
   async function approve() {
@@ -62,7 +65,7 @@ export const StakeForm = ({ isOpen, setOpen, address, balance }: Props) => {
       address: YSK_ADDRESS,
       abi: ERC20_ABI,
       functionName: 'approve',
-      args: [STAKE_ADRESS, MAX_VALUE]
+      args: [STAKE_ADRESS, MAX_VALUE],
     })
 
     console.log(res)
@@ -76,7 +79,7 @@ export const StakeForm = ({ isOpen, setOpen, address, balance }: Props) => {
       address: STAKE_ADRESS,
       abi: stakeModuleABI,
       functionName: 'stake',
-      args: [bigintValue, lockType]
+      args: [bigintValue, lockType],
     })
 
     console.log(res)
@@ -135,7 +138,7 @@ export const StakeForm = ({ isOpen, setOpen, address, balance }: Props) => {
               placeholder="Amount"
               className={cn(
                 'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-none',
-                { 'border-red-400': errors.amount?.message }
+                { 'border-red-400': errors.amount?.message },
               )}
               {...register('amount', { required: true })}
             />
@@ -176,16 +179,16 @@ const lockType = [
   {
     title: '0 Day',
     id: '0_day',
-    apy: 5
+    apy: 5,
   },
   {
     title: '90 Days',
     id: '90_days',
-    apy: 15
+    apy: 15,
   },
   {
     title: '180 Days',
     id: '180_days',
-    apy: 30
-  }
+    apy: 30,
+  },
 ]

@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.18",
+    "@headlessui/react": "^2.1.8",
     "@heroicons/react": "^2.1.1",
     "@hookform/resolvers": "^3.3.4",
     "@pinata/sdk": "^2.1.0",
@@ -18,11 +18,13 @@
     "@thirdweb-dev/react": "^4.9.4",
     "@thirdweb-dev/sdk": "^4.0.99",
     "@tremor/react": "^3.15.0",
-    "@uniswap/widgets": "^2.59.0",
+    "@wagmi/core": "^2.13.5",
+    "axios": "^1.7.7",
     "connectkit": "^1.7.2",
     "envalid": "^8.0.0",
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0",
+    "luxon": "^3.5.0",
     "react": "^18.2.0",
     "react-countup": "^6.5.0",
     "react-dom": "^18.2.0",
@@ -33,12 +35,15 @@
     "react-ts-tradingview-widgets": "^1.2.4",
     "typeit-react": "^2.7.1",
     "use-local-storage": "^3.0.0",
+    "uuid": "^11.0.3",
     "viem": "2.x",
     "wagmi": "^2.5.7",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "zustand": "5.0.0-rc.2"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/luxon": "^3.4.2",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "@typescript-eslint/eslint-plugin": "^6.21.0",

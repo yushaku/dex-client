@@ -20,7 +20,7 @@ export const SelectChain = () => {
   )
 
   return (
-    <Dropdown hidden={!chainId} title={Title}>
+    <Dropdown className="w-48 rounded-xl" hidden={!chainId} title={Title}>
       <Fragment>
         {chainList.map(({ id, name, logo: Logo }) => {
           return (

@@ -6,7 +6,7 @@ type Props = React.ComponentProps<'button'> & {
   loading?: boolean
   variant?: 'filled' | 'outline' | 'standard'
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  icon?: (props: any) => JSX.Element | any
+  icon?: (_props: any) => JSX.Element | any
 }
 
 export const Button = ({
@@ -33,18 +33,23 @@ export const Button = ({
 
   return (
     <button
-      className={cn('rounded-lg px-6 py-3', style, className, {
-        'bg-gray-400': disabled,
-        'bg-blue-300': loading
-      })}
+      className={cn(
+        'rounded-lg flex items-center px-6 py-3',
+        style,
+        className,
+        {
+          'bg-gray-400 hover:bg-gray-500 cursor-not-allowed': disabled,
+          'bg-blue-300': loading
+        }
+      )}
       {...props}
     >
-      {Icon ? <Icon className="inline-block size-5" /> : null}
+      {Icon ? <Icon className="mr-1 inline-block size-5" /> : null}
 
       {loading ? (
         <DotLoader />
       ) : (
-        <span className={`${title && 'ml-2'}`}>{title}</span>
+        <span className={`${title && 'ml-1'}`}>{title}</span>
       )}
     </button>
   )
