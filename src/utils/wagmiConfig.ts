@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   ReadContractParameters,
-  readContract,
-  sendTransaction,
-  simulateContract,
-  waitForTransactionReceipt,
-  writeContract,
+  readContract as _readContract,
+  sendTransaction as _sendTransaction,
+  simulateContract as _simulateContract,
+  waitForTransactionReceipt as _waitForTransactionReceipt,
+  writeContract as _writeContract,
 } from '@wagmi/core'
 import { Address } from 'viem'
 import { createConfig, http } from 'wagmi'
@@ -29,14 +29,14 @@ export const config = createConfig({
   },
 }) as any
 
-export const read = async (
+export const readContract = async (
   contract: ReadContractParameters<any, string, any[], any>,
 ) =>
-  readContract(config, {
+  _readContract(config, {
     ...contract,
   })
 
-export const writeCall = async (contract: {
+export const writeContract = async (contract: {
   functionName: string
   args: Array<any>
   address: Address
@@ -44,33 +44,33 @@ export const writeCall = async (contract: {
   chainId: number
   value: any
 }) =>
-  writeContract(config, {
+  _writeContract(config, {
     ...contract,
   })
 
-export const sendCall = async (contract: {
+export const sendTransaction = async (contract: {
   to: Address
   data: any
   value: any
   chainId: number
 }) =>
-  sendTransaction(config, {
+  _sendTransaction(config, {
     ...contract,
   })
 
-export const waitCall = async (hash: `0x${string}`) =>
-  waitForTransactionReceipt(config, {
+export const waitForTransaction = async (hash: `0x${string}`) =>
+  _waitForTransactionReceipt(config, {
     hash,
   })
 
-export const simulateCall = async (contract: {
+export const simulateContract = async (contract: {
   functionName: string
   args: Array<any>
   address: Address
   abi: any
   chainId: number
 }) => {
-  const res = await simulateContract(config, {
+  const res = await _simulateContract(config, {
     ...contract,
   })
   return res.result

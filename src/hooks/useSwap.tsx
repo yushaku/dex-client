@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ERC20_ABI } from '@/abi/erc20'
-import { Asset, TXN_STATUS, read } from '@/utils'
+import { Asset, TXN_STATUS, readContract } from '@/utils'
 import { contracts } from '@/utils/contracts'
 import { isInvalidAmount, quoteUrl } from '@/utils/odos'
 import { useQuery } from '@tanstack/react-query'
@@ -49,10 +49,10 @@ export const useOdosQuoteSwap = ({
   amount,
   slippage,
   account,
-  networkId
+  networkId,
 }: Partial<Props>) => {
   const isEnabled = Boolean(
-    fromAsset && toAsset && networkId === bsc.id && !isInvalidAmount(amount)
+    fromAsset && toAsset && networkId === bsc.id && !isInvalidAmount(amount),
   )
 
   const fetchQuote = async () => {
@@ -60,7 +60,7 @@ export const useOdosQuoteSwap = ({
 
     const inputAmount = parseUnits(
       amount!.toString(),
-      fromAsset!.decimals
+      fromAsset!.decimals,
     ).toString()
 
     const quoteRequestBody = {
@@ -68,18 +68,18 @@ export const useOdosQuoteSwap = ({
       inputTokens: [
         {
           tokenAddress: getAddress(
-            fromAsset!.address === 'BNB' ? zeroAddress : fromAsset!.address
+            fromAsset!.address === 'BNB' ? zeroAddress : fromAsset!.address,
           ),
-          amount: inputAmount
-        }
+          amount: inputAmount,
+        },
       ],
       outputTokens: [
         {
           tokenAddress: getAddress(
-            toAsset!.address === 'BNB' ? zeroAddress : toAsset!.address
+            toAsset!.address === 'BNB' ? zeroAddress : toAsset!.address,
           ),
-          proportion: 1
-        }
+          proportion: 1,
+        },
       ],
       userAddr: getAddress(account ?? zeroAddress),
       slippageLimitPercent: slippage,
@@ -92,12 +92,12 @@ export const useOdosQuoteSwap = ({
         nodeColor: '#422D4C',
         nodeTextColor: '#D9D5DB',
         legendTextColor: '#FCE6FB',
-        height: 300
-      }
+        height: 300,
+      },
     }
 
     const res = await axios.post(quoteUrl, quoteRequestBody, {
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
     })
     return res.data as OdosData
   }
@@ -109,11 +109,11 @@ export const useOdosQuoteSwap = ({
       fromAsset?.address,
       toAsset?.address,
       amount,
-      slippage
+      slippage,
     ],
     queryFn: fetchQuote,
     refetchInterval: 30000,
-    enabled: isEnabled
+    enabled: isEnabled,
   })
 
   return { data, error, isLoading, refetch }
@@ -126,24 +126,22 @@ export const useOdosSwap = (autoClose = false) => {
   account ??= zeroAddress
   chainId ??= bsc.id
 
-  const { startTxn, endTxn, sendTxn, closeTxnModal, writeTxn, } = useTxn(bsc.id)
+  const { startTxn, endTxn, sendTxn, closeTxnModal, writeTxn } = useTxn(bsc.id)
 
   const onOdosSwap = useCallback(
-    async (
-      {
-        fromAsset,
-        toAsset,
-        fromAmount,
-        quote,
-        callback
-      }: {
-        fromAsset: Asset,
-        toAsset: Asset,
-        fromAmount: string,
-        quote: any,
-        callback?: () => void
-      }
-    ) => {
+    async ({
+      fromAsset,
+      toAsset,
+      fromAmount,
+      quote,
+      callback,
+    }: {
+      fromAsset: Asset
+      toAsset: Asset
+      fromAmount: string
+      quote: any
+      callback?: () => void
+    }) => {
       const key = uuidv4()
       const approveId = uuidv4()
       const swapId = uuidv4()
@@ -152,13 +150,13 @@ export const useOdosSwap = (autoClose = false) => {
       const routerAddress = contracts.odos[bsc.id]
 
       if (fromAsset.address !== 'BNB') {
-        const allowance = await read({
+        const allowance = (await readContract({
           address: fromAsset.address,
           abi: ERC20_ABI,
           functionName: 'allowance',
           args: [account, routerAddress],
-          chainId
-        }) as bigint
+          chainId,
+        })) as bigint
 
         isApproved = parseUnits(fromAmount, fromAsset.decimals) <= allowance
       }
@@ -169,31 +167,31 @@ export const useOdosSwap = (autoClose = false) => {
         transactions[approveId] = {
           desc: `Approve ${fromAsset.symbol}`,
           status: TXN_STATUS.START,
-          hash: null
+          hash: null,
         }
       }
 
       transactions[swapId] = {
         desc: `Swap ${fromAsset.symbol} for ${toAsset.symbol}`,
         status: TXN_STATUS.START,
-        hash: null
+        hash: null,
       }
 
-      startTxn({ key, transactions, title: `Swap ${fromAsset.symbol} for ${toAsset.symbol}`, })
+      startTxn({
+        key,
+        transactions,
+        title: `Swap ${fromAsset.symbol} for ${toAsset.symbol}`,
+      })
 
       setPending(true)
 
       if (!isApproved) {
-        const approvalResult = await writeTxn(
-          key,
-          approveId,
-          {
-            address: fromAsset.address,
-            abi: ERC20_ABI,
-            functionName: 'approve',
-            args: [routerAddress, maxUint256]
-          },
-        )
+        const approvalResult = await writeTxn(key, approveId, {
+          address: fromAsset.address,
+          abi: ERC20_ABI,
+          functionName: 'approve',
+          args: [routerAddress, maxUint256],
+        })
 
         if (!approvalResult) {
           setPending(false)
@@ -204,14 +202,14 @@ export const useOdosSwap = (autoClose = false) => {
       const assembleRequestBody = {
         userAddr: getAddress(account),
         pathId: quote.pathId, // Replace with the pathId from quote response in step 1
-        simulate: true // this can be set to true if the user isn't doing their own estimate gas call for the transaction
+        simulate: true, // this can be set to true if the user isn't doing their own estimate gas call for the transaction
       }
 
       const assembleUrl = 'https://api.odos.xyz/sor/assemble'
       const response = await fetch(assembleUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(assembleRequestBody)
+        body: JSON.stringify(assembleRequestBody),
       })
       if (response.status !== 200) {
         console.error('Error in Transaction Assembly:', response)
@@ -225,7 +223,7 @@ export const useOdosSwap = (autoClose = false) => {
         return
       }
 
-      endTxn({ key, final: 'Swap Successful', link: "string", })
+      endTxn({ key, final: 'Swap Successful', link: 'string' })
 
       setPending(false)
 
@@ -235,7 +233,16 @@ export const useOdosSwap = (autoClose = false) => {
         closeTxnModal()
       }
     },
-    [account, autoClose, chainId, closeTxnModal, endTxn, sendTxn, startTxn, writeTxn]
+    [
+      account,
+      autoClose,
+      chainId,
+      closeTxnModal,
+      endTxn,
+      sendTxn,
+      startTxn,
+      writeTxn,
+    ],
   )
 
   return { onOdosSwap, pending }

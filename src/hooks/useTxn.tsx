@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback } from 'react'
 
-import { TXN_STATUS, sendCall, waitCall, writeCall } from '@/utils'
+import {
+  TXN_STATUS,
+  sendTransaction,
+  waitForTransaction,
+  writeContract,
+} from '@/utils'
 import { toast } from 'react-toastify'
 import { useTransactionStore } from '@/stores/transaction'
 import { Address } from 'viem'
@@ -16,7 +21,7 @@ export const useTxn = (chainId: 56 | 97) => {
     completeTransaction,
     closeTransaction,
     closeTransactionPopup,
-    openRetryTransactionModal
+    openRetryTransactionModal,
   } = useTransactionStore()
 
   const startTxn = openTransaction
@@ -25,23 +30,26 @@ export const useTxn = (chainId: 56 | 97) => {
   const closeTxn = closeTransaction
   const closeTxnModal = closeTransactionPopup
 
-
   const askUserToRetry = useCallback(
     (params: any) =>
       new Promise((resolve) => {
-        (openRetryTransactionModal({ params, resolver: resolve }))
+        openRetryTransactionModal({ params, resolver: resolve })
       }),
-    [openRetryTransactionModal]
+    [openRetryTransactionModal],
   )
 
   const writeTxn = useCallback(
-    async (key: string, uuid: string, contract: {
-      abi: any,
-      address: Address
-      functionName: string,
-      args: Array<any>,
-      msgValue?: string,
-    },) => {
+    async (
+      key: string,
+      uuid: string,
+      contract: {
+        abi: any
+        address: Address
+        functionName: string
+        args: Array<any>
+        msgValue?: string
+      },
+    ) => {
       let hash
 
       const { abi, functionName, address, args, msgValue } = contract
@@ -49,25 +57,25 @@ export const useTxn = (chainId: 56 | 97) => {
       updateTxn({ key, uuid, status: TXN_STATUS.WAITING })
 
       try {
-        hash = await writeCall({
+        hash = await writeContract({
           abi,
           functionName: functionName,
           args: args,
           value: msgValue,
           chainId,
-          address
+          address,
         })
 
         updateTxn({ key, uuid, hash, status: TXN_STATUS.PENDING })
 
-        await waitCall(hash)
+        await waitForTransaction(hash)
 
         updateTxn({ key, uuid, hash, status: TXN_STATUS.SUCCESS })
 
         toast.success(
           <a href={transactionHref(hash as any)}>
             transaction confirmed. Click here to view.
-          </a>
+          </a>,
         )
 
         return hash
@@ -77,7 +85,7 @@ export const useTxn = (chainId: 56 | 97) => {
           toast.success(
             <a href={transactionHref(hash as any)}>
               transaction confirmed. Click here to view.
-            </a>
+            </a>,
           )
 
           return true
@@ -93,7 +101,7 @@ export const useTxn = (chainId: 56 | 97) => {
           contract,
           method: functionName,
           params: args,
-          msgValue
+          msgValue,
         })
 
         if (userWantsToRetry) {
@@ -103,7 +111,7 @@ export const useTxn = (chainId: 56 | 97) => {
         return false
       }
     },
-    [updateTxn, chainId, transactionHref, askUserToRetry]
+    [updateTxn, chainId, transactionHref, askUserToRetry],
   )
 
   const sendTxn = useCallback(
@@ -112,19 +120,18 @@ export const useTxn = (chainId: 56 | 97) => {
       updateTxn({ key, uuid, status: TXN_STATUS.WAITING })
 
       try {
-        hash = await sendCall({ to, data, value, chainId })
+        hash = await sendTransaction({ to, data, value, chainId })
 
         updateTxn({ key, uuid, hash, status: TXN_STATUS.PENDING })
 
-        await waitCall(hash)
+        await waitForTransaction(hash)
 
         updateTxn({ key, uuid, hash, status: TXN_STATUS.SUCCESS })
-
 
         toast.success(
           <a href={transactionHref(hash)}>
             transaction confirmed. Click here to view.
-          </a>
+          </a>,
         )
 
         return true
@@ -141,9 +148,8 @@ export const useTxn = (chainId: 56 | 97) => {
         return false
       }
     },
-    [updateTxn, chainId, transactionHref]
+    [updateTxn, chainId, transactionHref],
   )
-
 
   return {
     startTxn,
@@ -152,6 +158,6 @@ export const useTxn = (chainId: 56 | 97) => {
     closeTxn,
     writeTxn,
     sendTxn,
-    closeTxnModal
+    closeTxnModal,
   }
 }
