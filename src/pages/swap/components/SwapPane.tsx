@@ -39,8 +39,6 @@ export const SwapPane = () => {
     },
   })
 
-  console.log(chainId !== bsc.id)
-
   const { data: tokenToBalance } = useBalance({
     token: toToken ?? '',
     chainId: bsc.id,

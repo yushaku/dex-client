@@ -1,10 +1,10 @@
-import { AVAX, BSC, BTC, ETH } from '@/components/icons'
 import { cleanEnv, str } from 'envalid'
 import { parseUnits } from 'viem'
 
 export const env = cleanEnv(import.meta.env, {
   VITE_WALLET_CONNECT_ID: str(),
   VITE_INFURA_KEY: str(),
+  VITE_MORALIS_API_KEY: str(),
   VITE_THIRD_WEB: str(),
   VITE_THIRD_WEB_SECRET: str(),
   VITE_OWNER_ADDRESS: str(),
@@ -53,34 +53,6 @@ export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export const MAX_VALUE = parseUnits('9999999999999999999999', 18)
 
-export const TOKENS = [
-  {
-    tradingview: 'BTCUSD',
-    icon: BTC,
-    name: 'BTC',
-    address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
-  },
-  {
-    tradingview: 'ETHUSD',
-    icon: ETH,
-    name: 'ETH',
-    address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
-  },
-  {
-    tradingview: 'BNBUSD',
-    icon: BSC,
-    name: 'BNB',
-    address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
-  },
-  {
-    tradingview: 'AVAXUSD',
-    icon: AVAX,
-    name: 'AVAX',
-    address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
-  },
-]
-export type TokenOption = (typeof TOKENS)[number]
-
 export const LOGIN_MESSAGE =
   'Welcome to Yushaku! Please sign this message to verify account ownership.'
 
@@ -97,4 +69,16 @@ export const TXN_STATUS = {
   PENDING: 'pending',
   SUCCESS: 'success',
   FAILED: 'failed',
+}
+
+export const getTokenLink = (token: string, chainId = 56) => {
+  switch (chainId) {
+    case 1:
+      return `https://etherscan.io/token/${token}`
+    case 97:
+      return `https://testnet.bscscan.com/token/${token}`
+    case 56:
+    default:
+      return `https://bscscan.com/token/${token}`
+  }
 }
