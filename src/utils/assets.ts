@@ -570,7 +570,6 @@ export const assets = [
   {
     name: 'Impossible Decentralized Incubator Access Token',
     symbol: 'IDIA',
-
     decimals: 18,
     chainId: 56,
     address: '0x0b15ddf19d47e6a86a56148fb4afffc6929bcb89',
@@ -579,7 +578,6 @@ export const assets = [
   {
     name: 'InceptionLRT restaked ETH',
     symbol: 'INETH',
-
     decimals: 18,
     chainId: 56,
     address: '0x5a7a183b6b44dc4ec2e3d2ef43f98c5152b1d76d',
@@ -588,7 +586,6 @@ export const assets = [
   {
     name: 'Inverse DAO',
     symbol: 'INV',
-
     decimals: 18,
     chainId: 56,
     address: '0x4e720dd3ac5cfe1e1fbde4935f386bb1c66f4642',
@@ -624,7 +621,6 @@ export const assets = [
   {
     name: 'Jarvis Reward Token',
     symbol: 'JRT',
-
     decimals: 18,
     chainId: 56,
     address: '0x414f9e74ba3a9d0acce65182809492f41ac671e0',
@@ -633,7 +629,6 @@ export const assets = [
   {
     name: 'Kenshi',
     symbol: 'KENSHI',
-
     decimals: 18,
     chainId: 56,
     address: '0x42f9c5a27a2647a64f7d3d58d8f896c60a727b0f',
@@ -669,7 +664,6 @@ export const assets = [
   {
     name: 'Lista DAO',
     symbol: 'LISTA',
-
     decimals: 18,
     chainId: 56,
     address: '0xfceb31a79f71ac9cbdcf853519c1b12d379edc46',
@@ -678,7 +672,6 @@ export const assets = [
   {
     name: 'Liquid Driver',
     symbol: 'LQDR',
-
     decimals: 18,
     chainId: 56,
     address: '0xe5c6155ed2924e50f998e28eff932d9b5a126974',
@@ -687,7 +680,6 @@ export const assets = [
   {
     name: 'Litecoin Token',
     symbol: 'LTC',
-
     decimals: 18,
     chainId: 56,
     address: '0x4338665cbb7b2485a8855a139b75d5e34ab0db94',
@@ -696,7 +688,6 @@ export const assets = [
   {
     name: 'LVL',
     symbol: 'LVL',
-
     decimals: 18,
     chainId: 56,
     address: '0xb64e280e9d1b5dbec4accedb2257a87b400db149',
@@ -732,7 +723,6 @@ export const assets = [
   {
     name: 'MeMusic',
     symbol: 'MMT',
-
     decimals: 18,
     chainId: 56,
     address: '0xb34966a2a66cb116ebe87b9554c020dcc950e917',
@@ -741,7 +731,6 @@ export const assets = [
   {
     name: 'MORE',
     symbol: 'MORE',
-
     decimals: 18,
     chainId: 56,
     address: '0x25ea98ac87a38142561ea70143fd44c4772a16b6',

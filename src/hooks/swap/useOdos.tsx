@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { getAddress, maxUint256, parseUnits, zeroAddress } from 'viem'
 import { bsc } from 'viem/chains'
 import { useAccount } from 'wagmi'
-import { useTxn } from './useTxn'
+import { useTxn } from '../useTxn'
 
 export type OdosData = {
   inTokens: string[]

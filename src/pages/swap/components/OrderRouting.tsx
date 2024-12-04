@@ -19,7 +19,7 @@ export const OrderRouting = ({
   isLoadingOdos,
 }: Props) => {
   return (
-    <Card className="col-span-2">
+    <Card className={cn('col-span-2 border-focus')}>
       <h4 className="mx-10 text-lg font-bold text-lighterAccent">
         Order Routing
       </h4>

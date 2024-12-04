@@ -5,7 +5,7 @@ import { formatUnits } from 'viem'
 import { bsc } from 'viem/chains'
 import { useAccount, useBalance, useSwitchChain } from 'wagmi'
 
-import { Spinner } from '@/components/common/Loading'
+import { DotLoader } from '@/components/common/Loading'
 import { Card } from '@/components/warper'
 import { useDebounce, useOdosQuoteSwap, useOdosSwap } from '@/hooks'
 import { useSettingState } from '@/stores'
@@ -15,6 +15,7 @@ import { OrderChart } from './OrderChart'
 import { OrderRouting } from './OrderRouting'
 import { OrderSetting } from './OrderSetting'
 import { OrderToken } from './OrderToken'
+import { WalletButton } from '@/components/layout/header'
 
 export const SwapPane = () => {
   // GLOBAL state
@@ -37,6 +38,8 @@ export const SwapPane = () => {
       enabled: Boolean(fromToken && address),
     },
   })
+
+  console.log(chainId !== bsc.id)
 
   const { data: tokenToBalance } = useBalance({
     token: toToken ?? '',
@@ -142,7 +145,7 @@ export const SwapPane = () => {
 
   return (
     <div className="grid w-full grid-cols-2">
-      <Card className="col-span-2 lg:col-span-1">
+      <Card className="col-span-2 border-focus lg:col-span-1">
         <h4 className="flex items-center justify-between">
           <strong className="text-lighterAccent">Swap</strong>
 
@@ -273,6 +276,13 @@ export const SwapPane = () => {
 
         <article id="BUTTON_GROUP">
           <button
+            className={cn(
+              'mt-5 h-10 w-full rounded-lg bg-accent hover:bg-lighterAccent',
+              chainId !== bsc.id ? 'hidden' : 'flex-center',
+              {
+                'bg-focus': isSwapping || !bestTrade,
+              },
+            )}
             onClick={() => {
               if (!fromAsset || !toAsset || !bestTrade) return
 
@@ -283,17 +293,16 @@ export const SwapPane = () => {
                 quote: bestTrade,
               })
             }}
-            className={cn(
-              'mt-5 flex-center h-10 w-full rounded-lg bg-accent hover:bg-lighterAccent',
-              {
-                hidden: chainId !== bsc.id,
-                'bg-gray-400': isSwapping || !bestTrade,
-              },
-            )}
             disabled={!bestTrade || isSwapping}
           >
-            {isSwapping ? <Spinner /> : 'Swap'}
+            {isSwapping || isLoadingOdos ? (
+              <DotLoader className="bg-accent" />
+            ) : (
+              'Swap'
+            )}
           </button>
+
+          <WalletButton className={cn('w-full mt-5', chainId && 'hidden')} />
 
           <button
             onClick={() => {
@@ -302,7 +311,7 @@ export const SwapPane = () => {
             className={cn(
               'mt-5 h-10 w-full rounded-lg bg-accent hover:bg-lighterAccent',
               {
-                hidden: chainId === bsc.id,
+                hidden: !chainId || chainId === bsc.id,
               },
             )}
           >
@@ -351,7 +360,11 @@ export const SwapPane = () => {
       </Card>
 
       <OrderChart
-        className={cn('hidden lg:block lg:col-span-1')}
+        fromAsset={fromAsset}
+        toAsset={toAsset}
+        className={cn('hidden lg:block lg:col-span-1', {
+          hidden: !fromAsset || !toAsset,
+        })}
         symbol={'BNBUSDT'}
       />
 

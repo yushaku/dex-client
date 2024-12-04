@@ -2,7 +2,7 @@ import { MoonIcon, SunIcon } from '@heroicons/react/16/solid'
 import { ConnectKitButton } from 'connectkit'
 import { Link, useLocation } from 'react-router-dom'
 import { SelectChain } from '../common/SelectChain'
-import { routes } from '@/utils'
+import { cn, routes } from '@/utils'
 import { CartList } from '../common/CartList'
 import createAvatar from '@/utils/avatar'
 import { MobileSidebar } from './MobileSidebar'
@@ -67,12 +67,20 @@ export const Header = ({ theme, switchTheme }: Props) => {
   )
 }
 
-export const WalletButton = () => {
+export const WalletButton = (
+  props: React.DetailedHTMLProps<
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  >,
+) => {
   return (
     <ConnectKitButton.Custom>
       {({ isConnected, show, truncatedAddress, ensName }) => {
         return (
-          <button onClick={show} className="rounded-lg bg-accent px-6 py-2">
+          <button
+            onClick={show}
+            className={cn('rounded-lg bg-accent px-6 py-2', props.className)}
+          >
             {isConnected ? ensName ?? truncatedAddress : 'Connect Wallet'}
           </button>
         )
@@ -116,5 +124,5 @@ const headTitle = {
   [routes.nftStudio]: 'NFTs Studio',
   [routes.myNFTs]: 'Your NFTs Collection',
   [routes.shop]: 'My store',
-  [routes.admin]: 'Admin Dashboard'
+  [routes.admin]: 'Admin Dashboard',
 }

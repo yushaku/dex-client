@@ -3,20 +3,10 @@ import { useState } from 'react'
 import {
   AdvancedRealTimeChart,
   CryptoCoinsHeatmap,
-  FundamentalData,
-  TechnicalAnalysis,
-  Timeline,
 } from 'react-ts-tradingview-widgets'
 import { SwapPane } from './components/SwapPane'
 
-const listFeature = [
-  'swap',
-  'chart',
-  'analysis',
-  'heatmap',
-  'bubble',
-  'news',
-] as const
+const listFeature = ['swap', 'chart', 'heatmap', 'bubble'] as const
 
 export const Swap = () => {
   const [type, setType] = useState<(typeof listFeature)[number]>('swap')
@@ -38,7 +28,7 @@ export const Swap = () => {
         })}
       </div>
 
-      <div className="mt-6 flex h-1/2">
+      <div className="mt-6 flex min-h-[80dvh]">
         <Tab isOpen={type === 'swap'} className="flex">
           <SwapPane />
         </Tab>
@@ -58,20 +48,6 @@ export const Swap = () => {
           </article>
         </Tab>
 
-        <Tab isOpen={type === 'analysis'} className="flex">
-          <TechnicalAnalysis
-            symbol="BTCUSD"
-            colorTheme="dark"
-            width="100%"
-          ></TechnicalAnalysis>
-
-          <FundamentalData
-            symbol="BTCUSD"
-            colorTheme="dark"
-            width="100%"
-          ></FundamentalData>
-        </Tab>
-
         <Tab isOpen={type === 'heatmap'}>
           <CryptoCoinsHeatmap
             width="100%"
@@ -87,16 +63,6 @@ export const Swap = () => {
             height="100%"
             loading="lazy"
           ></iframe>
-        </Tab>
-
-        <Tab isOpen={type === 'news'}>
-          <Timeline
-            colorTheme="dark"
-            feedMode="market"
-            market="crypto"
-            height="100%"
-            width="100%"
-          />
         </Tab>
       </div>
     </section>

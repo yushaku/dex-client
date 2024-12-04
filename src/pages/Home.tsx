@@ -4,7 +4,7 @@ import TypeIt from 'typeit-react'
 import {
   CubeTransparentIcon,
   EllipsisHorizontalIcon,
-  GlobeAltIcon
+  GlobeAltIcon,
 } from '@heroicons/react/16/solid'
 import { Link } from 'react-router-dom'
 import { routes } from '@/utils'
@@ -37,7 +37,7 @@ const Navbar = () => {
           </li>
         ))}
         <li className="gradient_accent btn z-50">
-          <Link to={routes.dashboard}>Launch App</Link>
+          <Link to={routes.trade}>Launch App</Link>
         </li>
       </ul>
     </header>
@@ -58,7 +58,7 @@ const TopIntro = () => {
         <TypeIt
           options={{
             strings: ['Decentralized trading'],
-            waitUntilVisible: true
+            waitUntilVisible: true,
           }}
         />
       </h3>
@@ -69,7 +69,7 @@ const TopIntro = () => {
         cross-margining for max efficiency.
       </p>
 
-      <Link to={routes.dashboard} className="gradient_accent btn z-50 mt-10">
+      <Link to={routes.trade} className="gradient_accent btn z-50 mt-10">
         Start Trading
       </Link>
 
@@ -107,7 +107,7 @@ const Backer = () => {
     '/brain-holdings.png',
     '/colab.png',
     '/hrt.png',
-    'jane_street.png'
+    'jane_street.png',
   ]
 
   return (
@@ -139,18 +139,18 @@ const Safety = () => {
     {
       title: 'Decentralized',
       desc: 'Access an immutable money market directly on-chain. ',
-      icon: GlobeAltIcon
+      icon: GlobeAltIcon,
     },
     {
       title: 'BEP-20/ERC-20',
       desc: 'All Venus Protocol assets are bound by the BEP-20 and ERC-20 standards.',
-      icon: CubeTransparentIcon
+      icon: CubeTransparentIcon,
     },
     {
       title: 'Multichain',
       desc: 'Built on EVM-compatible chains for fast, secure, and low cost transactions',
-      icon: EllipsisHorizontalIcon
-    }
+      icon: EllipsisHorizontalIcon,
+    },
   ]
 
   return (
