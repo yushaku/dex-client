@@ -1,5 +1,5 @@
 import { Asset } from '@/utils'
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { MiniChart } from 'react-ts-tradingview-widgets'
 
 type Pops = {
