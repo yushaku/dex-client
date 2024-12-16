@@ -1,9 +1,10 @@
 import { ERC20_ABI } from '@/abi/erc20'
 import { Button } from '@/components/common/Button'
 import { useDebounce, useTokenMetadata } from '@/hooks'
+import { useAssets } from '@/hooks/useAssets'
 import { WrapAsset, useTokensState } from '@/stores/addictionTokens'
 import { Asset, cn, getTokenLink } from '@/utils'
-import { assets, topAssets } from '@/utils/assets'
+import { topAssets } from '@/utils/assets'
 import {
   Dialog,
   DialogBackdrop,
@@ -31,23 +32,22 @@ type AssetList = Array<WrapAsset>
 export const OrderToken = ({ asset, handleSetToken }: Props) => {
   const { address: account, chainId } = useAccount()
   const { tokenList: storageTokens, add, remove } = useTokensState()
+  const { tokenList: listTokens } = useAssets()
 
-  const [tokenList, setTokenList] = useState<AssetList>(assets)
+  const [tokenList, setTokenList] = useState<AssetList>(listTokens)
   const [isOpen, setIsOpen] = useState(false)
   const [search, setSearch] = useState('')
   const deboundSearch = useDebounce(search)
 
   useMemo(() => {
-    const list = storageTokens
-      .concat(assets)
-      .filter(
-        (a) =>
-          a.name.toLowerCase().includes(deboundSearch.toLowerCase()) ||
-          a.address.toLowerCase().includes(deboundSearch.toLowerCase()),
-      )
+    const list = listTokens.filter(
+      (a) =>
+        a.name.toLowerCase().includes(deboundSearch.toLowerCase()) ||
+        a.address.toLowerCase().includes(deboundSearch.toLowerCase()),
+    )
 
     setTokenList(list)
-  }, [deboundSearch, storageTokens])
+  }, [deboundSearch, listTokens])
 
   const { data: balanceOf } = useReadContract({
     abi: ERC20_ABI,
@@ -74,7 +74,8 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
           symbol: newToken?.[0].symbol,
           decimals: newToken?.[0].decimals,
           chainId: 56,
-          balance: formatUnits(balanceOf ?? 0n, newToken?.[0].decimals),
+          formatted: formatUnits(balanceOf ?? 0n, newToken?.[0].decimals),
+          balance: balanceOf ?? 0n,
           isCustom: true,
         },
       ])
@@ -211,7 +212,9 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <strong>{token?.balance ?? '--'}</strong>
+                        <p className="text-sm text-textSecondary">
+                          {token?.formatted ?? '--'}
+                        </p>
                         <button
                           onClick={() => handleTogglenewToken(token)}
                           className={cn(

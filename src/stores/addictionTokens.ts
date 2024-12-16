@@ -4,9 +4,10 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 export type WrapAsset = Asset & {
-  balance?: string
+  formatted?: string
   isCustom?: boolean
   isLocal?: boolean
+  balance: bigint
 }
 
 type State = {
