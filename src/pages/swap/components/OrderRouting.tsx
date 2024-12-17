@@ -9,7 +9,10 @@ type Props = {
   toAsset?: Asset | null
   bestTrade?: OdosData
   isLoadingOdos: boolean
-}
+} & React.DetailedHTMLProps<
+  React.HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+>
 export const OrderRouting = ({
   fromAmount,
   toAmount,
@@ -17,9 +20,10 @@ export const OrderRouting = ({
   toAsset,
   bestTrade,
   isLoadingOdos,
+  ...props
 }: Props) => {
   return (
-    <Card className={cn('col-span-2 border-focus')}>
+    <Card {...props}>
       <h4 className="mx-10 text-lg font-bold text-lighterAccent">
         Order Routing
       </h4>
@@ -39,7 +43,7 @@ export const OrderRouting = ({
       </article>
 
       {isLoadingOdos ? (
-        <div className="mx-10 mt-5 h-60 animate-pulse rounded-lg bg-focus"></div>
+        <div className="mx-10 mt-5 h-52 animate-pulse rounded-lg bg-focus"></div>
       ) : (
         <img
           className={cn('w-full', bestTrade?.pathVizImage ? 'block' : 'hidden')}

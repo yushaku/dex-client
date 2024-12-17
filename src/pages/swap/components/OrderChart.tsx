@@ -1,6 +1,6 @@
-import { Asset } from '@/utils'
+import { Asset, cn } from '@/utils'
 import React, { useMemo } from 'react'
-import { MiniChart } from 'react-ts-tradingview-widgets'
+import { AdvancedRealTimeChart, MiniChart } from 'react-ts-tradingview-widgets'
 
 type Pops = {
   symbol: string
@@ -11,7 +11,14 @@ type Pops = {
   HTMLDivElement
 >
 
-export const OrderChart = ({ fromAsset, toAsset, ...props }: Pops) => {
+export const OrderChart = ({
+  fromAsset,
+  toAsset,
+  className,
+  ...props
+}: Pops) => {
+  const [isMini, setisMini] = React.useState(true)
+
   const symbol = useMemo(() => {
     if (fromAsset === null || toAsset === null) return
 
@@ -27,8 +34,50 @@ export const OrderChart = ({ fromAsset, toAsset, ...props }: Pops) => {
   }, [fromAsset, toAsset])
 
   return (
-    <div {...props}>
-      <MiniChart symbol={symbol} width="100%" colorTheme="dark" height="100%" />
+    <div className={cn('relative', className)} {...props}>
+      <div className="absolute right-0 top-2 z-50 text-xs">
+        <button
+          className={cn(
+            'bg-focus p-2 rounded-md',
+            isMini && 'bg-lighterAccent',
+          )}
+          onClick={() => setisMini(true)}
+        >
+          Mini Chart
+        </button>
+        <button
+          className={cn(
+            'bg-focus p-2 rounded-md',
+            !isMini && 'bg-lighterAccent',
+          )}
+          onClick={() => setisMini(false)}
+        >
+          Candle Chart
+        </button>
+      </div>
+
+      {isMini ? (
+        <MiniChart
+          symbol={symbol}
+          width="100%"
+          colorTheme="dark"
+          height="100%"
+        />
+      ) : (
+        <AdvancedRealTimeChart
+          symbol={symbol}
+          theme="dark"
+          interval="D"
+          calendar={false}
+          hide_top_toolbar={false}
+          hide_side_toolbar={true}
+          hide_legend={true}
+          withdateranges={true}
+          allow_symbol_change={false}
+          save_image={false}
+          autosize
+        />
+      )}
     </div>
   )
 }

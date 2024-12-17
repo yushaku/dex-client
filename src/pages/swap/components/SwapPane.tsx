@@ -157,8 +157,8 @@ export const SwapPane = () => {
   }, [bestTrade])
 
   return (
-    <div className="grid w-full grid-cols-2">
-      <Card className="col-span-2 border-focus lg:col-span-1">
+    <div className="grid w-full grid-cols-5">
+      <Card className="col-span-5 border-focus lg:col-span-2">
         <h4 className="flex items-center justify-between">
           <strong className="text-lighterAccent">Swap</strong>
 
@@ -385,13 +385,14 @@ export const SwapPane = () => {
       <OrderChart
         fromAsset={fromAsset}
         toAsset={toAsset}
-        className={cn('hidden lg:block lg:col-span-1', {
+        className={cn('hidden lg:block lg:col-span-3', {
           hidden: !fromAsset || !toAsset,
         })}
         symbol={'BNBUSDT'}
       />
 
       <OrderRouting
+        className={cn('col-span-5 border-focus')}
         fromAmount={fromAmount}
         toAmount={toAmount}
         fromAsset={fromAsset}

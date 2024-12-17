@@ -1,7 +1,7 @@
 export const topAssets = [
   {
     name: 'BTCB Token',
-    symbol: 'BTCB',
+    symbol: 'BTC',
     decimals: 18,
     chainId: 56,
     address: '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c',
@@ -68,7 +68,7 @@ export const topAssets = [
 export const assets = [
   {
     name: 'BTCB Token',
-    symbol: 'BTCB',
+    symbol: 'BTC',
     decimals: 18,
     chainId: 56,
     address: '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c',
@@ -1069,7 +1069,6 @@ export const assets = [
   {
     name: 'Uniswap',
     symbol: 'UNI',
-
     decimals: 18,
     chainId: 56,
     address: '0xbf5140a22578168fd562dccf235e5d43a02ce9b1',
@@ -1078,7 +1077,6 @@ export const assets = [
   {
     name: 'Uniwhale Token',
     symbol: 'UNW',
-
     decimals: 18,
     chainId: 56,
     address: '0x5b65cd9feb54f1df3d0c60576003344079f8dc06',
@@ -1104,7 +1102,6 @@ export const assets = [
   {
     name: 'Real USD',
     symbol: 'USDR',
-
     decimals: 9,
     chainId: 56,
     address: '0x509a5a600a2258d1e984b87e0db190c6742d4cb1',
