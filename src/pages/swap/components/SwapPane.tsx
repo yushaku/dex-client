@@ -6,20 +6,25 @@ import { bsc } from 'viem/chains'
 import { useAccount, useBalance, useSwitchChain } from 'wagmi'
 
 import { DotLoader } from '@/components/common/Loading'
+import { WalletButton } from '@/components/layout/header'
 import { Card } from '@/components/warper'
-import { useDebounce, useOdosQuoteSwap, useOdosSwap } from '@/hooks'
+import {
+  useDebounce,
+  useOdosQuoteSwap,
+  useOdosSwap,
+  useTokenPrice,
+} from '@/hooks'
 import { useSettingState } from '@/stores'
 import { Asset, cn } from '@/utils'
-import { findAsset } from '@/utils/odos'
+import { findAsset, formatAmount } from '@/utils/odos'
 import { OrderChart } from './OrderChart'
 import { OrderRouting } from './OrderRouting'
 import { OrderSetting } from './OrderSetting'
 import { OrderToken } from './OrderToken'
-import { WalletButton } from '@/components/layout/header'
 
 export const SwapPane = () => {
   // GLOBAL state
-  const { address, chainId } = useAccount()
+  const { address: account, chainId } = useAccount()
   const { switchChain } = useSwitchChain()
   const { setting } = useSettingState()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -32,22 +37,30 @@ export const SwapPane = () => {
   // CALL API
   const { data: tokenFromBalance } = useBalance({
     token: fromToken ?? '',
-    address,
+    address: account,
     chainId: bsc.id,
     query: {
-      enabled: Boolean(fromToken && address),
+      enabled: Boolean(fromToken && account),
     },
   })
-
-  console.log(chainId !== bsc.id)
 
   const { data: tokenToBalance } = useBalance({
     token: toToken ?? '',
     chainId: bsc.id,
-    address,
+    address: account,
     query: {
-      enabled: Boolean(fromToken && address),
+      enabled: Boolean(fromToken && account),
     },
+  })
+
+  const { data: tokenAPrice } = useTokenPrice({
+    token: fromToken ?? '',
+    chainId: bsc.id,
+  })
+
+  const { data: tokenBPrice } = useTokenPrice({
+    token: toToken ?? '',
+    chainId: bsc.id,
   })
 
   // LOCAL STATE
@@ -83,7 +96,7 @@ export const SwapPane = () => {
   const { data: bestTrade, isLoading: isLoadingOdos } = useOdosQuoteSwap({
     fromAsset,
     toAsset,
-    account: address,
+    account: account,
     amount: amountA,
     networkId: bsc.id,
     slippage: setting.slippage,
@@ -172,7 +185,7 @@ export const SwapPane = () => {
           <div
             id="TOKEN-A"
             className={cn(
-              'mt-5 space-y-1 rounded-lg border border-focus bg-background p-4',
+              'mt-5 space-y-1 rounded-xl border border-focus bg-background p-4',
               'focus-within:border-lighterAccent hover:border-lighterAccent',
             )}
           >
@@ -188,7 +201,7 @@ export const SwapPane = () => {
                     setToAmount('0')
                   }
                 }}
-                className="no-spinner flex-1 bg-transparent text-2xl focus:outline-none"
+                className="no-spinner flex-1 bg-transparent text-lg focus:outline-none lg:text-2xl"
                 style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
               />
 
@@ -198,18 +211,23 @@ export const SwapPane = () => {
               />
             </div>
 
-            <div className="flex justify-between">
-              <p className="text-textSecondary">$0</p>
+            <div className="flex justify-between text-sm lg:text-lg">
+              <p className="text-textSecondary">
+                $
+                {Number(
+                  Number(tokenAPrice?.usdPrice ?? 0) * Number(fromAmount),
+                ).toFixed(4)}
+              </p>
               <p className="space-x-2 text-textSecondary">
                 <span>Balance:</span>
 
                 {tokenFromBalance?.value !== undefined ? (
                   <span>
                     <strong className="mr-1">
-                      {formatUnits(
-                        tokenFromBalance.value,
-                        fromAsset?.decimals ?? 18,
-                      )}
+                      {formatAmount({
+                        amount: tokenFromBalance?.value,
+                        decimals: fromAsset?.decimals,
+                      })}
                     </strong>
                     {fromAsset?.symbol}
                   </span>
@@ -231,7 +249,7 @@ export const SwapPane = () => {
           <div
             id="TOKEN-B"
             className={cn(
-              'mt-5 space-y-1 rounded-lg border border-focus bg-background p-4',
+              'mt-5 space-y-1 rounded-xl border border-focus bg-background p-4',
               'focus-within:border-lighterAccent hover:border-lighterAccent',
             )}
           >
@@ -241,7 +259,7 @@ export const SwapPane = () => {
                 disabled
                 placeholder="0.0"
                 type="number"
-                className="no-spinner flex-1 bg-transparent text-2xl focus:outline-none"
+                className="no-spinner flex-1 bg-transparent text-lg focus:outline-none lg:text-2xl"
                 style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
               />
 
@@ -251,18 +269,23 @@ export const SwapPane = () => {
               />
             </div>
 
-            <div className="flex justify-between">
-              <p className="text-textSecondary">$0</p>
+            <div className="flex justify-between text-sm lg:text-lg">
+              <p className="text-textSecondary">
+                $
+                {Number(
+                  Number(tokenBPrice?.usdPrice ?? 0) * Number(toAmount),
+                ).toFixed(4)}
+              </p>
               <p className="space-x-2 text-textSecondary">
                 <span>Balance:</span>
 
                 {tokenToBalance?.value !== undefined ? (
                   <span>
                     <strong className="mr-1">
-                      {formatUnits(
-                        tokenToBalance.value ?? 0n,
-                        toAsset?.decimals ?? 18,
-                      )}
+                      {formatAmount({
+                        amount: tokenToBalance.value,
+                        decimals: toAsset?.decimals ?? 18,
+                      })}
                     </strong>
                     {toAsset?.symbol}
                   </span>

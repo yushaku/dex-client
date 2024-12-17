@@ -11,6 +11,7 @@ import './styles/index.css'
 import { config, connectModalStyle, env } from './utils'
 import { ThirdwebProvider } from '@thirdweb-dev/react'
 import { TxModalLoading } from './components/Modal'
+import { AssetsProvider } from './hooks/useAssets.tsx'
 
 const queryClient = new QueryClient()
 
@@ -27,7 +28,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             onConnect={({ address }) => checkUser(address)}
             customTheme={connectModalStyle}
           >
-            <App />
+            <AssetsProvider>
+              <App />
+            </AssetsProvider>
 
             <ToastContainer
               position="top-center"
