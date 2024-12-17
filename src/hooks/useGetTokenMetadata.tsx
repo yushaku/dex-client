@@ -51,3 +51,39 @@ export const useTokenMetadata = ({
     enabled: !!token && enabled,
   })
 }
+
+interface TokenPriceData {
+  usdPrice: number
+  nativePrice: {
+    value: string
+    decimals: number
+    name: string
+    symbol: string
+  }
+  percentChange24h: number
+}
+
+export const useTokenPrice = ({
+  token,
+  enabled = true,
+  chainId = 56,
+}: UseTokenMetadataParams) => {
+  return useQuery<TokenPriceData>({
+    queryKey: ['tokenPrice', token, chainId],
+    queryFn: async () => {
+      const response = await axios.get(`${BASE_URL}/erc20/${token}/price`, {
+        headers: {
+          accept: 'application/json',
+          'X-API-Key': env.VITE_MORALIS_API_KEY,
+        },
+        params: {
+          chain: getChainName(chainId),
+          include: 'percent_change',
+        },
+      })
+
+      return response.data
+    },
+    enabled: !!token && enabled,
+  })
+}

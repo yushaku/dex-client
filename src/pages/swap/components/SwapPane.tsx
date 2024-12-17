@@ -8,10 +8,15 @@ import { useAccount, useBalance, useSwitchChain } from 'wagmi'
 import { DotLoader } from '@/components/common/Loading'
 import { WalletButton } from '@/components/layout/header'
 import { Card } from '@/components/warper'
-import { useDebounce, useOdosQuoteSwap, useOdosSwap } from '@/hooks'
+import {
+  useDebounce,
+  useOdosQuoteSwap,
+  useOdosSwap,
+  useTokenPrice,
+} from '@/hooks'
 import { useSettingState } from '@/stores'
 import { Asset, cn } from '@/utils'
-import { findAsset } from '@/utils/odos'
+import { findAsset, formatAmount } from '@/utils/odos'
 import { OrderChart } from './OrderChart'
 import { OrderRouting } from './OrderRouting'
 import { OrderSetting } from './OrderSetting'
@@ -46,6 +51,16 @@ export const SwapPane = () => {
     query: {
       enabled: Boolean(fromToken && account),
     },
+  })
+
+  const { data: tokenAPrice } = useTokenPrice({
+    token: fromToken ?? '',
+    chainId: bsc.id,
+  })
+
+  const { data: tokenBPrice } = useTokenPrice({
+    token: toToken ?? '',
+    chainId: bsc.id,
   })
 
   // LOCAL STATE
@@ -197,17 +212,22 @@ export const SwapPane = () => {
             </div>
 
             <div className="flex justify-between text-sm lg:text-lg">
-              <p className="text-textSecondary">$0</p>
+              <p className="text-textSecondary">
+                $
+                {Number(
+                  Number(tokenAPrice?.usdPrice ?? 0) * Number(fromAmount),
+                ).toFixed(4)}
+              </p>
               <p className="space-x-2 text-textSecondary">
                 <span>Balance:</span>
 
                 {tokenFromBalance?.value !== undefined ? (
                   <span>
                     <strong className="mr-1">
-                      {formatUnits(
-                        tokenFromBalance.value,
-                        fromAsset?.decimals ?? 18,
-                      )}
+                      {formatAmount({
+                        amount: tokenFromBalance?.value,
+                        decimals: fromAsset?.decimals,
+                      })}
                     </strong>
                     {fromAsset?.symbol}
                   </span>
@@ -250,17 +270,22 @@ export const SwapPane = () => {
             </div>
 
             <div className="flex justify-between text-sm lg:text-lg">
-              <p className="text-textSecondary">$0</p>
+              <p className="text-textSecondary">
+                $
+                {Number(
+                  Number(tokenBPrice?.usdPrice ?? 0) * Number(toAmount),
+                ).toFixed(4)}
+              </p>
               <p className="space-x-2 text-textSecondary">
                 <span>Balance:</span>
 
                 {tokenToBalance?.value !== undefined ? (
                   <span>
                     <strong className="mr-1">
-                      {formatUnits(
-                        tokenToBalance.value ?? 0n,
-                        toAsset?.decimals ?? 18,
-                      )}
+                      {formatAmount({
+                        amount: tokenToBalance.value,
+                        decimals: toAsset?.decimals ?? 18,
+                      })}
                     </strong>
                     {toAsset?.symbol}
                   </span>
