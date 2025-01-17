@@ -19,6 +19,7 @@ export const env = cleanEnv(import.meta.env, {
 export const routes = {
   home: '/',
   trade: '/trade',
+  bridge: '/trade/bridge',
   nfts: '/nfts',
   myNFTs: '/nfts/my-collection',
   nftStudio: '/nfts/studio',

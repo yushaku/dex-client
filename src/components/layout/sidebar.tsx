@@ -5,13 +5,15 @@ import {
   ArrowPathIcon,
   BanknotesIcon,
   CalendarIcon,
+  ChartPieIcon,
   HomeIcon,
   PhotoIcon,
   ScissorsIcon,
   ShoppingBagIcon,
   UserIcon,
-  WalletIcon
+  WalletIcon,
 } from '@heroicons/react/16/solid'
+import { ForwardIcon } from '@heroicons/react/20/solid'
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 
@@ -20,7 +22,7 @@ export const Sidebar = () => {
   const [isSmall, setIsSmall] = useState(false)
 
   const isTablet = useMediaQuery(
-    '(min-width: 600px) and (max-width: 1024px) and (orientation: portrait)'
+    '(min-width: 600px) and (max-width: 1024px) and (orientation: portrait)',
   )
 
   useEffect(() => {
@@ -31,7 +33,7 @@ export const Sidebar = () => {
     <section
       className={cn(
         'relative z-50 hidden h-screen bg-layer transition-all duration-300 md:block',
-        isSmall ? 'w-16' : 'w-72'
+        isSmall ? 'w-16' : 'w-72',
       )}
     >
       <Link
@@ -113,12 +115,24 @@ export const navlinks = [
   {
     icon: HomeIcon,
     title: 'Dashboard',
-    href: routes.dashboard
+    href: routes.dashboard,
   },
   {
     icon: ArrowPathIcon,
     title: 'Trade',
-    href: routes.trade
+    href: routes.trade,
+    childrens: [
+      // {
+      //   icon: ChartPieIcon,
+      //   title: 'Wallet',
+      //   href: routes.myNFTs,
+      // },
+      {
+        icon: ForwardIcon,
+        title: 'Bridge',
+        href: routes.bridge,
+      },
+    ],
   },
   {
     icon: PhotoIcon,
@@ -128,33 +142,33 @@ export const navlinks = [
       {
         icon: WalletIcon,
         title: 'Inventory',
-        href: routes.myNFTs
+        href: routes.myNFTs,
       },
       {
         icon: ScissorsIcon,
         title: 'Studio',
-        href: routes.nftStudio
-      }
-    ]
+        href: routes.nftStudio,
+      },
+    ],
   },
   {
     icon: BanknotesIcon,
     title: 'Vaults',
-    href: routes.vaults
+    href: routes.vaults,
   },
   {
     icon: CalendarIcon,
     title: 'History',
-    href: routes.history
+    href: routes.history,
   },
   {
     icon: ShoppingBagIcon,
     title: 'Shop',
-    href: routes.shop
+    href: routes.shop,
   },
   {
     icon: UserIcon,
     title: 'Admin',
-    href: routes.admin
-  }
+    href: routes.admin,
+  },
 ]

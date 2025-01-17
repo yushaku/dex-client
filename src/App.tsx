@@ -18,9 +18,10 @@ import {
   Swap,
   UserCollection,
   UserNftDetail,
-  UserNfts
+  UserNfts,
 } from './pages'
 import { env, routes } from './utils'
+import { Bridge } from './pages/brige'
 
 function App() {
   const { address, isConnected } = useAccount()
@@ -39,6 +40,7 @@ function App() {
 
           <Route path={routes.dashboard} element={<Dashboard />} />
           <Route path={routes.trade} element={<Swap />} />
+          <Route path={routes.bridge} element={<Bridge />} />
 
           <Route path={routes.nfts} element={<NftMarket />} />
           <Route path={routes.nftStudio} element={<NFTsStudio />} />
