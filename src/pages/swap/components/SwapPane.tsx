@@ -201,7 +201,7 @@ export const SwapPane = () => {
                     setToAmount('0')
                   }
                 }}
-                className="no-spinner flex-1 bg-transparent text-lg focus:outline-none lg:text-2xl"
+                className="no-spinner w-4/5 flex-1 bg-transparent text-lg focus:outline-none lg:text-2xl"
                 style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
               />
 
@@ -259,7 +259,7 @@ export const SwapPane = () => {
                 disabled
                 placeholder="0.0"
                 type="number"
-                className="no-spinner flex-1 bg-transparent text-lg focus:outline-none lg:text-2xl"
+                className="no-spinner w-4/5 flex-1 bg-transparent text-lg focus:outline-none lg:text-2xl"
                 style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
               />
 

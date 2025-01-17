@@ -173,7 +173,7 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
             <div id="token list">
               <h6 className="mb-2 text-textSecondary">Token List</h6>
 
-              <ul className="h-96 space-y-2 overflow-y-scroll">
+              <ul className="scroll-container h-96 space-y-2 overflow-y-scroll">
                 {tokenList.map((token) => {
                   return (
                     <li
