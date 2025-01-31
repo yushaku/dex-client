@@ -1,5 +1,3 @@
-import { assets } from './assets'
-
 export type Data = {
   address: string
 }
@@ -19,4 +17,10 @@ export type ItemNft = {
   url: string
 }
 
-export type Asset = (typeof assets)[number]
+export type Asset = {
+  address: string
+  decimals: number
+  symbol: string
+  name: string
+  logoURI: string
+}

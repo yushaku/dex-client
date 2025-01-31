@@ -38,7 +38,7 @@ export type Props = {
   toAsset: Asset | null
   amount: string
   slippage: number
-  networkId: number
+  chainId: number
 }
 
 export const BEST_TRADE_ODOS = 'BEST_TRADE_ODOS'
@@ -49,11 +49,9 @@ export const useOdosQuoteSwap = ({
   amount,
   slippage,
   account,
-  networkId,
+  chainId,
 }: Partial<Props>) => {
-  const isEnabled = Boolean(
-    fromAsset && toAsset && networkId === bsc.id && !isInvalidAmount(amount),
-  )
+  const isEnabled = Boolean(fromAsset && toAsset && !isInvalidAmount(amount))
 
   const fetchQuote = async () => {
     if (!isEnabled) return
@@ -64,7 +62,7 @@ export const useOdosQuoteSwap = ({
     ).toString()
 
     const quoteRequestBody = {
-      chainId: networkId,
+      chainId,
       inputTokens: [
         {
           tokenAddress: getAddress(
@@ -83,7 +81,7 @@ export const useOdosQuoteSwap = ({
       ],
       userAddr: getAddress(account ?? zeroAddress),
       slippageLimitPercent: slippage,
-      referralCode: 121015208,
+      // referralCode: 121015208,
       pathVizImage: true,
       disableRFQs: true,
       compact: true,
@@ -121,10 +119,7 @@ export const useOdosQuoteSwap = ({
 
 export const useOdosSwap = (autoClose = false) => {
   const [pending, setPending] = useState(false)
-  let { address: account, chainId } = useAccount()
-
-  account ??= zeroAddress
-  chainId ??= bsc.id
+  const { address: account = zeroAddress, chainId = 56 } = useAccount()
 
   const { startTxn, endTxn, sendTxn, closeTxnModal, writeTxn } = useTxn(bsc.id)
 
@@ -149,7 +144,7 @@ export const useOdosSwap = (autoClose = false) => {
       let isApproved = true
       const routerAddress = contracts.odos[bsc.id]
 
-      if (fromAsset.address !== 'BNB') {
+      if (fromAsset.address !== zeroAddress) {
         const allowance = (await readContract({
           address: fromAsset.address,
           abi: ERC20_ABI,

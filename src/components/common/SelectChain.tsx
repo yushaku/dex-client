@@ -1,8 +1,9 @@
+import { cn } from '@/utils'
 import { Menu } from '@headlessui/react'
 import { Fragment } from 'react'
+import { arbitrum, bsc, bscTestnet, mainnet } from 'viem/chains'
 import { useChainId, useSwitchChain } from 'wagmi'
-import { BSC } from '../icons'
-import { cn } from '@/utils'
+import { Arbitrum, BSC, ETH } from '../icons'
 import { Dropdown } from '../warper'
 
 export const SelectChain = () => {
@@ -30,7 +31,7 @@ export const SelectChain = () => {
                   onClick={() => switchChain({ chainId: id })}
                   className={cn(
                     active ? 'bg-focus text-accent' : 'text-textSecondary',
-                    'flex w-full items-center gap-3 px-4 py-3 text-sm'
+                    'flex w-full items-center gap-3 px-4 py-3 text-sm',
                   )}
                 >
                   <Logo className="size-5" />
@@ -46,29 +47,24 @@ export const SelectChain = () => {
 }
 
 const chainList = [
-  // {
-  //   id: 1,
-  //   name: 'Ethereum',
-  //   logo: ETH
-  // },
-  // {
-  //   id: 5,
-  //   name: 'Goerli',
-  //   logo: ETH
-  // },
-  // {
-  //   id: 80001,
-  //   name: 'Mumbai',
-  //   logo: Matic
-  // },
   {
-    id: 97,
-    name: 'BSC Testnet',
-    logo: BSC
+    id: mainnet.id,
+    name: 'Ethereum',
+    logo: ETH,
   },
   {
-    id: 56,
+    id: arbitrum.id,
+    name: 'Arbitrum',
+    logo: Arbitrum,
+  },
+  {
+    id: bscTestnet.id,
+    name: 'BSC Testnet',
+    logo: BSC,
+  },
+  {
+    id: bsc.id,
     name: 'BSC',
-    logo: BSC
-  }
+    logo: BSC,
+  },
 ] as const

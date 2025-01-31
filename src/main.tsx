@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { WagmiProvider } from 'wagmi'
 import App from './App.tsx'
-import { checkUser } from './apis'
+// import { checkUser } from './apis'
 import './styles/index.css'
 import { config, connectModalStyle, env } from './utils'
 import { ThirdwebProvider } from '@thirdweb-dev/react'
@@ -25,7 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <QueryClientProvider client={queryClient}>
           <ConnectKitProvider
             theme="midnight"
-            onConnect={({ address }) => checkUser(address)}
+            // onConnect={({ address }) => checkUser(address)}
             customTheme={connectModalStyle}
           >
             <AssetsProvider>

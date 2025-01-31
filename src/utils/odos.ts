@@ -1,5 +1,5 @@
 import { formatUnits } from 'viem/utils'
-import { assets } from './assets'
+import { WrapAsset } from '@/stores/addictionTokens'
 
 export const routers = {
   1: '0xCf5540fFFCdC3d510B18bFcA6d2b9987b0772559',
@@ -47,7 +47,7 @@ export const percents = [
 export const isInvalidAmount = (amount?: string | number | null) =>
   !amount || Number.isNaN(Number(amount)) || Number(amount) <= 0
 
-export const findAsset = (token: string | null) =>
+export const findAsset = (token: string | null, assets: Array<WrapAsset>) =>
   token
     ? assets.find(
         (asset) => asset.address.toLowerCase() === token.toLowerCase(),

@@ -1,66 +1,54 @@
 import { ArrowPathIcon } from '@heroicons/react/16/solid'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { formatUnits } from 'viem'
+import { formatUnits, zeroAddress } from 'viem'
 import { bsc } from 'viem/chains'
 import { useAccount, useBalance, useSwitchChain } from 'wagmi'
 
 import { DotLoader } from '@/components/common/Loading'
 import { WalletButton } from '@/components/layout/header'
 import { Card } from '@/components/warper'
-import {
-  useDebounce,
-  useOdosQuoteSwap,
-  useOdosSwap,
-  useTokenPrice,
-} from '@/hooks'
+import { useDebounce, useOdosQuoteSwap, useOdosSwap } from '@/hooks'
+import { AssetsContext } from '@/hooks/useAssets'
 import { useSettingState } from '@/stores'
-import { Asset, cn } from '@/utils'
-import { findAsset, formatAmount } from '@/utils/odos'
+import { Asset, cn, supportedChain } from '@/utils'
+import { getTopAssets } from '@/utils/assets'
+import { findAsset } from '@/utils/odos'
 import { OrderChart } from './OrderChart'
+import { OrderInput } from './OrderInput'
 import { OrderRouting } from './OrderRouting'
 import { OrderSetting } from './OrderSetting'
-import { OrderToken } from './OrderToken'
 
 export const SwapPane = () => {
   // GLOBAL state
-  const { address: account, chainId } = useAccount()
+  const { address: account, chainId = 56 } = useAccount()
+  const { listTokens } = useContext(AssetsContext)
   const { switchChain } = useSwitchChain()
   const { setting } = useSettingState()
   const [searchParams, setSearchParams] = useSearchParams()
   const [fromAsset, setFromAsset] = useState<Asset | null>(null)
   const [toAsset, setToAsset] = useState<Asset | null>(null)
+  const topAssets = getTopAssets(chainId)
+  const isSupport = Boolean(supportedChain.find((c) => c.id === chainId))
 
-  const fromToken = searchParams.get('from')
-  const toToken = searchParams.get('to')
+  const fromToken = searchParams.get('from') ?? ''
+  const toToken = searchParams.get('to') ?? ''
 
   // CALL API
   const { data: tokenFromBalance } = useBalance({
-    token: fromToken ?? '',
+    token: fromToken === zeroAddress ? undefined : fromToken,
     address: account,
-    chainId: bsc.id,
     query: {
       enabled: Boolean(fromToken && account),
     },
   })
 
   const { data: tokenToBalance } = useBalance({
-    token: toToken ?? '',
-    chainId: bsc.id,
+    token: toToken === zeroAddress ? undefined : toToken,
     address: account,
     query: {
-      enabled: Boolean(fromToken && account),
+      enabled: Boolean(toToken && account),
     },
-  })
-
-  const { data: tokenAPrice } = useTokenPrice({
-    token: fromToken ?? '',
-    chainId: bsc.id,
-  })
-
-  const { data: tokenBPrice } = useTokenPrice({
-    token: toToken ?? '',
-    chainId: bsc.id,
   })
 
   // LOCAL STATE
@@ -71,25 +59,25 @@ export const SwapPane = () => {
   useEffect(() => {
     if (!fromToken) {
       setSearchParams({
-        from: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
-        to: '0x55d398326f99059ff775485246999027b3197955', //USDT
+        from: zeroAddress,
+        to: topAssets.at(-1)?.address ?? '',
       })
     }
-  }, [fromToken, setSearchParams])
+  }, [fromToken, setSearchParams, topAssets])
 
   useEffect(() => {
-    const tokenA = findAsset(fromToken)
+    const tokenA = findAsset(fromToken, listTokens)
     if (tokenA) {
       setFromAsset(tokenA)
     }
-  }, [fromToken])
+  }, [fromToken, listTokens])
 
   useEffect(() => {
-    const tokenB = findAsset(toToken)
+    const tokenB = findAsset(toToken, listTokens)
     if (tokenB) {
       setToAsset(tokenB)
     }
-  }, [toToken])
+  }, [listTokens, toToken])
 
   // CALL API ODOS
   const { onOdosSwap, pending: isSwapping } = useOdosSwap(true)
@@ -98,7 +86,7 @@ export const SwapPane = () => {
     toAsset,
     account: account,
     amount: amountA,
-    networkId: bsc.id,
+    chainId,
     slippage: setting.slippage,
   })
 
@@ -113,13 +101,8 @@ export const SwapPane = () => {
       to: tokenB?.address ?? '',
     })
 
-    if (bestTrade && toAsset) {
-      const amountSwaped = formatUnits(
-        BigInt(bestTrade.outAmounts[0]),
-        toAsset.decimals,
-      )
-      setFromAmount(amountSwaped)
-    }
+    setFromAmount('0')
+    setToAmount('0')
   }
 
   const handleSetAmount = (persent: number) => {
@@ -182,61 +165,15 @@ export const SwapPane = () => {
         </h4>
 
         <article className="relative mt-10">
-          <div
-            id="TOKEN-A"
-            className={cn(
-              'mt-5 space-y-1 rounded-xl border border-focus bg-background p-4',
-              'focus-within:border-lighterAccent hover:border-lighterAccent',
-            )}
-          >
-            <div className="flex justify-between">
-              <input
-                placeholder="0.0"
-                type="number"
-                value={fromAmount}
-                onChange={(e) => {
-                  const value = e.target.value
-                  setFromAmount(Number(value).toString())
-                  if (Number(value) === 0) {
-                    setToAmount('0')
-                  }
-                }}
-                className="no-spinner w-4/5 flex-1 bg-transparent text-lg focus:outline-none lg:text-2xl"
-                style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
-              />
-
-              <OrderToken
-                handleSetToken={(asset) => handleSetToken('from', asset)}
-                asset={fromAsset}
-              />
-            </div>
-
-            <div className="flex justify-between text-sm lg:text-lg">
-              <p className="text-textSecondary">
-                $
-                {Number(
-                  Number(tokenAPrice?.usdPrice ?? 0) * Number(fromAmount),
-                ).toFixed(4)}
-              </p>
-              <p className="space-x-2 text-textSecondary">
-                <span>Balance:</span>
-
-                {tokenFromBalance?.value !== undefined ? (
-                  <span>
-                    <strong className="mr-1">
-                      {formatAmount({
-                        amount: tokenFromBalance?.value,
-                        decimals: fromAsset?.decimals,
-                      })}
-                    </strong>
-                    {fromAsset?.symbol}
-                  </span>
-                ) : (
-                  <span>--</span>
-                )}
-              </p>
-            </div>
-          </div>
+          <OrderInput
+            type="from"
+            amount={fromAmount}
+            asset={fromAsset}
+            balance={tokenFromBalance?.value}
+            setToAmount={setToAmount}
+            setFromAmount={setFromAmount}
+            handleSetToken={handleSetToken}
+          />
 
           <button
             onClick={handleSwapPosition}
@@ -246,62 +183,22 @@ export const SwapPane = () => {
             <ArrowPathIcon className="animate size-5 hover:stroke-lighterAccent group-hover:rotate-180" />
           </button>
 
-          <div
-            id="TOKEN-B"
-            className={cn(
-              'mt-5 space-y-1 rounded-xl border border-focus bg-background p-4',
-              'focus-within:border-lighterAccent hover:border-lighterAccent',
-            )}
-          >
-            <div className="flex justify-between">
-              <input
-                value={toAmount}
-                disabled
-                placeholder="0.0"
-                type="number"
-                className="no-spinner w-4/5 flex-1 bg-transparent text-lg focus:outline-none lg:text-2xl"
-                style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
-              />
-
-              <OrderToken
-                handleSetToken={(asset) => handleSetToken('to', asset)}
-                asset={toAsset}
-              />
-            </div>
-
-            <div className="flex justify-between text-sm lg:text-lg">
-              <p className="text-textSecondary">
-                $
-                {Number(
-                  Number(tokenBPrice?.usdPrice ?? 0) * Number(toAmount),
-                ).toFixed(4)}
-              </p>
-              <p className="space-x-2 text-textSecondary">
-                <span>Balance:</span>
-
-                {tokenToBalance?.value !== undefined ? (
-                  <span>
-                    <strong className="mr-1">
-                      {formatAmount({
-                        amount: tokenToBalance.value,
-                        decimals: toAsset?.decimals ?? 18,
-                      })}
-                    </strong>
-                    {toAsset?.symbol}
-                  </span>
-                ) : (
-                  <span>--</span>
-                )}
-              </p>
-            </div>
-          </div>
+          <OrderInput
+            type="to"
+            amount={toAmount}
+            asset={toAsset}
+            balance={tokenToBalance?.value}
+            setToAmount={setToAmount}
+            setFromAmount={setFromAmount}
+            handleSetToken={handleSetToken}
+          />
         </article>
 
         <article id="BUTTON_GROUP">
           <button
             className={cn(
               'mt-5 h-10 w-full rounded-lg bg-accent hover:bg-lighterAccent',
-              chainId !== bsc.id ? 'hidden' : 'flex-center',
+              isSupport ? 'flex-center' : 'hidden',
               {
                 'bg-focus': isSwapping || !bestTrade,
               },
@@ -334,7 +231,7 @@ export const SwapPane = () => {
             className={cn(
               'mt-5 h-10 w-full rounded-lg bg-accent hover:bg-lighterAccent',
               {
-                hidden: !chainId || chainId === bsc.id,
+                hidden: !chainId || isSupport,
               },
             )}
           >
