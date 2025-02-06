@@ -1,3 +1,4 @@
+import { useGetNftCollections } from '@/hooks/NFTs'
 import { routes } from '@/utils'
 import { ArrowRightIcon } from '@heroicons/react/20/solid'
 import { useEffect, useState } from 'react'
@@ -6,6 +7,7 @@ import { Link } from 'react-router-dom'
 export const NftDashboard = () => {
   const [index, setIndex] = useState(0)
   const [selected, setSelected] = useState(collections[index])
+  const { data = [] } = useGetNftCollections({ enabled: true })
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -60,12 +62,12 @@ export const NftDashboard = () => {
       </div>
 
       <ul className="relative mt-5 grid grid-cols-5 gap-5">
-        {collections.map((col, jndex) => {
+        {collections.map((col, i) => {
           return (
             <li
               className="animate group relative cursor-pointer overflow-hidden rounded-lg hover:-translate-y-2"
               onClick={() => setSelected(col)}
-              key={jndex}
+              key={i}
             >
               <img
                 src={col.img}
@@ -80,6 +82,56 @@ export const NftDashboard = () => {
           )
         })}
       </ul>
+
+      <h3 className="mb-5 mt-20 text-2xl font-bold">Top</h3>
+
+      <ul className="space-y-2">
+        <li className="grid grid-cols-5 border-b border-gray-500 pb-3 font-bold text-lighterAccent">
+          <p>Name</p>
+          <p>floor price usd</p>
+          <p>market cap usd</p>
+          <p>volume usd</p>
+          <p>24hr percent change</p>
+        </li>
+
+        {data?.map((col, i) => {
+          return (
+            <li key={i}>
+              <Link
+                to={`${routes.nfts}/${col.collectionId}`}
+                className="grid grid-cols-5 gap-2 p-2 hover:bg-focus"
+              >
+                <span className="flex items-center gap-2">
+                  <img
+                    src={col.image}
+                    alt="NFT"
+                    className="size-10 rounded-full"
+                  />
+                  <h3 className="animate text-sm font-bold text-gray-300">
+                    {col.name}
+                  </h3>
+                </span>
+
+                <p className="animate text-sm font-bold text-gray-300">
+                  {col.name}
+                </p>
+
+                <p className="animate text-sm font-bold text-gray-300">
+                  {col.uniqueOwnerRatio}
+                </p>
+
+                <p className="animate text-sm font-bold text-gray-300">
+                  {col.vol}
+                </p>
+
+                <p className="animate text-sm font-bold text-gray-300">
+                  {col.volPctChg}
+                </p>
+              </Link>
+            </li>
+          )
+        })}
+      </ul>
     </section>
   )
 }
@@ -90,7 +142,7 @@ const collections = [
     author: 'Yushaku',
     authorImg: '/logo.png',
     address: '0x14a9c99d89106F66C2B86910d2C622Ce0A58C630',
-    img: '/gundams.jpg'
+    img: '/gundams.jpg',
   },
   {
     name: 'Pudgy Penguins',
@@ -98,7 +150,7 @@ const collections = [
     authorImg:
       'https://images.blur.io/_blur-prod/0xbd3531da5cf5857e7cfaa92426877b022e612cf8/7387-2a29cab51c8c73ac?w=64&h=64',
     address: '0x14a9c99d89106F66C2B86910d2C622Ce0A58C630',
-    img: 'https://images.blur.io/_blur-prod/_assets/homepage/covers/bayc-1.png?w=1560&format=png'
+    img: 'https://images.blur.io/_blur-prod/_assets/homepage/covers/bayc-1.png?w=1560&format=png',
   },
   {
     name: 'Pudgy Penguins',
@@ -106,7 +158,7 @@ const collections = [
     address: '0x14a9c99d89106F66C2B86910d2C622Ce0A58C630',
     authorImg:
       'https://images.blur.io/_blur-prod/0xbd3531da5cf5857e7cfaa92426877b022e612cf8/7387-2a29cab51c8c73ac?w=64&h=64',
-    img: 'https://images.blur.io/_blur-prod/_assets/homepage/covers/azuki-1.png?w=1560&format=png'
+    img: 'https://images.blur.io/_blur-prod/_assets/homepage/covers/azuki-1.png?w=1560&format=png',
   },
   {
     name: 'Pudgy Penguins',
@@ -114,7 +166,7 @@ const collections = [
     address: '0x14a9c99d89106F66C2B86910d2C622Ce0A58C630',
     authorImg:
       'https://images.blur.io/_blur-prod/0xbd3531da5cf5857e7cfaa92426877b022e612cf8/7387-2a29cab51c8c73ac?w=64&h=64',
-    img: 'https://i.seadn.io/gae/5c-HcdLMinTg3LvEwXYZYC-u5nN22Pn5ivTPYA4pVEsWJHU1rCobhUlHSFjZgCHPGSmcGMQGCrDCQU8BfSfygmL7Uol9MRQZt6-gqA?w=886'
+    img: 'https://i.seadn.io/gae/5c-HcdLMinTg3LvEwXYZYC-u5nN22Pn5ivTPYA4pVEsWJHU1rCobhUlHSFjZgCHPGSmcGMQGCrDCQU8BfSfygmL7Uol9MRQZt6-gqA?w=886',
   },
   {
     name: 'Pudgy Penguins',
@@ -122,6 +174,6 @@ const collections = [
     address: '0x14a9c99d89106F66C2B86910d2C622Ce0A58C630',
     authorImg:
       'https://images.blur.io/_blur-prod/0xbd3531da5cf5857e7cfaa92426877b022e612cf8/7387-2a29cab51c8c73ac?w=64&h=64',
-    img: 'https://i.seadn.io/gae/0rRqgbEAHfee51ZWv0Crstfq_o3cHB7JdOwMMG0QPKqncTtkTvtTrEaLUcUysJHeLrLQ6UgtXmJB2-8xP3p-Z2_fhgnl6MgQmOY2?w=500&auto=format'
-  }
+    img: 'https://i.seadn.io/gae/0rRqgbEAHfee51ZWv0Crstfq_o3cHB7JdOwMMG0QPKqncTtkTvtTrEaLUcUysJHeLrLQ6UgtXmJB2-8xP3p-Z2_fhgnl6MgQmOY2?w=500&auto=format',
+  },
 ]

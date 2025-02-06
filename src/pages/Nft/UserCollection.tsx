@@ -1,27 +1,24 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ERC721_ABI } from '@/abi/erc721'
 import { Button } from '@/components/common/Button'
 import { Input } from '@/components/common/Input'
 import { DotLoader } from '@/components/common/Loading'
-import { useGetCollections, useInportCollection } from '@/hooks/useNfts'
 import { cn, publicClient, routes } from '@/utils'
 import { shortenAddress } from '@thirdweb-dev/react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { isAddress } from 'viem'
-import { useAccount, useChainId } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 export const UserCollection = () => {
-  const chainId = useChainId()
   const [skeleton, setSkeleton] = useState({
     address: '',
     name: '',
-    loading: false
+    loading: false,
   })
 
-  const { address } = useAccount()
-  // const { data: collector } = useCollector(address)
+  const collections: any[] = []
   const { address: userAddress } = useAccount()
-  const { data: collections } = useGetCollections(address, chainId)
 
   return (
     <section className="min-h-[85%]">
@@ -46,7 +43,7 @@ export const UserCollection = () => {
           <DotLoader className="absolute right-1/2 top-1/2 z-10  translate-x-1/2" />
         </article>
 
-        {collections?.collections.map((nft) => {
+        {collections?.map((nft) => {
           return (
             <Link
               to={`${routes.myNFTs}/${nft.address}`}
@@ -71,7 +68,7 @@ export const UserCollection = () => {
 
 type Props = React.FormHTMLAttributes<HTMLFormElement> & {
   userAddress?: string
-  whenSubmit: ({ address, name }: { address: string; name: string }) => void
+  whenSubmit: (_data: { address: string; name: string }) => void
   onSuccess: () => void
 }
 
@@ -79,12 +76,11 @@ const FormImport = ({
   userAddress = '0x0',
   whenSubmit,
   onSuccess,
-  className
+  className,
 }: Props) => {
-  const chainId = useChainId()
   const [address, setAddress] = useState('0x')
   const [error, setError] = useState('')
-  const { mutateAsync: importCollection, isPending } = useInportCollection()
+  console.log(userAddress)
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -93,7 +89,7 @@ const FormImport = ({
       const name = await publicClient.readContract({
         address,
         abi: ERC721_ABI,
-        functionName: 'name'
+        functionName: 'name',
       })
 
       if (!name) {
@@ -101,7 +97,7 @@ const FormImport = ({
       }
 
       whenSubmit({ address, name })
-      await importCollection({ address, name, userAddress, chainId })
+      // await importCollection({ address, name, userAddress, chainId })
       onSuccess()
       setAddress('0x')
     } else {
@@ -122,13 +118,7 @@ const FormImport = ({
         className={`mt-5 ${error && 'border-red-500'}`}
       />
       <span className="mt-2 text-sm text-red-500">{error}</span>
-      <Button
-        loading={isPending}
-        disabled={isPending || !userAddress}
-        type="submit"
-        title="Import"
-        className="mt-5 w-full"
-      />
+      <Button type="submit" title="Import" className="mt-5 w-full" />
     </form>
   )
 }
