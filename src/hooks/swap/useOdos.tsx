@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ERC20_ABI } from '@/abi/erc20'
 import { Asset, TXN_STATUS, readContract } from '@/utils'
 import { contracts } from '@/utils/contracts'
 import { isInvalidAmount, quoteUrl } from '@/utils/odos'
@@ -8,7 +7,7 @@ import axios from 'axios'
 import { useCallback, useState } from 'react'
 import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
-import { getAddress, maxUint256, parseUnits, zeroAddress } from 'viem'
+import { erc20Abi, getAddress, maxUint256, parseUnits, zeroAddress } from 'viem'
 import { useAccount } from 'wagmi'
 import { useTxn } from '../useTxn'
 
@@ -152,7 +151,7 @@ export const useOdosSwap = (autoClose = false) => {
       if (fromAsset.address !== zeroAddress) {
         const allowance = (await readContract({
           address: fromAsset.address,
-          abi: ERC20_ABI,
+          abi: erc20Abi,
           functionName: 'allowance',
           args: [account, routerAddress],
           chainId,
@@ -188,7 +187,7 @@ export const useOdosSwap = (autoClose = false) => {
       if (!isApproved) {
         const approvalResult = await writeTxn(key, approveId, {
           address: fromAsset.address,
-          abi: ERC20_ABI,
+          abi: erc20Abi,
           functionName: 'approve',
           args: [routerAddress, maxUint256],
         })

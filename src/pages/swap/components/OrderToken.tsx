@@ -1,4 +1,3 @@
-import { ERC20_ABI } from '@/abi/erc20'
 import { Button } from '@/components/common/Button'
 import { useDebounce, useTokenMetadata } from '@/hooks'
 import { AssetsContext } from '@/hooks/useAssets'
@@ -19,7 +18,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/16/solid'
 import { useContext, useEffect, useMemo, useState } from 'react'
-import { formatUnits, isAddress } from 'viem'
+import { erc20Abi, formatUnits, isAddress } from 'viem'
 import { useAccount, useReadContract } from 'wagmi'
 
 type Props = {
@@ -51,7 +50,7 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
   }, [deboundSearch, listTokens])
 
   const { data: balanceOf } = useReadContract({
-    abi: ERC20_ABI,
+    abi: erc20Abi,
     address: deboundSearch,
     functionName: 'balanceOf',
     args: [account ?? ''],

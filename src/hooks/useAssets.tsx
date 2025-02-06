@@ -1,7 +1,6 @@
-import { ERC20_ABI } from '@/abi/erc20'
 import { WrapAsset, useTokensState } from '@/stores/addictionTokens'
 import React, { createContext, useMemo } from 'react'
-import { formatUnits, zeroAddress } from 'viem'
+import { erc20Abi, formatUnits, zeroAddress } from 'viem'
 import { useAccount, useBalance, useReadContracts } from 'wagmi'
 import { useFetchTokenList } from './useGetTokenMetadata'
 
@@ -33,7 +32,7 @@ export const AssetsProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const { data: balanceOfs } = useReadContracts({
     contracts: allTokens.map((token) => ({
-      abi: ERC20_ABI,
+      abi: erc20Abi,
       functionName: 'balanceOf',
       address: token.address,
       args: [account],
