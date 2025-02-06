@@ -2,14 +2,14 @@ import {
   StreetAddress,
   useCreateOrder,
   useDeleteOrders,
-  useGetAddresses
+  useGetAddresses,
 } from '@/apis'
 import { useGetPrice } from '@/apis/price'
 import { Button } from '@/components/common/Button'
 import { SelectPayToken } from '@/components/common/SelectPayToken'
 import { BSC, USDT } from '@/components/icons'
 import { useCartState } from '@/stores/shopCart'
-import { SHOP_PAYMENT_ADDRESS, ZERO_ADDRESS, cn } from '@/utils'
+import { SHOP_PAYMENT_ADDRESS, ZERO_ADDRESS, cn, shortenAddress } from '@/utils'
 import { toastContractError } from '@/utils/error'
 import {
   Description,
@@ -18,10 +18,9 @@ import {
   DialogPanel,
   DialogTitle,
   Radio,
-  RadioGroup
+  RadioGroup,
 } from '@headlessui/react'
 import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/16/solid'
-import { shortenString } from '@thirdweb-dev/react'
 import { useEffect, useState } from 'react'
 import { parseEther } from 'viem'
 import { useSendTransaction } from 'wagmi'
@@ -92,7 +91,7 @@ export const PaymentForm = () => {
 const ConfirmTab = ({
   isShow,
   address_id,
-  setStep
+  setStep,
 }: {
   isShow: boolean
   address_id: number
@@ -121,8 +120,8 @@ const ConfirmTab = ({
       token_address: token,
       products: itemList.map((item) => ({
         product_id: item.product_id,
-        quantity: item.quantity
-      }))
+        quantity: item.quantity,
+      })),
     })
 
     // setOrder(data)
@@ -131,7 +130,7 @@ const ConfirmTab = ({
       {
         to: SHOP_PAYMENT_ADDRESS,
         data: data.encodeData as `0x${string}`,
-        value: parseEther(data.order.price_in_token)
+        value: parseEther(data.order.price_in_token),
       },
       {
         onSuccess: () => {
@@ -140,8 +139,8 @@ const ConfirmTab = ({
         onError: async (e) => {
           toastContractError(e)
           await deleteOrder([data.order.order_id])
-        }
-      }
+        },
+      },
     )
   }
 
@@ -151,7 +150,7 @@ const ConfirmTab = ({
         <div
           className={cn(
             'mb-4 flex items-center justify-between',
-            isError || isSuccess ? 'hidden' : 'flex'
+            isError || isSuccess ? 'hidden' : 'flex',
           )}
         >
           <h6>Select payment token</h6>
@@ -161,7 +160,7 @@ const ConfirmTab = ({
         <ul
           className={cn(
             'flex-wrap gap-2 rounded bg-focus p-2',
-            isError || isSuccess ? 'hidden' : 'flex'
+            isError || isSuccess ? 'hidden' : 'flex',
           )}
         >
           {itemList.map((item) => {
@@ -192,7 +191,7 @@ const ConfirmTab = ({
           className={cn(
             'mt-4 flex items-center gap-4',
             isSuccess && 'hidden',
-            isError && 'hidden'
+            isError && 'hidden',
           )}
         >
           <span>Total: </span>
@@ -214,7 +213,7 @@ const ConfirmTab = ({
           className={cn(
             'mt-4 flex justify-between gap-2',
             (isCallApi || isPaused || isError || isPending || isSuccess) &&
-              'hidden'
+              'hidden',
           )}
         >
           <Button
@@ -264,7 +263,7 @@ const SelectAddress = ({
   isShow,
   selected,
   setStep,
-  setSelected
+  setSelected,
 }: {
   isShow: boolean
   selected: StreetAddress | null
@@ -274,8 +273,8 @@ const SelectAddress = ({
   const { data: addressList } = useGetAddresses({
     options: {
       enabled: true,
-      refetchOnWindowFocus: true
-    }
+      refetchOnWindowFocus: true,
+    },
   })
 
   useEffect(() => {
@@ -307,7 +306,7 @@ const SelectAddress = ({
                   <div aria-hidden="true">&middot;</div>
                   <div>{plan.street}</div>
                   <div aria-hidden="true">&middot;</div>
-                  <div>{shortenString(plan.phone_number, true)}</div>
+                  <div>{shortenAddress(plan.phone_number)}</div>
                 </div>
               </div>
 
