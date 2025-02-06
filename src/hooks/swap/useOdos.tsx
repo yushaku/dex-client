@@ -6,9 +6,9 @@ import { isInvalidAmount, quoteUrl } from '@/utils/odos'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { useCallback, useState } from 'react'
+import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
 import { getAddress, maxUint256, parseUnits, zeroAddress } from 'viem'
-import { bsc } from 'viem/chains'
 import { useAccount } from 'wagmi'
 import { useTxn } from '../useTxn'
 
@@ -121,7 +121,7 @@ export const useOdosSwap = (autoClose = false) => {
   const [pending, setPending] = useState(false)
   const { address: account = zeroAddress, chainId = 56 } = useAccount()
 
-  const { startTxn, endTxn, sendTxn, closeTxnModal, writeTxn } = useTxn(bsc.id)
+  const { startTxn, endTxn, sendTxn, closeTxnModal, writeTxn } = useTxn(chainId)
 
   const onOdosSwap = useCallback(
     async ({
@@ -137,12 +137,17 @@ export const useOdosSwap = (autoClose = false) => {
       quote: any
       callback?: () => void
     }) => {
+      if (chainId !== 56 && chainId !== 1 && chainId !== 42161) {
+        toast.error('Unsupported chain')
+        return
+      }
+
       const key = uuidv4()
       const approveId = uuidv4()
       const swapId = uuidv4()
 
       let isApproved = true
-      const routerAddress = contracts.odos[bsc.id]
+      const routerAddress = contracts.odos[chainId]
 
       if (fromAsset.address !== zeroAddress) {
         const allowance = (await readContract({

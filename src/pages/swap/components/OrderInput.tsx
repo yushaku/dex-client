@@ -3,12 +3,15 @@ import { Asset, cn } from '@/utils'
 import { formatAmount } from '@/utils/odos'
 import { useAccount } from 'wagmi'
 import { OrderToken } from './OrderToken'
+import { TokensDialog } from './TokensDialog'
+import { WrapAsset } from '@/stores/addictionTokens'
 
 type Props = {
   type: 'from' | 'to'
   asset: Asset | null
   amount: string
   balance: bigint | undefined
+  listAssets?: WrapAsset[]
   setToAmount: (_amount: string) => void
   setFromAmount: (_amount: string) => void
   handleSetToken: (_type: 'from' | 'to', _asset: Asset) => void
@@ -19,6 +22,7 @@ export const OrderInput = ({
   amount,
   asset,
   balance,
+  listAssets,
   setToAmount,
   setFromAmount,
   handleSetToken,
@@ -54,13 +58,24 @@ export const OrderInput = ({
           style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
         />
 
-        <OrderToken
-          handleSetToken={(asset) => {
-            handleSetToken(type, asset)
-            setToAmount('0')
-          }}
-          asset={asset}
-        />
+        {listAssets ? (
+          <TokensDialog
+            handleSetToken={(asset) => {
+              handleSetToken(type, asset)
+              setToAmount('0')
+            }}
+            asset={asset}
+            listAssets={listAssets}
+          />
+        ) : (
+          <OrderToken
+            handleSetToken={(asset) => {
+              handleSetToken(type, asset)
+              setToAmount('0')
+            }}
+            asset={asset}
+          />
+        )}
       </div>
 
       <div className="flex justify-between text-sm lg:text-lg">

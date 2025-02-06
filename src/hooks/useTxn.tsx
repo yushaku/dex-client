@@ -12,7 +12,7 @@ import { useTransactionStore } from '@/stores/transaction'
 import { Address } from 'viem'
 import { useGetTx } from './useGetTx'
 
-export const useTxn = (chainId: 56 | 97) => {
+export const useTxn = (chainId: number) => {
   const { transactionHref } = useGetTx()
 
   const {
