@@ -21,7 +21,7 @@ import { useAccount } from 'wagmi'
 import * as yup from 'yup'
 
 export const UserNftDetail = () => {
-  const { cip: tokenId, id: nftAddress } = useParams()
+  const { cip: tokenId } = useParams()
   const { address: userAddress } = useAccount()
   const [isOpenForm, setIsOpenForm] = useState(false)
   const navigate = useNavigate()
@@ -207,6 +207,7 @@ const ListNftForm = ({ className, userAddress }: Props) => {
   } = useForm<Inputs>({ resolver: yupResolver(schema) })
 
   async function onSubmit(_data: Inputs) {}
+  console.log(userAddress)
 
   return (
     <form

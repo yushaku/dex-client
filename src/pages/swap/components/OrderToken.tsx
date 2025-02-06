@@ -18,7 +18,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/16/solid'
 import { useContext, useEffect, useMemo, useState } from 'react'
-import { erc20Abi, formatUnits, isAddress } from 'viem'
+import { Address, erc20Abi, formatUnits, isAddress, zeroAddress } from 'viem'
 import { useAccount, useReadContract } from 'wagmi'
 
 type Props = {
@@ -51,9 +51,9 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
 
   const { data: balanceOf } = useReadContract({
     abi: erc20Abi,
-    address: deboundSearch,
+    address: isAddress(deboundSearch) ? deboundSearch : undefined,
     functionName: 'balanceOf',
-    args: [account ?? ''],
+    args: [account ?? zeroAddress],
     query: {
       enabled: isAddress(deboundSearch) && !!account,
     },
@@ -84,7 +84,7 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
   const handleTogglenewToken = (token: WrapAsset) => {
     const exist = storageTokens.find((t) => t.address === token.address)
     if (exist) {
-      remove(token.address)
+      remove(token.address as Address)
     } else {
       delete token?.isCustom
       token.isLocal = true

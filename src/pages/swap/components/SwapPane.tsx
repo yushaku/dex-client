@@ -1,7 +1,7 @@
 import { ArrowPathIcon } from '@heroicons/react/16/solid'
 import { useContext, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { formatUnits, zeroAddress } from 'viem'
+import { Address, formatUnits, isAddress, zeroAddress } from 'viem'
 import { bsc } from 'viem/chains'
 import { useAccount, useBalance, useSwitchChain } from 'wagmi'
 
@@ -36,18 +36,18 @@ export const SwapPane = () => {
 
   // CALL API
   const { data: tokenFromBalance } = useBalance({
-    token: fromToken === zeroAddress ? undefined : fromToken,
+    token: fromToken === zeroAddress ? undefined : (fromToken as Address),
     address: account,
     query: {
-      enabled: Boolean(fromToken && account),
+      enabled: isAddress(fromToken) && Boolean(account),
     },
   })
 
   const { data: tokenToBalance } = useBalance({
-    token: toToken === zeroAddress ? undefined : toToken,
+    token: toToken === zeroAddress ? undefined : (toToken as Address),
     address: account,
     query: {
-      enabled: Boolean(toToken && account),
+      enabled: isAddress(toToken) && Boolean(account),
     },
   })
 

@@ -7,7 +7,14 @@ import axios from 'axios'
 import { useCallback, useState } from 'react'
 import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
-import { erc20Abi, getAddress, maxUint256, parseUnits, zeroAddress } from 'viem'
+import {
+  erc20Abi,
+  getAddress,
+  isAddress,
+  maxUint256,
+  parseUnits,
+  zeroAddress,
+} from 'viem'
 import { useAccount } from 'wagmi'
 import { useTxn } from '../useTxn'
 
@@ -138,6 +145,11 @@ export const useOdosSwap = (autoClose = false) => {
     }) => {
       if (chainId !== 56 && chainId !== 1 && chainId !== 42161) {
         toast.error('Unsupported chain')
+        return
+      }
+
+      if (!isAddress(fromAsset.address)) {
+        toast.error('Invalid token address')
         return
       }
 

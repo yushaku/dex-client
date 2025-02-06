@@ -1,6 +1,6 @@
 import { WrapAsset, useTokensState } from '@/stores/addictionTokens'
 import React, { createContext, useMemo } from 'react'
-import { erc20Abi, formatUnits, zeroAddress } from 'viem'
+import { Address, erc20Abi, formatUnits, zeroAddress } from 'viem'
 import { useAccount, useBalance, useReadContracts } from 'wagmi'
 import { useFetchTokenList } from './useGetTokenMetadata'
 
@@ -34,7 +34,7 @@ export const AssetsProvider: React.FC<{ children: React.ReactNode }> = ({
     contracts: allTokens.map((token) => ({
       abi: erc20Abi,
       functionName: 'balanceOf',
-      address: token.address,
+      address: token.address as Address,
       args: [account],
       chainId,
     })),

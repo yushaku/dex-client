@@ -1,5 +1,5 @@
 import { chainlinkPriceFeedABI } from '@/abi/chainlinkPriceFeed'
-import { formatUnits } from 'viem'
+import { Address, formatUnits } from 'viem'
 import { useReadContract } from 'wagmi'
 
 const symbolPrice = {
@@ -16,7 +16,7 @@ export const useGetPrice = ({
   const { symbol } = params
 
   const { data, ...rest } = useReadContract({
-    address: symbolPrice[symbol],
+    address: symbolPrice[symbol] as Address,
     abi: chainlinkPriceFeedABI,
     functionName: 'latestRoundData',
     chainId: 56,

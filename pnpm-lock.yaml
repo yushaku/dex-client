@@ -40,10 +40,10 @@ importers:
         version: 8.0.0
       graphql:
         specifier: ^16.8.1
-        version: 16.8.1
+        version: 16.10.0
       graphql-request:
         specifier: ^6.1.0
-        version: 6.1.0(encoding@0.1.13)(graphql@16.8.1)
+        version: 6.1.0(encoding@0.1.13)(graphql@16.10.0)
       luxon:
         specifier: ^3.5.0
         version: 3.5.0
@@ -3458,8 +3458,8 @@ packages:
     peerDependencies:
       graphql: 14 - 16
 
-  graphql@16.8.1:
-    resolution: {integrity: sha512-59LZHPdGZVh695Ud9lRzPBVTtlX9ZCV150Er2W43ro37wVof0ctenSaskPPjN7lVTIN8mSZt8PHUNKZuNQUuxw==}
+  graphql@16.10.0:
+    resolution: {integrity: sha512-AjqGKbDGUFRKIRCP9tCKiIGHyriz2oHEbPIbEtcSLSs4YjReZOIPQQWek4+6hjw62H9QShXHyaGivGiYVLeYFQ==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
 
   h3@1.11.1:
@@ -7013,9 +7013,9 @@ snapshots:
 
   '@floating-ui/utils@0.2.8': {}
 
-  '@graphql-typed-document-node/core@3.2.0(graphql@16.8.1)':
+  '@graphql-typed-document-node/core@3.2.0(graphql@16.10.0)':
     dependencies:
-      graphql: 16.8.1
+      graphql: 16.10.0
 
   '@hapi/hoek@9.3.0': {}
 
@@ -9916,15 +9916,15 @@ snapshots:
 
   graphemer@1.4.0: {}
 
-  graphql-request@6.1.0(encoding@0.1.13)(graphql@16.8.1):
+  graphql-request@6.1.0(encoding@0.1.13)(graphql@16.10.0):
     dependencies:
-      '@graphql-typed-document-node/core': 3.2.0(graphql@16.8.1)
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.10.0)
       cross-fetch: 3.1.8(encoding@0.1.13)
-      graphql: 16.8.1
+      graphql: 16.10.0
     transitivePeerDependencies:
       - encoding
 
-  graphql@16.8.1: {}
+  graphql@16.10.0: {}
 
   h3@1.11.1:
     dependencies:

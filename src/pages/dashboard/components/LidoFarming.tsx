@@ -11,7 +11,7 @@ import { contracts } from '@/utils/contracts'
 import { formatAmount } from '@/utils/odos'
 import { ArrowDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import { useEffect, useState } from 'react'
-import { erc20Abi, formatEther, parseEther, zeroAddress } from 'viem'
+import { Address, erc20Abi, formatEther, parseEther, zeroAddress } from 'viem'
 import { mainnet } from 'viem/chains'
 import { useAccount, useBalance, useReadContracts } from 'wagmi'
 
@@ -328,7 +328,7 @@ const RenzoStake = () => {
   const { data: balances } = useReadContracts({
     contracts: assets.map((asset) => ({
       abi: erc20Abi,
-      address: asset.address,
+      address: asset.address as Address,
       functionName: 'balanceOf',
       args: [account ?? zeroAddress],
     })),
