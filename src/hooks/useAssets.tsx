@@ -1,35 +1,40 @@
-import React, { createContext, useContext, useMemo } from 'react'
-import { ERC20_ABI } from '@/abi/erc20'
 import { WrapAsset, useTokensState } from '@/stores/addictionTokens'
-import { assets } from '@/utils/assets'
-import { formatUnits } from 'viem'
-import { useAccount, useReadContracts } from 'wagmi'
+import React, { createContext, useMemo } from 'react'
+import { Address, erc20Abi, formatUnits, zeroAddress } from 'viem'
+import { useAccount, useBalance, useReadContracts } from 'wagmi'
+import { useFetchTokenList } from './useGetTokenMetadata'
 
 // Create context for assets
-const AssetsContext = createContext<{
+export const AssetsContext = createContext<{
   mappedToken: Record<string, WrapAsset>
-  tokenList: Array<WrapAsset>
+  listTokens: Array<WrapAsset>
 }>({
   mappedToken: {},
-  tokenList: [],
+  listTokens: [],
 })
 
-// Provider component
 export const AssetsProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { tokenList: storageTokens } = useTokensState()
-  const { address: account, chainId } = useAccount()
+
+  const { address: account, chainId = 56 } = useAccount()
+  const { data: assets = [] } = useFetchTokenList(chainId)
   const allTokens = useMemo(
     () => storageTokens.concat(assets as unknown as WrapAsset),
-    [storageTokens],
+    [assets, storageTokens],
   )
+
+  const { data: nativeBalance } = useBalance({
+    address: account,
+    query: { enabled: Boolean(account) },
+  })
 
   const { data: balanceOfs } = useReadContracts({
     contracts: allTokens.map((token) => ({
-      abi: ERC20_ABI,
+      abi: erc20Abi,
       functionName: 'balanceOf',
-      address: token.address,
+      address: token.address as Address,
       args: [account],
       chainId,
     })),
@@ -39,12 +44,15 @@ export const AssetsProvider: React.FC<{ children: React.ReactNode }> = ({
     },
   })
 
-  const { mappedToken, tokenList } = useMemo(() => {
+  const { mappedToken, listTokens } = useMemo(() => {
     const mapped: Record<string, WrapAsset> = {}
     const list: Array<WrapAsset> = []
 
     allTokens.forEach((token, index) => {
-      const balanceOf = (balanceOfs?.at(index)?.result ?? 0n) as bigint
+      const balanceOf =
+        token.address === zeroAddress
+          ? nativeBalance?.value ?? 0n
+          : ((balanceOfs?.at(index)?.result ?? 0n) as bigint)
 
       const asset = {
         ...token,
@@ -58,22 +66,13 @@ export const AssetsProvider: React.FC<{ children: React.ReactNode }> = ({
 
     return {
       mappedToken: mapped,
-      tokenList: list.sort((a, b) => Number(b.balance - a.balance)),
+      listTokens: list.sort((a, b) => Number(b.balance - a.balance)),
     }
-  }, [allTokens, balanceOfs])
+  }, [allTokens, balanceOfs, nativeBalance?.value])
 
   return (
-    <AssetsContext.Provider value={{ mappedToken, tokenList }}>
+    <AssetsContext.Provider value={{ mappedToken, listTokens }}>
       {children}
     </AssetsContext.Provider>
   )
-}
-
-// Custom hook to use the assets context
-export const useAssets = () => {
-  const context = useContext(AssetsContext)
-  if (!context) {
-    throw new Error('useAssets must be used within an AssetsProvider')
-  }
-  return context
 }

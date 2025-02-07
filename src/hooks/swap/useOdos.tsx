@@ -1,14 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ERC20_ABI } from '@/abi/erc20'
 import { Asset, TXN_STATUS, readContract } from '@/utils'
 import { contracts } from '@/utils/contracts'
 import { isInvalidAmount, quoteUrl } from '@/utils/odos'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { useCallback, useState } from 'react'
+import { toast } from 'react-toastify'
 import { v4 as uuidv4 } from 'uuid'
-import { getAddress, maxUint256, parseUnits, zeroAddress } from 'viem'
-import { bsc } from 'viem/chains'
+import {
+  erc20Abi,
+  getAddress,
+  isAddress,
+  maxUint256,
+  parseUnits,
+  zeroAddress,
+} from 'viem'
 import { useAccount } from 'wagmi'
 import { useTxn } from '../useTxn'
 
@@ -38,7 +44,7 @@ export type Props = {
   toAsset: Asset | null
   amount: string
   slippage: number
-  networkId: number
+  chainId: number
 }
 
 export const BEST_TRADE_ODOS = 'BEST_TRADE_ODOS'
@@ -49,11 +55,9 @@ export const useOdosQuoteSwap = ({
   amount,
   slippage,
   account,
-  networkId,
+  chainId,
 }: Partial<Props>) => {
-  const isEnabled = Boolean(
-    fromAsset && toAsset && networkId === bsc.id && !isInvalidAmount(amount),
-  )
+  const isEnabled = Boolean(fromAsset && toAsset && !isInvalidAmount(amount))
 
   const fetchQuote = async () => {
     if (!isEnabled) return
@@ -64,7 +68,7 @@ export const useOdosQuoteSwap = ({
     ).toString()
 
     const quoteRequestBody = {
-      chainId: networkId,
+      chainId,
       inputTokens: [
         {
           tokenAddress: getAddress(
@@ -83,7 +87,7 @@ export const useOdosQuoteSwap = ({
       ],
       userAddr: getAddress(account ?? zeroAddress),
       slippageLimitPercent: slippage,
-      referralCode: 121015208,
+      // referralCode: 121015208,
       pathVizImage: true,
       disableRFQs: true,
       compact: true,
@@ -121,12 +125,9 @@ export const useOdosQuoteSwap = ({
 
 export const useOdosSwap = (autoClose = false) => {
   const [pending, setPending] = useState(false)
-  let { address: account, chainId } = useAccount()
+  const { address: account = zeroAddress, chainId = 56 } = useAccount()
 
-  account ??= zeroAddress
-  chainId ??= bsc.id
-
-  const { startTxn, endTxn, sendTxn, closeTxnModal, writeTxn } = useTxn(bsc.id)
+  const { startTxn, endTxn, sendTxn, closeTxnModal, writeTxn } = useTxn(chainId)
 
   const onOdosSwap = useCallback(
     async ({
@@ -142,17 +143,27 @@ export const useOdosSwap = (autoClose = false) => {
       quote: any
       callback?: () => void
     }) => {
+      if (chainId !== 56 && chainId !== 1 && chainId !== 42161) {
+        toast.error('Unsupported chain')
+        return
+      }
+
+      if (!isAddress(fromAsset.address)) {
+        toast.error('Invalid token address')
+        return
+      }
+
       const key = uuidv4()
       const approveId = uuidv4()
       const swapId = uuidv4()
 
       let isApproved = true
-      const routerAddress = contracts.odos[bsc.id]
+      const routerAddress = contracts.odos[chainId]
 
-      if (fromAsset.address !== 'BNB') {
+      if (fromAsset.address !== zeroAddress) {
         const allowance = (await readContract({
           address: fromAsset.address,
-          abi: ERC20_ABI,
+          abi: erc20Abi,
           functionName: 'allowance',
           args: [account, routerAddress],
           chainId,
@@ -188,7 +199,7 @@ export const useOdosSwap = (autoClose = false) => {
       if (!isApproved) {
         const approvalResult = await writeTxn(key, approveId, {
           address: fromAsset.address,
-          abi: ERC20_ABI,
+          abi: erc20Abi,
           functionName: 'approve',
           args: [routerAddress, maxUint256],
         })

@@ -1,10 +1,9 @@
-import { ERC20_ABI } from '@/abi/erc20'
 import { Button } from '@/components/common/Button'
 import { useDebounce, useTokenMetadata } from '@/hooks'
-import { useAssets } from '@/hooks/useAssets'
+import { AssetsContext } from '@/hooks/useAssets'
 import { WrapAsset, useTokensState } from '@/stores/addictionTokens'
 import { Asset, cn, getTokenLink } from '@/utils'
-import { topAssets } from '@/utils/assets'
+import { getTopAssets } from '@/utils/assets'
 import {
   Dialog,
   DialogBackdrop,
@@ -18,8 +17,8 @@ import {
   TrashIcon,
   XMarkIcon,
 } from '@heroicons/react/16/solid'
-import { useEffect, useMemo, useState } from 'react'
-import { formatUnits, isAddress } from 'viem'
+import { useContext, useEffect, useMemo, useState } from 'react'
+import { Address, erc20Abi, formatUnits, isAddress, zeroAddress } from 'viem'
 import { useAccount, useReadContract } from 'wagmi'
 
 type Props = {
@@ -30,9 +29,10 @@ type Props = {
 type AssetList = Array<WrapAsset>
 
 export const OrderToken = ({ asset, handleSetToken }: Props) => {
-  const { address: account, chainId } = useAccount()
+  const { address: account, chainId = 56 } = useAccount()
   const { tokenList: storageTokens, add, remove } = useTokensState()
-  const { tokenList: listTokens } = useAssets()
+  const { listTokens } = useContext(AssetsContext)
+  const topAssets = getTopAssets(chainId)
 
   const [tokenList, setTokenList] = useState<AssetList>(listTokens)
   const [isOpen, setIsOpen] = useState(false)
@@ -50,10 +50,10 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
   }, [deboundSearch, listTokens])
 
   const { data: balanceOf } = useReadContract({
-    abi: ERC20_ABI,
-    address: deboundSearch,
+    abi: erc20Abi,
+    address: isAddress(deboundSearch) ? deboundSearch : undefined,
     functionName: 'balanceOf',
-    args: [account ?? ''],
+    args: [account ?? zeroAddress],
     query: {
       enabled: isAddress(deboundSearch) && !!account,
     },
@@ -61,7 +61,7 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
   const { data: newToken } = useTokenMetadata({
     token: deboundSearch,
     enabled: isAddress(deboundSearch) || tokenList.length === 0,
-    chainId: 56,
+    chainId,
   })
 
   useEffect(() => {
@@ -73,7 +73,6 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
           logoURI: newToken?.[0].logo,
           symbol: newToken?.[0].symbol,
           decimals: newToken?.[0].decimals,
-          chainId: 56,
           formatted: formatUnits(balanceOf ?? 0n, newToken?.[0].decimals),
           balance: balanceOf ?? 0n,
           isCustom: true,
@@ -85,7 +84,7 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
   const handleTogglenewToken = (token: WrapAsset) => {
     const exist = storageTokens.find((t) => t.address === token.address)
     if (exist) {
-      remove(token.address)
+      remove(token.address as Address)
     } else {
       delete token?.isCustom
       token.isLocal = true
@@ -140,7 +139,14 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
             />
 
             <div id="TOP-TOKENS">
-              <h6 className="mb-2 text-textSecondary">Treding Tokens</h6>
+              <h6
+                className={cn(
+                  'mb-2 text-textSecondary',
+                  topAssets.length === 0 && 'hidden',
+                )}
+              >
+                Treding Tokens
+              </h6>
 
               <ul className="grid grid-cols-4 gap-2">
                 {topAssets.map((token) => {

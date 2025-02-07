@@ -1,15 +1,12 @@
-import { NFTMetadata } from '@thirdweb-dev/sdk'
-
 type Props = React.VideoHTMLAttributes<HTMLVideoElement> & {
-  metadata: NFTMetadata
+  url: string
   isOn: boolean
 }
 
-export const Nftmedia = ({ metadata, isOn }: Props) => {
-  const url = metadata?.image || '/img.svg'
+export const Nftmedia = ({ url, isOn }: Props) => {
   const type = url?.split('.')?.at(-1)
 
-  if (!metadata || !type) return <span />
+  if (!url || !type) return <span />
 
   switch (type) {
     case 'mp4':

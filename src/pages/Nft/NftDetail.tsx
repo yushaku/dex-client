@@ -1,25 +1,46 @@
 import { Button } from '@/components/common/Button'
-import Tilt from 'react-parallax-tilt'
 import { NativeToken } from '@/components/common/NativeTokenBalance'
 import { Card } from '@/components/warper'
-import { GATEWAY_URL, chartdata, fakeNFTs } from '@/utils'
+import { getNameFromId } from '@/hooks'
+import { NftDetail } from '@/hooks/NFTs/type'
+import { chartdata, shortenAddress } from '@/utils'
 import {
   ArrowLeftIcon,
   Bars3BottomLeftIcon,
   ClockIcon,
   ShoppingCartIcon,
-  TagIcon
+  TagIcon,
 } from '@heroicons/react/16/solid'
+import { useQuery } from '@tanstack/react-query'
 import { AreaChart, Divider } from '@tremor/react'
+import axios from 'axios'
 import { Fragment } from 'react'
+import Tilt from 'react-parallax-tilt'
 import { useNavigate, useParams } from 'react-router-dom'
-import TypeIt from 'typeit-react'
+import { isAddress } from 'viem'
+import { useAccount } from 'wagmi'
 
 export const DetailNFT = () => {
-  const { cip } = useParams()
   const navigate = useNavigate()
+  const { chainId = 1 } = useAccount()
+  const { id: address = '', cip = '' } = useParams()
 
-  const nft = fakeNFTs[Number(cip ?? 0)]
+  const { data: nft } = useQuery<NftDetail>({
+    queryKey: ['rtp/tokens/v7', JSON.stringify({ address, cip, chainId })],
+    queryFn: async () => {
+      const response = await axios.get(
+        `https://api-mainnet.magiceden.io/v3/rtp/${getNameFromId(chainId)}/tokens/v7`,
+        {
+          params: {
+            tokens: [`${address}:${cip}`],
+          },
+        },
+      )
+
+      return response.data?.tokens?.at(0)
+    },
+    enabled: isAddress(address),
+  })
 
   return (
     <section>
@@ -28,7 +49,7 @@ export const DetailNFT = () => {
         className="my-5 text-lg text-gray-100 hover:text-accent"
       >
         <ArrowLeftIcon className="mr-3 inline-block size-5" />
-        Gundam Collection
+        {nft?.token?.collection?.name}
       </button>
 
       <div className="grid grid-cols-2 gap-5">
@@ -44,26 +65,14 @@ export const DetailNFT = () => {
               className="animate parallax-effect h-1/2 w-full cursor-grabbing group-hover:w-fit"
             >
               <Card className="animate h-[600px] w-full group-hover:w-fit">
-                <video
-                  src={`${GATEWAY_URL}${nft.url}`}
-                  className="size-full"
-                  autoPlay
-                  loop
-                  muted
-                />
+                <img className="size-full" src={nft?.media?.image} />
               </Card>
             </Tilt>
           </div>
 
           <Card className="mt-5">
             <h3 className="text-2xl">Description</h3>
-            <p className="text-sm text-gray-300">
-              Alyxandra's fierce independence, resourcefulness, mental acuity
-              and raw talent make her both a natural leader and a lone wolf. She
-              struggles against societal norms, relishes the freedoms of
-              mercenary life, and fights for her family. She is ambitious beyond
-              measure.
-            </p>
+            <p className="text-sm text-gray-300">{nft?.token?.description}</p>
           </Card>
 
           <Card className="mt-5">
@@ -83,19 +92,13 @@ export const DetailNFT = () => {
 
         <article className="col-span-1">
           <Card>
-            <h3 className="text-2xl text-lighterAccent">
-              <TypeIt
-                options={{
-                  strings: [`#${nft.cip} - ${nft.name}`],
-                  waitUntilVisible: true,
-                  cursor: false
-                }}
-              />
-            </h3>
-            <p className="text-sm text-gray-50">Owned by Yushaku</p>
-            <ul className="mt-5 flex gap-4">
+            <h3 className="text-2xl text-lighterAccent">{nft?.token?.name}</h3>
+            <p className="mt-5 w-fit rounded-lg bg-background px-3 py-1">
+              Owned by {shortenAddress(nft?.token?.owner)}
+            </p>
+            <ul className="mt-2 flex gap-4">
               <li className="rounded-lg bg-background px-3 py-1">
-                # {nft.cip}
+                # {nft?.token.lastFlagUpdate}
               </li>
               <li className="rounded-lg bg-background px-3 py-1">23 views</li>
               <li className="rounded-lg bg-background px-3 py-1">PFPs</li>
@@ -106,7 +109,8 @@ export const DetailNFT = () => {
             <Fragment>
               <p className="text-sm text-gray-400">Current Price</p>
               <h3 className="my-3 text-2xl font-bold">
-                0.05 <NativeToken className="inline-block size-5" />
+                {nft?.market.floorAsk.price.amount.native}{' '}
+                <NativeToken className="inline-block size-5" />
               </h3>
               <p className="flex gap-4">
                 <Button
@@ -207,22 +211,22 @@ export const DetailNFT = () => {
 const nftDetail = [
   {
     type: 'Contract Address',
-    value: '0x000000000000000'
+    value: '0x000000000000000',
   },
   {
     type: 'Token ID',
-    value: '1'
+    value: '1',
   },
   {
     type: 'Token Standard',
-    value: 'ERC 721'
+    value: 'ERC 721',
   },
   {
     type: 'last update',
-    value: '1 year ago'
+    value: '1 year ago',
   },
   {
     type: 'Creator Earning',
-    value: '5%'
-  }
+    value: '5%',
+  },
 ]

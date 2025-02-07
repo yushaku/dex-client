@@ -24,7 +24,7 @@ type TokenMetadata = {
 type UseTokenMetadataParams = {
   token: string
   enabled?: boolean
-  chainId: 1 | 56
+  chainId: number
 }
 
 export const useTokenMetadata = ({
@@ -71,19 +71,52 @@ export const useTokenPrice = ({
   return useQuery<TokenPriceData>({
     queryKey: ['tokenPrice', token, chainId],
     queryFn: async () => {
-      const response = await axios.get(`${BASE_URL}/erc20/${token}/price`, {
-        headers: {
-          accept: 'application/json',
-          'X-API-Key': env.VITE_MORALIS_API_KEY,
+      const response = await axios.get(
+        `https://api.odos.xyz/pricing/token/${chainId}`,
+        {
+          headers: {
+            accept: 'application/json',
+          },
+          params: {
+            token_addresses: token,
+          },
         },
-        params: {
-          chain: getChainName(chainId),
-          include: 'percent_change',
-        },
-      })
+      )
 
-      return response.data
+      return response.data?.tokenPrices?.[token] ?? 0
     },
     enabled: !!token && enabled,
+  })
+}
+
+export const useFetchTokenList = (chainId: number = 56) => {
+  return useQuery({
+    queryKey: ['assets', chainId],
+    queryFn: async () => {
+      const res = await axios.get(
+        `https://api.odos.xyz/info/tokens/${chainId}`,
+        {
+          headers: {
+            Accept: 'application/json',
+          },
+        },
+      )
+
+      const data = res.data.tokenMap as Record<
+        string,
+        { name: string; symbol: string; decimals: number }
+      >
+
+      return Object.entries(data).map(
+        ([address, { name, symbol, decimals }]) => ({
+          address,
+          name,
+          symbol,
+          decimals,
+          logoURI: `https://assets.odos.xyz/tokens/${symbol}.webp`,
+        }),
+      )
+    },
+    staleTime: Infinity,
   })
 }

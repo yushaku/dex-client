@@ -1,7 +1,4 @@
-import { useEffect } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { useAccount } from 'wagmi'
-import { checkUser } from './apis'
 import { Layout } from './components/layout'
 import {
   AdminPage,
@@ -20,17 +17,17 @@ import {
   UserNftDetail,
   UserNfts,
 } from './pages'
-import { env, routes } from './utils'
 import { Bridge } from './pages/brige'
+import { routes } from './utils'
 
 function App() {
-  const { address, isConnected } = useAccount()
+  // const { address, isConnected } = useAccount()
 
-  useEffect(() => {
-    if (isConnected) {
-      checkUser(address)
-    }
-  }, [address, isConnected])
+  // useEffect(() => {
+  //   if (isConnected) {
+  //     checkUser(address)
+  //   }
+  // }, [address, isConnected])
 
   return (
     <BrowserRouter>

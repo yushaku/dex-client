@@ -1,14 +1,11 @@
-import { NFT_FACTORY_ADDRESS, cn, publicClient } from '@/utils'
-import { decodeAbiParameters } from 'viem'
+import { NFT_FACTOARY_ABI } from '@/abi/nftFactory'
+import { NFT_FACTORY_ADDRESS, cn, waitForTransaction } from '@/utils'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useWriteContract } from 'wagmi'
 import * as yup from 'yup'
 import { Button } from '../Button'
-import { useChainId } from '@thirdweb-dev/react'
-import { useInportCollection } from '@/hooks'
-import { useAccount, useWriteContract } from 'wagmi'
-import { NFT_FACTOARY_ABI } from '@/abi/nftFactory'
-import { useState } from 'react'
 import { DotLoader } from '../Loading'
 
 type Inputs = {
@@ -20,23 +17,18 @@ type Inputs = {
 const schema = yup.object({
   name: yup.string().required(),
   symbol: yup.string().required(),
-  royalty: yup.number().min(0).max(5).required().default(0)
+  royalty: yup.number().min(0).max(5).required().default(0),
 })
 
-const NEEDED_LOG_INDEX = 2
-
 export const CreateCollectionTab = () => {
-  const chainId = useChainId()
   const [media, setMedia] = useState<File | null>()
-  const { address: userAddress } = useAccount()
-  const { mutateAsync: importCollecion } = useInportCollection()
   const { isPending, writeContractAsync } = useWriteContract()
 
   const {
     register,
     handleSubmit,
     getValues,
-    formState: { errors }
+    formState: { errors },
   } = useForm<Inputs>({ resolver: yupResolver(schema) })
 
   async function onSubmit(data: Inputs) {
@@ -48,21 +40,23 @@ export const CreateCollectionTab = () => {
       address: NFT_FACTORY_ADDRESS,
       abi: NFT_FACTOARY_ABI,
       functionName: 'create',
-      args: [name, symbol, royalty]
+      args: [name, symbol, royalty],
     })
 
-    const transaction = await publicClient.getTransactionReceipt({ hash })
-    const log = transaction?.logs[NEEDED_LOG_INDEX]
-    const values = decodeAbiParameters(
-      [
-        { name: 'from', type: 'address' },
-        { name: 'name', type: 'string' },
-        { name: 'nft', type: 'address' }
-      ],
-      log.data
-    )
-    const nftAddress = values[NEEDED_LOG_INDEX]
-    await importCollecion({ name, address: nftAddress, userAddress, chainId })
+    const transaction = await waitForTransaction(hash)
+    console.log(transaction)
+
+    // const log = transaction?.logs[NEEDED_LOG_INDEX]
+    // const values = decodeAbiParameters(
+    //   [
+    //     { name: 'from', type: 'address' },
+    //     { name: 'name', type: 'string' },
+    //     { name: 'nft', type: 'address' },
+    //   ],
+    //   log.data,
+    // )
+    // const nftAddress = values[NEEDED_LOG_INDEX]
+    // await importCollecion({ name, address: nftAddress, userAddress, chainId })
   }
 
   const styleInput =
@@ -86,7 +80,7 @@ export const CreateCollectionTab = () => {
           type="text"
           placeholder="Symbol"
           className={cn(styleInput, {
-            'border-red-400': errors.symbol?.message
+            'border-red-400': errors.symbol?.message,
           })}
           {...register('symbol', { required: true })}
         />
@@ -95,7 +89,7 @@ export const CreateCollectionTab = () => {
           type="text"
           placeholder="Set royalty from 0% to 5%"
           className={cn(styleInput, {
-            'border-red-400': errors.royalty?.message
+            'border-red-400': errors.royalty?.message,
           })}
           {...register('royalty', { required: true })}
         />
@@ -107,7 +101,7 @@ export const CreateCollectionTab = () => {
             setMedia(e.target.files?.[0])
           }}
           className={cn(
-            'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-none'
+            'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-none',
           )}
         />
         <label className="text-gray-400">

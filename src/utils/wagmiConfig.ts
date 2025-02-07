@@ -9,23 +9,20 @@ import {
 } from '@wagmi/core'
 import { Address } from 'viem'
 import { createConfig, http } from 'wagmi'
-import { bsc, bscTestnet } from 'wagmi/chains'
+import { arbitrum, bsc, bscTestnet, mainnet } from 'wagmi/chains'
 
-// declare module 'wagmi' {
-//   interface Register {
-//     config: typeof config
-//   }
-// }
-
+export const supportedChain = [bscTestnet, bsc, mainnet, arbitrum] as const
 export const config = createConfig({
   ssr: true,
-  chains: [bscTestnet, bsc],
+  chains: supportedChain,
   connectors: [
     // walletConnect({ projectId: env.VITE_WALLET_CONNECT_ID }),
   ],
   transports: {
     [bscTestnet.id]: http(),
     [bsc.id]: http(),
+    [mainnet.id]: http(),
+    [arbitrum.id]: http(),
   },
 }) as any
 
