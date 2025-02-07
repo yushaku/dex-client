@@ -1,7 +1,6 @@
 import { NativeBalance } from '@/components/common/NativeTokenBalance'
 import { cn, shortenAddress } from '@/utils'
 import { useAccount, useEnsName } from 'wagmi'
-import { StakedValueLockChart } from './components/Chart'
 import { HelloGuy } from './components/Hello'
 import { LidoFarming } from './components/LidoFarming'
 import { LidoStakeForm } from './components/LidoStaking'
@@ -32,7 +31,7 @@ export const Dashboard = () => {
       )}
 
       <LidoFarming />
-      <StakedValueLockChart />
+      {/* <StakedValueLockChart /> */}
     </>
   )
 }

@@ -3,7 +3,7 @@ import { NativeToken } from '@/components/common/NativeTokenBalance'
 import { Card } from '@/components/warper'
 import { getNameFromId } from '@/hooks'
 import { NftDetail } from '@/hooks/NFTs/type'
-import { chartdata, shortenAddress } from '@/utils'
+import { shortenAddress } from '@/utils'
 import {
   ArrowLeftIcon,
   Bars3BottomLeftIcon,
@@ -12,7 +12,6 @@ import {
   TagIcon,
 } from '@heroicons/react/16/solid'
 import { useQuery } from '@tanstack/react-query'
-import { AreaChart, Divider } from '@tremor/react'
 import axios from 'axios'
 import { Fragment } from 'react'
 import Tilt from 'react-parallax-tilt'
@@ -121,21 +120,21 @@ export const DetailNFT = () => {
                 <Button icon={TagIcon} title="Make Offer" className="w-1/2" />
               </p>
 
-              <Divider className="border-gray-700">History</Divider>
+              <h4 className="border-gray-700">History</h4>
 
               <h3>
                 <ClockIcon className="mr-3 inline-block size-5" />
                 Sale ends April 30, 2024 at 7:50 AM
               </h3>
-              <AreaChart
-                className="h-80"
-                data={chartdata}
-                index="date"
-                categories={['ETH']}
-                colors={['indigo']}
-                yAxisWidth={60}
-                onValueChange={(v) => console.log(v)}
-              />
+              {/* <AreaChart */}
+              {/*   className="h-80" */}
+              {/*   data={chartdata} */}
+              {/*   index="date" */}
+              {/*   categories={['ETH']} */}
+              {/*   colors={['indigo']} */}
+              {/*   yAxisWidth={60} */}
+              {/*   onValueChange={(v) => console.log(v)} */}
+              {/* /> */}
             </Fragment>
           </Card>
 
