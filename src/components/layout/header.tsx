@@ -14,7 +14,7 @@ type Props = {
   switchTheme: () => void
 }
 
-export const Header = ({ theme, switchTheme }: Props) => {
+export const Header = (_prop: Props) => {
   const location = useLocation().pathname
   const title = headTitle[location as keyof typeof headTitle] ?? 'Home'
 
@@ -29,13 +29,13 @@ export const Header = ({ theme, switchTheme }: Props) => {
       </h3>
 
       <div className="flex-center gap-3">
-        <button className="hidden p-3 md:block" onClick={switchTheme}>
-          {theme === 'light' ? (
-            <SunIcon className="size-6 fill-accent" />
-          ) : (
-            <MoonIcon className="size-6" />
-          )}
-        </button>
+        {/* <button className="hidden p-3 md:block" onClick={switchTheme}> */}
+        {/*   {theme === 'light' ? ( */}
+        {/*     <SunIcon className="size-6 fill-accent" /> */}
+        {/*   ) : ( */}
+        {/*     <MoonIcon className="size-6" /> */}
+        {/*   )} */}
+        {/* </button> */}
 
         <span className={`${location.includes('nft') ? '' : 'hidden'}`}>
           <CartList />

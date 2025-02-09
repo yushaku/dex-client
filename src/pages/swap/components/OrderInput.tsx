@@ -54,7 +54,7 @@ export const OrderInput = ({
               setToAmount('0')
             }
           }}
-          className="no-spinner flex-1 bg-transparent text-lg focus:outline-none lg:text-2xl"
+          className="no-spinner w-3/4 flex-1 bg-transparent text-lg focus:outline-none lg:text-2xl"
           style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
         />
 

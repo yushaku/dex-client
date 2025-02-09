@@ -4,14 +4,42 @@
 @tailwind components;
 @tailwind utilities;
 
+/*--accent: 221 100% 61%;*/
+/*--background: 235 32% 12%;*/
+/*lighter-accent: hsl(217, 100%, 70%)*/
+
 :root {
-  --background: #181d27;
   --layer: #1e2431;
   --focus: #2d3549;
   --text-primary: #f5f3f0;
   --text-secondary: #9ca3af;
   --accent: #3a78ff;
   --lighter-accent: #6ca3ff;
+
+  --background: 220 24% 12%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 0 0% 98%;
+  --primary-foreground: 240 5.9% 10%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 221 100% 61%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 240 4.9% 83.9%;
+  --chart-1: 220 70% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
 }
 
 [data-theme='light'] {
@@ -22,11 +50,43 @@
   --text-secondary: #7d879c; /* Muted blue-gray */
   --accent: #3a78ff; /* Keep accent color consistent */
   --lighter-accent: #6ca3ff; /* Keep lighter accent color consistent */
+
+  --background: 217.2 100% 95%;
+  --foreground: 217.2 5% 10%;
+  --card: 217.2 50% 90%;
+  --card-foreground: 217.2 5% 15%;
+  --popover: 217.2 100% 95%;
+  --popover-foreground: 217.2 100% 10%;
+  --primary: 217.2 91.2% 59.8%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 217.2 30% 70%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 179.2 30% 85%;
+  --muted-foreground: 217.2 5% 35%;
+  --accent: 179.2 30% 80%;
+  --accent-foreground: 217.2 5% 15%;
+  --destructive: 0 100% 30%;
+  --destructive-foreground: 217.2 5% 90%;
+  --border: 217.2 30% 50%;
+  --input: 217.2 30% 21%;
+  --ring: 217.2 91.2% 59.8%;
+  --radius: 0.75rem;
+  --ring: 240 10% 3.9%;
+  --chart-1: 12 76% 61%;
+  --chart-2: 173 58% 39%;
+  --chart-3: 197 37% 24%;
+  --chart-4: 43 74% 66%;
+  --chart-5: 27 87% 67%;
+  --radius: 0.5rem;
 }
 
 @layer base {
+  * {
+    @apply border-border;
+  }
+
   body {
-    @apply font-poppins text-gray-100;
+    @apply font-poppins bg-background text-foreground;
   }
 
   html {
@@ -153,7 +213,6 @@ iframe .header {
   -webkit-appearance: none;
   margin: 0;
 }
-
 .no-spinner {
   -moz-appearance: textfield;
 }
