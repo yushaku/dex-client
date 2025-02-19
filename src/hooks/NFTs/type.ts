@@ -39,6 +39,7 @@ export type NftDetail = {
 }
 
 export interface NftToken {
+  rarity: string
   chainId: number
   contract: string
   tokenId: string

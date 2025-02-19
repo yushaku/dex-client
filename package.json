@@ -33,6 +33,7 @@
     "react-router-dom": "^6.22.3",
     "react-toastify": "^10.0.5",
     "react-ts-tradingview-widgets": "^1.2.4",
+    "recharts": "^2.15.1",
     "tailwindcss-animate": "^1.0.7",
     "typeit-react": "^2.7.1",
     "use-local-storage": "^3.0.0",

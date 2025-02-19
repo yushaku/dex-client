@@ -3,10 +3,10 @@ import { ERC721_ABI } from '@/abi/erc721'
 import { Button } from '@/components/common/Button'
 import { Input } from '@/components/common/Input'
 import { DotLoader } from '@/components/common/Loading'
-import { cn, publicClient, routes, shortenAddress } from '@/utils'
+import { cn, readContract, routes, shortenAddress } from '@/utils'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { isAddress } from 'viem'
+import { Address, isAddress } from 'viem'
 import { useAccount } from 'wagmi'
 
 export const UserCollection = () => {
@@ -85,11 +85,12 @@ const FormImport = ({
     e.preventDefault()
 
     if (isAddress(address)) {
-      const name = await publicClient.readContract({
-        address,
+      const name = (await readContract({
+        address: address as Address,
         abi: ERC721_ABI,
         functionName: 'name',
-      })
+        args: [],
+      })) as string
 
       if (!name) {
         setError('This collection is not supported')

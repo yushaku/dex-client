@@ -1,12 +1,11 @@
-import { MoonIcon, SunIcon } from '@heroicons/react/16/solid'
+import { ShopCartList } from '@/pages/shop/components/shopCartList'
+import { cn, routes } from '@/utils'
+import createAvatar from '@/utils/avatar'
 import { ConnectKitButton } from 'connectkit'
 import { Link, useLocation } from 'react-router-dom'
-import { SelectChain } from '../common/SelectChain'
-import { cn, routes } from '@/utils'
 import { CartList } from '../common/CartList'
-import createAvatar from '@/utils/avatar'
+import { SelectChain } from '../common/SelectChain'
 import { MobileSidebar } from './MobileSidebar'
-import { ShopCartList } from '@/pages/shop/components/shopCartList'
 import { NotificationDropdown } from './Notification'
 
 type Props = {

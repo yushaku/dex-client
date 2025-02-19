@@ -1,5 +1,6 @@
 import { Button } from '@/components/common/Button'
 import { NativeToken } from '@/components/common/NativeTokenBalance'
+import { LoadingPage } from '@/components/ui/LoadingPage'
 import { Card } from '@/components/warper'
 import { getNameFromId } from '@/hooks'
 import { NftDetail } from '@/hooks/NFTs/type'
@@ -19,16 +20,18 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { isAddress } from 'viem'
 import { useAccount } from 'wagmi'
 
+const BASE_URL = 'https://api-mainnet.magiceden.io/v3/rtp'
+
 export const DetailNFT = () => {
   const navigate = useNavigate()
   const { chainId = 1 } = useAccount()
   const { id: address = '', cip = '' } = useParams()
 
-  const { data: nft } = useQuery<NftDetail>({
+  const { data: nft, isPending: isLoadingNft } = useQuery<NftDetail>({
     queryKey: ['rtp/tokens/v7', JSON.stringify({ address, cip, chainId })],
     queryFn: async () => {
       const response = await axios.get(
-        `https://api-mainnet.magiceden.io/v3/rtp/${getNameFromId(chainId)}/tokens/v7`,
+        `${BASE_URL}/${getNameFromId(chainId)}/tokens/v7`,
         {
           params: {
             tokens: [`${address}:${cip}`],
@@ -39,7 +42,45 @@ export const DetailNFT = () => {
       return response.data?.tokens?.at(0)
     },
     enabled: isAddress(address),
+    staleTime: Infinity,
   })
+
+  const { data: activity } = useQuery({
+    queryKey: ['rtp/activity/v5', JSON.stringify({ address, cip, chainId })],
+    queryFn: async () => {
+      const [stats, activity] = await Promise.all([
+        axios.get(
+          `https://stats-mainnet.magiceden.io/collection_stats/stats?`,
+          {
+            params: {
+              chain: getNameFromId(chainId),
+              collectionId: address,
+            },
+          },
+        ),
+        axios.get(
+          `${BASE_URL}/${getNameFromId(chainId)}/tokens/${address}:${cip}/activity/v5`,
+          {
+            params: {
+              tokens: [`${address}:${cip}`],
+              types: 'sale',
+              sortBy: 'eventTimestamp',
+            },
+          },
+        ),
+      ])
+
+      return {
+        stats: stats.data,
+        activity: activity.data?.activities,
+      }
+    },
+    enabled: isAddress(address),
+    staleTime: Infinity,
+    refetchInterval: 10_000,
+  })
+
+  if (isLoadingNft) return <LoadingPage />
 
   return (
     <section>
@@ -97,10 +138,11 @@ export const DetailNFT = () => {
             </p>
             <ul className="mt-2 flex gap-4">
               <li className="rounded-lg bg-background px-3 py-1">
-                # {nft?.token.lastFlagUpdate}
+                #rarity {nft?.token.rarity}
               </li>
-              <li className="rounded-lg bg-background px-3 py-1">23 views</li>
-              <li className="rounded-lg bg-background px-3 py-1">PFPs</li>
+              <li className="rounded-lg bg-background px-3 py-1">
+                {nft?.token?.kind}
+              </li>
             </ul>
           </Card>
 
@@ -110,6 +152,7 @@ export const DetailNFT = () => {
               <h3 className="my-3 text-2xl font-bold">
                 {nft?.market.floorAsk.price.amount.native}{' '}
                 <NativeToken className="inline-block size-5" />
+                {/* <span> = ${nft?.market?.floorAsk.price.amount.usd}</span> */}
               </h3>
               <p className="flex gap-4">
                 <Button
