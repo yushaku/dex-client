@@ -2,7 +2,7 @@
 import { Button } from '@/components/common/Button'
 import { NativeToken } from '@/components/common/NativeTokenBalance'
 import { Card } from '@/components/warper'
-import { chartdata, cn } from '@/utils'
+import { cn } from '@/utils'
 import {
   ArrowLeftIcon,
   Bars3BottomLeftIcon,
@@ -12,7 +12,6 @@ import {
   XMarkIcon,
 } from '@heroicons/react/16/solid'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { AreaChart, Divider } from '@tremor/react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -97,21 +96,21 @@ export const UserNftDetail = () => {
                 userAddress={userAddress}
               />
 
-              <Divider className="border-gray-700">History</Divider>
+              {/* <Divider className="border-gray-700">History</Divider> */}
 
               <h3>
                 <ClockIcon className="mr-3 inline-block size-5" />
                 Sale ends April 30, 2024 at 7:50 AM
               </h3>
-              <AreaChart
-                className="h-80"
-                data={chartdata}
-                index="date"
-                categories={['ETH']}
-                colors={['indigo']}
-                yAxisWidth={60}
-                onValueChange={(v) => console.log(v)}
-              />
+              {/* <AreaChart */}
+              {/*   className="h-80" */}
+              {/*   data={chartdata} */}
+              {/*   index="date" */}
+              {/*   categories={['ETH']} */}
+              {/*   colors={['indigo']} */}
+              {/*   yAxisWidth={60} */}
+              {/*   onValueChange={(v) => console.log(v)} */}
+              {/* /> */}
             </Fragment>
           </Card>
 

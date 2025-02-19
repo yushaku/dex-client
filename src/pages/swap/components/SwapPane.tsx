@@ -18,6 +18,7 @@ import { OrderChart } from './OrderChart'
 import { OrderInput } from './OrderInput'
 import { OrderRouting } from './OrderRouting'
 import { OrderSetting } from './OrderSetting'
+import { Button } from '@/components/ui/button'
 
 export const SwapPane = () => {
   // GLOBAL state
@@ -60,7 +61,7 @@ export const SwapPane = () => {
     if (!fromToken) {
       setSearchParams({
         from: zeroAddress,
-        to: topAssets.at(-1)?.address ?? '',
+        to: topAssets.at(0)?.address ?? '',
       })
     }
   }, [fromToken, setSearchParams, topAssets])
@@ -224,19 +225,16 @@ export const SwapPane = () => {
 
           <WalletButton className={cn('w-full mt-5', chainId && 'hidden')} />
 
-          <button
+          <Button
             onClick={() => {
               switchChain({ chainId: bsc.id })
             }}
-            className={cn(
-              'mt-5 h-10 w-full rounded-lg bg-accent hover:bg-lighterAccent',
-              {
-                hidden: !chainId || isSupport,
-              },
-            )}
+            className={cn('w-full', {
+              hidden: !chainId || isSupport,
+            })}
           >
             Connect to BSC
-          </button>
+          </Button>
         </article>
 
         {bestTrade && (

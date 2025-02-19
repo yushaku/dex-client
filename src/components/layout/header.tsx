@@ -1,12 +1,11 @@
-import { MoonIcon, SunIcon } from '@heroicons/react/16/solid'
+import { ShopCartList } from '@/pages/shop/components/shopCartList'
+import { cn, routes } from '@/utils'
+import createAvatar from '@/utils/avatar'
 import { ConnectKitButton } from 'connectkit'
 import { Link, useLocation } from 'react-router-dom'
-import { SelectChain } from '../common/SelectChain'
-import { cn, routes } from '@/utils'
 import { CartList } from '../common/CartList'
-import createAvatar from '@/utils/avatar'
+import { SelectChain } from '../common/SelectChain'
 import { MobileSidebar } from './MobileSidebar'
-import { ShopCartList } from '@/pages/shop/components/shopCartList'
 import { NotificationDropdown } from './Notification'
 
 type Props = {
@@ -14,7 +13,7 @@ type Props = {
   switchTheme: () => void
 }
 
-export const Header = ({ theme, switchTheme }: Props) => {
+export const Header = (_prop: Props) => {
   const location = useLocation().pathname
   const title = headTitle[location as keyof typeof headTitle] ?? 'Home'
 
@@ -29,13 +28,13 @@ export const Header = ({ theme, switchTheme }: Props) => {
       </h3>
 
       <div className="flex-center gap-3">
-        <button className="hidden p-3 md:block" onClick={switchTheme}>
-          {theme === 'light' ? (
-            <SunIcon className="size-6 fill-accent" />
-          ) : (
-            <MoonIcon className="size-6" />
-          )}
-        </button>
+        {/* <button className="hidden p-3 md:block" onClick={switchTheme}> */}
+        {/*   {theme === 'light' ? ( */}
+        {/*     <SunIcon className="size-6 fill-accent" /> */}
+        {/*   ) : ( */}
+        {/*     <MoonIcon className="size-6" /> */}
+        {/*   )} */}
+        {/* </button> */}
 
         <span className={`${location.includes('nft') ? '' : 'hidden'}`}>
           <CartList />

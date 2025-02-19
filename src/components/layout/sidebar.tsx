@@ -166,9 +166,9 @@ export const navlinks = [
     title: 'Shop',
     href: routes.shop,
   },
-  {
-    icon: UserIcon,
-    title: 'Admin',
-    href: routes.admin,
-  },
+  // {
+  //   icon: UserIcon,
+  //   title: 'Admin',
+  //   href: routes.admin,
+  // },
 ]

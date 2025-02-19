@@ -38,6 +38,7 @@ export const useGetNftCollections = ({ enabled = true, chainId = 1 }) => {
       return response.data
     },
     enabled: enabled,
+    staleTime: Infinity,
   })
 }
 

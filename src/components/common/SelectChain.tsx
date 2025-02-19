@@ -10,7 +10,7 @@ export const SelectChain = () => {
   const chainId = useChainId()
   const { switchChain } = useSwitchChain()
 
-  const name = chainList.find(({ id }) => id === chainId)?.name ?? 'BSC Testnet'
+  const name = chainList.find(({ id }) => id === chainId)?.name ?? 'BSC'
   const Logo = chainList.find(({ id }) => id === chainId)?.logo ?? BSC
 
   const Title = (
@@ -58,13 +58,13 @@ const chainList = [
     logo: Arbitrum,
   },
   {
-    id: bscTestnet.id,
-    name: 'BSC Testnet',
+    id: bsc.id,
+    name: 'BSC',
     logo: BSC,
   },
   {
-    id: bsc.id,
-    name: 'BSC',
+    id: bscTestnet.id,
+    name: 'BSC Testnet',
     logo: BSC,
   },
 ] as const

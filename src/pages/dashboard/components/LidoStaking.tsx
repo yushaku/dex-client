@@ -42,11 +42,13 @@ export const LidoStakeForm = () => {
         abi: LIDO_ABI,
         functionName: 'balanceOf',
         args: [address ?? zeroAddress],
+        chainId: mainnet.id,
       },
       {
         address: contracts.STAKING_ETH.LIDO,
         abi: LIDO_ABI,
         functionName: 'totalSupply',
+        chainId: mainnet.id,
       },
     ],
     query: {
@@ -58,6 +60,7 @@ export const LidoStakeForm = () => {
     to: contracts.STAKING_ETH.LIDO,
     data: '0xa1903eab00000000000000000000000011d00000000000000000000000000000000011d0',
     value: parseEther('1'),
+    chainId: mainnet.id,
   })
 
   const balance = data?.[0]?.result
