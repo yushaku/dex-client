@@ -2,9 +2,9 @@ import { NativeBalance } from '@/components/common/NativeTokenBalance'
 import { cn, shortenAddress } from '@/utils'
 import { useAccount, useEnsName } from 'wagmi'
 import { HelloGuy } from './components/Hello'
-import { LidoFarming } from './components/LidoFarming'
 import { LidoStakeForm } from './components/LidoStaking'
 import { YSKStakeForm } from './components/YSKStaking'
+import { ETHFarming } from './components/ETHFarming'
 
 export const Dashboard = () => {
   const { address } = useAccount()
@@ -30,7 +30,7 @@ export const Dashboard = () => {
         </section>
       )}
 
-      <LidoFarming />
+      <ETHFarming />
       {/* <StakedValueLockChart /> */}
     </>
   )

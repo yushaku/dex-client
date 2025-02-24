@@ -1,16 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { LIDO_ABI } from '@/abi/lido'
 import { WST_ETH } from '@/abi/wstETH'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
+import { Button } from '@/components/ui/button'
 import { Card } from '@/components/warper'
-import { useWstETH } from '@/hooks/stake/useLido'
+import { useStakeEth, useWstETH } from '@/hooks/stake/useLido'
+import { useRenzo } from '@/hooks/stake/useRenzo'
 import { OrderInput } from '@/pages/swap/components/OrderInput'
 import { useFarmState } from '@/stores'
 import { WrapAsset } from '@/stores/addictionTokens'
 import { cn, getTokenLink, shortenAddress } from '@/utils'
 import { contracts } from '@/utils/contracts'
 import { formatAmount } from '@/utils/odos'
-import { ArrowDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
-import { useEffect, useState } from 'react'
+import { ArrowDownIcon } from '@heroicons/react/16/solid'
+import { XMarkIcon } from '@heroicons/react/20/solid'
+import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import { Address, erc20Abi, formatEther, parseEther, zeroAddress } from 'viem'
 import { mainnet } from 'viem/chains'
 import { useAccount, useBalance, useReadContracts } from 'wagmi'
@@ -22,6 +32,20 @@ const listProtocols = [
       {
         img: 'https://etherscan.io/token/images/steth_32.svg',
         name: 'LIDO',
+        description: [
+          {
+            title: 'How does Lido work?',
+            detail:
+              'While each network works differently, generally, the Lido protocols batch user tokens to stake with validators and route the staking packages to network staking contracts. Users mint amounts of stTokens which correspond to the amount of tokens sent as stake and they receive staking rewards. When they unstake, they burn the stToken to initiate the network-specific withdrawal process to withdraw the balance of stake and rewards.',
+          },
+          {
+            title: 'What is Lido staking APR for Ethereum?',
+            detail: `Lido staking APR for Ethereum = Protocol APR * (1 - Protocol fee)
+                Protocol APR — the overall Consensus Layer (CL) and Execution Layer (EL) rewards received by Lido validators to total pooled ETH estimated as the moving average of the last seven days.
+                Protocol fee — Lido applies a 10% fee on staking rewards that are split between node operators and the DAO Treasury.
+                More about Lido staking APR for Ethereum you could find on the Ethereum landing page and in our Docs.`,
+          },
+        ],
       },
     ],
   },
@@ -31,6 +55,18 @@ const listProtocols = [
       {
         img: 'https://etherscan.io/token/images/renzorez_32.png',
         name: 'RENZO',
+        description: [
+          {
+            title: 'what is ezETH?',
+            detail:
+              'ezETH is the liquid restaking token representing a user’s EigenLayer restaked position at Renzo. Users can deposit native ETH or stETH and receive ezETH. Serving as the interface to the EigenLayer ecosystem, ezETH secures Actively Validated Services (AVSs) to generate both staking and restaking rewards.',
+          },
+          {
+            title: 'what is rewards of ezETH?',
+            detail:
+              'Staking and restaking rewards are auto-compounded. This means the value $ezETH increases relative to the underlying assets as it earns more rewards.',
+          },
+        ],
       },
     ],
   },
@@ -51,10 +87,11 @@ const listProtocols = [
   // },
 ] as const
 
-export const LidoFarming = () => {
+export const ETHFarming = () => {
   const { chainId } = useAccount()
   const { data: earnOnToken, toggleFarmin } = useFarmState()
   const [protocol, setProtocol] = useState<string>('LIDO')
+  const [description, setDescription] = useState<any>([])
 
   if (earnOnToken !== 'ETH' || chainId !== mainnet.id) return null
 
@@ -74,7 +111,11 @@ export const LidoFarming = () => {
                 {list.map((item) => {
                   return (
                     <button
-                      onClick={() => setProtocol(item.name)}
+                      onClick={(event) => {
+                        event.preventDefault()
+                        setProtocol(item.name)
+                        setDescription(item.description)
+                      }}
                       className={cn(
                         'flex w-full items-center gap-2 rounded-lg p-4 hover:bg-focus',
                         item.name === protocol && 'bg-focus',
@@ -90,13 +131,188 @@ export const LidoFarming = () => {
           })}
         </ul>
 
-        {protocol === 'wrapStETH' && <WrapStETH />}
+        {protocol === 'LIDO' && <LidoStake />}
         {protocol === 'RENZO' && <RenzoStake />}
+
+        <article className="col-span-2 rounded-lg bg-focus p-4">
+          <Accordion type="single" collapsible className="w-full">
+            {description.map((item: any, index: number) => {
+              return (
+                <AccordionItem value={`item-${index}`}>
+                  <AccordionTrigger>{item.title}</AccordionTrigger>
+                  <AccordionContent> {item.detail} </AccordionContent>
+                </AccordionItem>
+              )
+            })}
+          </Accordion>
+        </article>
       </div>
     </Card>
   )
 }
 
+const lidoAssets: Array<WrapAsset> = [
+  {
+    address: zeroAddress,
+    decimals: 18,
+    symbol: 'ETH',
+    name: 'ETH',
+    logoURI: 'https://app.renzoprotocol.com/tokens/ETH.svg',
+    balance: 0n,
+  },
+  {
+    address: contracts.STAKING_ETH.LIDO,
+    decimals: 18,
+    symbol: 'stETH',
+    name: 'stETH',
+    logoURI: 'https://etherscan.io/token/images/steth_32.svg',
+    balance: 0n,
+  },
+  {
+    address: contracts.STAKING_ETH.WST_ETH,
+    decimals: 18,
+    symbol: 'wstETH',
+    name: 'wstETH',
+    logoURI: 'https://etherscan.io/token/images/wsteth3_32.png',
+    balance: 0n,
+  },
+]
+
+const LidoStake = () => {
+  const [assetList, setAssetList] = useState<WrapAsset[]>(lidoAssets)
+  const [fromAsset, setFromAsset] = useState<WrapAsset>(assetList[0])
+  const [toAsset, setToAsset] = useState<WrapAsset>(assetList[1])
+  const { address: account } = useAccount()
+  const { stakeETH } = useStakeEth()
+
+  const [fromAmount, setFromAmount] = useState('0')
+  const [, setToAmount] = useState('0')
+
+  const handleSetToken = (type: 'from' | 'to', asset: any) => {
+    if (type === 'from') {
+      setFromAmount('0')
+      setToAmount('0')
+      setFromAsset(asset)
+    } else {
+      setToAsset(asset)
+    }
+  }
+
+  const handleDeposit = useCallback(() => {
+    if (fromAsset.balance < parseEther(fromAmount)) {
+      toast.error('Insufficient balance')
+      return
+    }
+
+    if (fromAsset.address === zeroAddress) {
+      stakeETH({ amount: fromAmount })
+    } else {
+      // depositToken({ amount: fromAmount })
+    }
+  }, [fromAmount, fromAsset.address, fromAsset.balance, stakeETH])
+
+  const { data: balances } = useReadContracts({
+    contracts: lidoAssets.map((asset) => ({
+      abi: erc20Abi,
+      address: asset.address as Address,
+      functionName: 'balanceOf',
+      args: [account ?? zeroAddress],
+    })),
+  })
+  const { data: nativeBalance } = useBalance({
+    address: account,
+  })
+
+  useEffect(() => {
+    if (balances && nativeBalance?.value) {
+      setAssetList(
+        lidoAssets.map((asset, index) => ({
+          ...asset,
+          balance:
+            asset.address === zeroAddress
+              ? BigInt(nativeBalance?.value ?? 0n)
+              : BigInt(balances[index].result ?? 0n),
+        })),
+      )
+    }
+  }, [balances, nativeBalance?.value])
+
+  useEffect(() => {
+    const newFromToken = assetList.find((t) => t.address === fromAsset.address)
+    const newToToken = assetList.find((t) => t.address === toAsset.address)
+
+    if (newFromToken?.balance !== fromAsset.balance) {
+      setFromAsset(newFromToken ?? fromAsset)
+    }
+
+    if (newToToken?.balance !== toAsset.balance) {
+      setToAsset(newToToken ?? toAsset)
+    }
+  }, [assetList, fromAsset, toAsset])
+
+  return (
+    <article className="col-span-2 rounded-lg bg-focus p-2 py-4">
+      <h4 className="flex items-center justify-between">
+        <strong className="text-lighterAccent">Restake on Renzo</strong>
+      </h4>
+
+      <div className="relative">
+        <OrderInput
+          type="from"
+          amount={fromAmount}
+          asset={fromAsset}
+          balance={fromAsset?.balance}
+          listAssets={[fromAsset]}
+          setToAmount={setToAmount}
+          setFromAmount={setFromAmount}
+          handleSetToken={handleSetToken}
+        />
+
+        <div className="mt-5 flex items-center justify-center">
+          <button
+            // onClick={handleSwapPosition}
+            className="group rounded-lg border border-focus bg-layer p-3"
+          >
+            <ArrowDownIcon className="animate size-5 hover:stroke-lighterAccent" />
+          </button>
+        </div>
+
+        <OrderInput
+          type="to"
+          amount={fromAmount}
+          asset={toAsset}
+          balance={toAsset.balance}
+          listAssets={[assetList[1]]}
+          setToAmount={setToAmount}
+          setFromAmount={setFromAmount}
+          handleSetToken={handleSetToken}
+        />
+
+        <div className="mt-5 space-y-2 p-2 text-sm">
+          <p className="flex justify-between">
+            <span>Exchange Rate</span>
+            <span>1 ETH = 1 stETH</span>
+          </p>
+          <p className="flex justify-between">
+            <span>APY</span>
+            <span>3%</span>
+          </p>
+        </div>
+
+        <Button
+          size="lg"
+          onClick={handleDeposit}
+          className={cn('btn btn-solid w-full mt-5')}
+          disabled={Number(fromAmount) <= 0}
+        >
+          Stake
+        </Button>
+      </div>
+    </article>
+  )
+}
+
+// eslint-disable-next-line no-unused-vars
 const WrapStETH = () => {
   const { address, chainId } = useAccount()
 
@@ -113,19 +329,19 @@ const WrapStETH = () => {
         args: [address ?? zeroAddress],
       },
       {
-        address: contracts.WST_ETH[mainnet.id],
+        address: contracts.STAKING_ETH.WST_ETH,
         abi: WST_ETH,
         functionName: 'balanceOf',
         args: [address ?? zeroAddress],
       },
       {
-        address: contracts.WST_ETH[mainnet.id],
+        address: contracts.STAKING_ETH.WST_ETH,
         abi: WST_ETH,
         functionName: 'getWstETHByStETH',
         args: [parseEther('1')],
       },
       {
-        address: contracts.WST_ETH[mainnet.id],
+        address: contracts.STAKING_ETH.WST_ETH,
         abi: WST_ETH,
         functionName: 'getStETHByWstETH',
         args: [parseEther('1')],
@@ -255,10 +471,10 @@ const WrapStETH = () => {
             contract address
           </span>
           <a
-            href={getTokenLink(contracts.WST_ETH[mainnet.id], mainnet.id)}
+            href={getTokenLink(contracts.STAKING_ETH.WST_ETH, mainnet.id)}
             className="text-sm font-bold text-textPrimary"
           >
-            {shortenAddress(contracts.WST_ETH[mainnet.id])}
+            {shortenAddress(contracts.STAKING_ETH.WST_ETH)}
           </a>
         </p>
       </div>
@@ -311,9 +527,10 @@ const RenzoStake = () => {
   const [fromAsset, setFromAsset] = useState<WrapAsset>(assetList[0])
   const [toAsset, setToAsset] = useState<WrapAsset>(assetList[2])
   const { address: account } = useAccount()
+  const { depositETH, depositToken } = useRenzo()
 
   const [fromAmount, setFromAmount] = useState('0')
-  const [toAmount, setToAmount] = useState('0')
+  const [, setToAmount] = useState('0')
 
   const handleSetToken = (type: 'from' | 'to', asset: any) => {
     if (type === 'from') {
@@ -325,8 +542,27 @@ const RenzoStake = () => {
     }
   }
 
+  const handleDeposit = useCallback(() => {
+    if (fromAsset.balance < parseEther(fromAmount)) {
+      toast.error('Insufficient balance')
+      return
+    }
+
+    if (fromAsset.address === zeroAddress) {
+      depositETH({ amount: fromAmount })
+    } else {
+      depositToken({ amount: fromAmount })
+    }
+  }, [
+    depositETH,
+    depositToken,
+    fromAmount,
+    fromAsset.address,
+    fromAsset.balance,
+  ])
+
   const { data: balances } = useReadContracts({
-    contracts: assets.map((asset) => ({
+    contracts: lidoAssets.map((asset) => ({
       abi: erc20Abi,
       address: asset.address as Address,
       functionName: 'balanceOf',
@@ -340,7 +576,7 @@ const RenzoStake = () => {
   useEffect(() => {
     if (balances && nativeBalance?.value) {
       setAssetList(
-        assets.map((asset, index) => ({
+        lidoAssets.map((asset, index) => ({
           ...asset,
           balance:
             asset.address === zeroAddress
@@ -382,31 +618,31 @@ const RenzoStake = () => {
           handleSetToken={handleSetToken}
         />
 
-        <div className="mt-5 flex items-center justify-center">
-          <button
-            // onClick={handleSwapPosition}
-            className="group rounded-lg border border-focus bg-layer p-3"
-          >
-            <ArrowDownIcon className="animate size-5 hover:stroke-lighterAccent" />
-          </button>
-        </div>
+        {/* <div className="mt-5 flex items-center justify-center"> */}
+        {/*   <button */}
+        {/*     // onClick={handleSwapPosition} */}
+        {/*     className="group rounded-lg border border-focus bg-layer p-3" */}
+        {/*   > */}
+        {/*     <ArrowDownIcon className="animate size-5 hover:stroke-lighterAccent" /> */}
+        {/*   </button> */}
+        {/* </div> */}
 
-        <OrderInput
-          type="to"
-          amount={toAmount}
-          asset={toAsset}
-          balance={toAsset.balance}
-          listAssets={[toAsset]}
-          setToAmount={setToAmount}
-          setFromAmount={setFromAmount}
-          handleSetToken={handleSetToken}
-        />
+        {/* <OrderInput */}
+        {/*   type="to" */}
+        {/*   amount={toAmount} */}
+        {/*   asset={toAsset} */}
+        {/*   balance={toAsset.balance} */}
+        {/*   listAssets={[toAsset]} */}
+        {/*   setToAmount={setToAmount} */}
+        {/*   setFromAmount={setFromAmount} */}
+        {/*   handleSetToken={handleSetToken} */}
+        {/* /> */}
 
         <div className="mt-5 space-y-2 p-2 text-sm">
-          <p className="flex justify-between">
-            <span>Exchange Rate</span>
-            <span>1 ETH = 0.96536 ezETH</span>
-          </p>
+          {/* <p className="flex justify-between"> */}
+          {/*   <span>Exchange Rate</span> */}
+          {/*   <span>1 ETH = 0.96536 ezETH</span> */}
+          {/* </p> */}
           <p className="flex justify-between">
             <span>APY</span>
             <span>4.11%</span>
@@ -417,7 +653,14 @@ const RenzoStake = () => {
           </p>
         </div>
 
-        <button className={cn('btn btn-solid w-full mt-5')}>Stake</button>
+        <Button
+          size="lg"
+          onClick={handleDeposit}
+          className={cn('btn btn-solid w-full mt-5')}
+          disabled={Number(fromAmount) <= 0}
+        >
+          Stake
+        </Button>
       </div>
     </article>
   )

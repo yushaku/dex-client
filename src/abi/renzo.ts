@@ -345,13 +345,6 @@ export const RENZO_ABI = [
   },
   {
     inputs: [],
-    name: 'depositETH',
-    outputs: [],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'depositQueue',
     outputs: [
       { internalType: 'contract IDepositQueue', name: '', type: 'address' },

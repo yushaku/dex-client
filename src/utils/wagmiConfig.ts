@@ -20,7 +20,7 @@ export const config = createConfig({
   ],
   transports: {
     [bsc.id]: http(),
-    [mainnet.id]: http(),
+    [mainnet.id]: http('https://eth.llamarpc.com'),
     [arbitrum.id]: http(),
     [bscTestnet.id]: http(),
   },

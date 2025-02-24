@@ -8,7 +8,7 @@ export const NativeBalance = ({ address }: { address?: Address }) => {
 
   return (
     <div className="font-bold">
-      {balance.data?.formatted.slice(0, 5)}
+      {balance.data?.formatted.slice(0, 5) ?? 0}
       <NativeToken />
     </div>
   )

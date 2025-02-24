@@ -130,7 +130,7 @@ export const YSKStakeForm = () => {
         </div>
       </article>
 
-      <article className="flex gap-5">
+      <article className={cn('flex gap-5')}>
         <button
           onClick={() => {
             if (isOpen) {

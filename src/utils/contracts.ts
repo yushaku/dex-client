@@ -20,15 +20,13 @@ export const contracts = {
   },
   STAKING_ETH: {
     LIDO: '0xae7ab96520de3a18e5e111b5eaab095312d7fe84',
+    WST_ETH: '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0',
   },
   RESTAKING_ETH: {
     RENZO: {
       PROTOCOL: '0x74a09653A083691711cF8215a6ab074BB4e99ef5',
       ezETH: '0xbf5495Efe5DB9ce00f80364C8B423567e58d2110',
     },
-  },
-  WST_ETH: {
-    [mainnet.id]: '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0',
   },
   YSK: {
     [bscTestnet.id]: '0x7AFa15757A8012C3ECc0948154AD0f99c3b3c116',
