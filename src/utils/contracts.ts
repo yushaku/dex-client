@@ -1,3 +1,4 @@
+import { NONFUNGIBLE_POSITION_MANAGER_ADDRESSES } from '@uniswap/sdk-core'
 import { arbitrum, bsc, bscTestnet, mainnet } from 'viem/chains'
 
 export const contracts = {
@@ -30,5 +31,8 @@ export const contracts = {
   },
   YSK: {
     [bscTestnet.id]: '0x7AFa15757A8012C3ECc0948154AD0f99c3b3c116',
+  },
+  uniswap: {
+    NFP: NONFUNGIBLE_POSITION_MANAGER_ADDRESSES,
   },
 } as const

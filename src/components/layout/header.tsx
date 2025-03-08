@@ -124,4 +124,6 @@ const headTitle = {
   [routes.myNFTs]: 'Your NFTs Collection',
   [routes.shop]: 'My store',
   [routes.admin]: 'Admin Dashboard',
+  [routes.addLiquidity]: 'New position',
+  [routes.pools]: 'Pools',
 }

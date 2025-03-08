@@ -24,7 +24,8 @@ export const routes = {
   myNFTs: '/nfts/my-collection',
   nftStudio: '/nfts/studio',
   nftLaunchpad: '/nfts/launchpad',
-  vaults: '/vaults',
+  pools: '/pools',
+  addLiquidity: '/pools/add-liquidity',
   history: '/history',
   admin: '/admin',
   dashboard: '/dashboard',
@@ -32,6 +33,7 @@ export const routes = {
   order: '/shop/order',
 } as const
 
+export const UNKNOWN_TOKEN = 'https://cdn.thena.fi/assets/UNKNOWN_TOKEN.png'
 export const GATEWAY_URL = 'https://ipfs.io/ipfs/'
 export const TOKEN_LIST = 'https://gateway.ipfs.io/ipns/tokens.uniswap.org'
 export const UNI = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'

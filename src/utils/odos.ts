@@ -1,5 +1,6 @@
 import { formatUnits } from 'viem/utils'
 import { WrapAsset } from '@/stores/addictionTokens'
+import BigNumber from 'bignumber.js'
 
 export const quoteUrl = 'https://api.odos.xyz/sor/quote/v2'
 
@@ -18,7 +19,7 @@ export const formatAmount = ({
   decimals = 18,
   shorted = false,
 }: {
-  amount: bigint | string | null | undefined
+  amount: bigint | string | number | null | undefined
   decimals?: number
   shorted?: boolean
 }) => {
@@ -47,4 +48,48 @@ export const formatAmount = ({
   }
 
   return formattedAmount.toFixed(6)
+}
+
+export const formatNumber = (
+  amount: string | null | undefined = null,
+  shorted = false,
+  fixed = 3,
+  hideNegative = true,
+) => {
+  if (!amount || BigNumber(amount).isZero()) return '0'
+  const bigAmount = BigNumber(amount)
+  if (
+    hideNegative &&
+    bigAmount.lt(BigNumber(1).div(BigNumber(10).pow(fixed)))
+  ) {
+    return `< ${BigNumber(1).div(BigNumber(10).pow(fixed)).toString(10)}`
+  }
+
+  if (bigAmount.gt(1) && bigAmount.lt(1000)) {
+    return bigAmount.dp(2).toFormat()
+  }
+
+  if (shorted) {
+    if (bigAmount.gte(1e12)) {
+      return `${bigAmount.div(1e12).dp(2).toFormat()}T`
+    }
+
+    if (bigAmount.gte(1e9)) {
+      return `${bigAmount.div(1e9).dp(2).toFormat()}B`
+    }
+
+    if (bigAmount.gte(1e6)) {
+      return `${bigAmount.div(1e6).dp(2).toFormat()}M`
+    }
+
+    if (bigAmount.gte(1e3)) {
+      return `${bigAmount.div(1e3).dp(2).toFormat()}K`
+    }
+  }
+
+  if (bigAmount.gte(1e3)) {
+    return bigAmount.dp(0).toFormat()
+  }
+
+  return bigAmount.dp(fixed).toFormat()
 }

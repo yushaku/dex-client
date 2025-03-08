@@ -2,7 +2,7 @@ import { Button } from '@/components/common/Button'
 import { useDebounce, useTokenMetadata } from '@/hooks'
 import { AssetsContext } from '@/hooks/useAssets'
 import { WrapAsset, useTokensState } from '@/stores/addictionTokens'
-import { Asset, cn, getTokenLink } from '@/utils'
+import { Asset, UNKNOWN_TOKEN, cn, getTokenLink } from '@/utils'
 import { getTopAssets } from '@/utils/assets'
 import {
   Dialog,
@@ -101,7 +101,7 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
         className="flex cursor-pointer items-center gap-3 rounded-full bg-focus p-2"
       >
         <img
-          src={asset?.logoURI}
+          src={asset?.logoURI ?? UNKNOWN_TOKEN}
           alt="icon logo"
           className="size-8 overflow-hidden rounded-full"
         />

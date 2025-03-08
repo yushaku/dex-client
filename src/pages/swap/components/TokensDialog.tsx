@@ -1,6 +1,6 @@
 import { Button } from '@/components/common/Button'
 import { WrapAsset } from '@/stores/addictionTokens'
-import { Asset, cn, getTokenLink } from '@/utils'
+import { Asset, UNKNOWN_TOKEN, cn, getTokenLink } from '@/utils'
 import { formatAmount } from '@/utils/odos'
 import {
   Dialog,
@@ -33,7 +33,7 @@ export const TokensDialog = ({ asset, listAssets, handleSetToken }: Props) => {
         className="flex cursor-pointer items-center gap-3 rounded-full bg-focus p-2"
       >
         <img
-          src={asset?.logoURI}
+          src={asset?.logoURI ?? UNKNOWN_TOKEN}
           alt="icon logo"
           className="size-8 overflow-hidden rounded-full"
         />

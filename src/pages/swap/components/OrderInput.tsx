@@ -6,18 +6,18 @@ import { OrderToken } from './OrderToken'
 import { TokensDialog } from './TokensDialog'
 import { WrapAsset } from '@/stores/addictionTokens'
 
-type Props = {
-  type: 'from' | 'to'
+type Props<T> = {
+  type: T
   asset: Asset | null
   amount: string
   balance: bigint | undefined
   listAssets?: WrapAsset[]
   setToAmount: (_amount: string) => void
   setFromAmount: (_amount: string) => void
-  handleSetToken: (_type: 'from' | 'to', _asset: Asset) => void
+  handleSetToken: (_type: T, _asset: Asset) => void
 }
 
-export const OrderInput = ({
+export const OrderInput = <T,>({
   type,
   amount,
   asset,
@@ -26,7 +26,7 @@ export const OrderInput = ({
   setToAmount,
   setFromAmount,
   handleSetToken,
-}: Props) => {
+}: Props<T>) => {
   const { chainId = 56 } = useAccount()
   const { data: price } = useTokenPrice({
     token: asset?.address ?? '',

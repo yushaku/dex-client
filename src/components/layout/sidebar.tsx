@@ -5,12 +5,11 @@ import {
   ArrowPathIcon,
   BanknotesIcon,
   CalendarIcon,
-  ChartPieIcon,
   HomeIcon,
   PhotoIcon,
   ScissorsIcon,
   ShoppingBagIcon,
-  UserIcon,
+  SparklesIcon,
   WalletIcon,
 } from '@heroicons/react/16/solid'
 import { ForwardIcon } from '@heroicons/react/20/solid'
@@ -153,8 +152,15 @@ export const navlinks = [
   },
   {
     icon: BanknotesIcon,
-    title: 'Vaults',
-    href: routes.vaults,
+    title: 'Pools',
+    href: routes.pools,
+    childrens: [
+      {
+        icon: SparklesIcon,
+        title: 'Add Liquidity',
+        href: routes.addLiquidity,
+      },
+    ],
   },
   {
     icon: CalendarIcon,

@@ -23,4 +23,5 @@ export type Asset = {
   symbol: string
   name: string
   logoURI: string
+  balance?: bigint
 }
