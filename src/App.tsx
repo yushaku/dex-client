@@ -1,9 +1,10 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Layout } from './components/layout'
 import {
+  AddLiquidity,
   AdminPage,
+  Bridge,
   CollectionNFTs,
-  Comming,
   Dashboard,
   DetailNFT,
   HistoryPage,
@@ -11,13 +12,13 @@ import {
   NFTsStudio,
   NftMarket,
   NotMatch,
+  Pools,
   ShopPage,
   Swap,
   UserCollection,
   UserNftDetail,
   UserNfts,
 } from './pages'
-import { Bridge } from './pages/brige'
 import { routes } from './utils'
 
 function App() {
@@ -51,8 +52,10 @@ function App() {
             element={<UserNftDetail />}
           />
 
+          <Route path={routes.pools} element={<Pools />} />
+          <Route path={routes.addLiquidity} element={<AddLiquidity />} />
+
           <Route path={routes.history} element={<HistoryPage />} />
-          <Route path={routes.vaults} element={<Comming />} />
           <Route path={routes.admin} element={<AdminPage />} />
           <Route path={routes.shop} element={<ShopPage />} />
           <Route path="*" element={<NotMatch />} />

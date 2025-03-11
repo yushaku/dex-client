@@ -393,9 +393,9 @@ export function useRangeHopCallbacks({
   const getDecrementLower = useCallback(
     (rate = 1) => {
       if (
+        typeof tickLower === 'number' &&
         baseToken &&
         quoteToken &&
-        typeof tickLower === 'number' &&
         feeAmount
       ) {
         const newPrice = tickToPrice(
