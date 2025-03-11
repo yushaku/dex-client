@@ -51,7 +51,7 @@ export const formatAmount = ({
 }
 
 export const formatNumber = (
-  amount: string | null | undefined = null,
+  amount: number | string | null | undefined = null,
   shorted = false,
   fixed = 3,
   hideNegative = true,
