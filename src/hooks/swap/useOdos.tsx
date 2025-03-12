@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Asset, TXN_STATUS, readContract } from '@/utils'
 import { contracts } from '@/utils/contracts'
-import { isInvalidAmount, quoteUrl } from '@/utils/odos'
+import { isInvalidAmount } from '@/utils'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { useCallback, useState } from 'react'
@@ -47,6 +47,7 @@ export type Props = {
   chainId: number
 }
 
+export const quoteUrl = 'https://api.odos.xyz/sor/quote/v2'
 export const BEST_TRADE_ODOS = 'BEST_TRADE_ODOS'
 
 export const useOdosQuoteSwap = ({

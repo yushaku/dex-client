@@ -9,7 +9,7 @@ import { Button } from '@/components/common/Button'
 import { SelectPayToken } from '@/components/common/SelectPayToken'
 import { BSC, USDT } from '@/components/icons'
 import { useCartState } from '@/stores/shopCart'
-import { SHOP_PAYMENT_ADDRESS, ZERO_ADDRESS, cn, shortenAddress } from '@/utils'
+import { SHOP_PAYMENT_ADDRESS, cn, shortenAddress } from '@/utils'
 import { toastContractError } from '@/utils/error'
 import {
   Description,
@@ -22,7 +22,7 @@ import {
 } from '@headlessui/react'
 import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/16/solid'
 import { useEffect, useState } from 'react'
-import { parseEther } from 'viem'
+import { parseEther, zeroAddress } from 'viem'
 import { useSendTransaction } from 'wagmi'
 import { AddressForm } from './AddressForm'
 
@@ -109,7 +109,7 @@ const ConfirmTab = ({
 
   // LOCAL STATE
   // const [order, setOrder] = useState<OrderResponse>(initialOrder)
-  const [token, setToken] = useState(ZERO_ADDRESS)
+  const [token, setToken] = useState(zeroAddress)
 
   const totalUsdt = itemList.reduce((a, b) => a + Number(b.price), 0)
   const totalBnb = totalUsdt / (bnbPrice ?? 1)
@@ -171,7 +171,7 @@ const ConfirmTab = ({
                   alt="image"
                   className="mb-2 size-32 rounded"
                 />
-                {token === ZERO_ADDRESS ? (
+                {token === zeroAddress ? (
                   <p className="flex items-center gap-2">
                     {Number(Number(item.price) / (bnbPrice ?? 1)).toFixed(6)}
                     <BSC className="size-5" />
@@ -196,7 +196,7 @@ const ConfirmTab = ({
         >
           <span>Total: </span>
 
-          {token === ZERO_ADDRESS ? (
+          {token === zeroAddress ? (
             <p className="flex items-center gap-2">
               {totalBnb.toFixed(6)}
               <BSC className="size-5" />

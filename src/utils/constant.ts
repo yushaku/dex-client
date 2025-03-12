@@ -52,10 +52,6 @@ export const NFT_FACTORY_ADDRESS = '0x64FFE32eCb2D433fc0868920c98Bf33Bee4f072A'
 export const PUBLIC_NFTS_ADDRESS = '0x284C5d066a4A2fD0163D190887fC5EFB6b4E0540'
 export const SHOP_PAYMENT_ADDRESS = '0x6b3De2f71bbeeEc360Cd50f6C19Daf13534bE8EA'
 
-export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
-
-export const MAX_VALUE = parseUnits('9999999999999999999999', 18)
-
 export const LOGIN_MESSAGE =
   'Welcome to Yushaku! Please sign this message to verify account ownership.'
 

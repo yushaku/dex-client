@@ -4,7 +4,7 @@ import { AssetsContext } from '@/hooks/useAssets'
 import { WrapAsset, useTokensState } from '@/stores/addictionTokens'
 import { Asset, UNKNOWN_TOKEN, cn, getTokenLink } from '@/utils'
 import { getTopAssets } from '@/utils/assets'
-import { formatNumber } from '@/utils/odos'
+import { formatNumber } from '@/utils'
 import {
   Dialog,
   DialogBackdrop,

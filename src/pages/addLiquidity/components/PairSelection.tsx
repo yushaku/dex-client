@@ -1,7 +1,7 @@
 import { AssetsContext } from '@/hooks/useAssets'
 import { OrderToken } from '@/pages/swap/components/OrderToken'
 import { useMintState } from '@/stores'
-import { findAsset } from '@/utils/odos'
+import { findAsset } from '@/utils'
 import { useContext, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 

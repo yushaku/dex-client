@@ -1,7 +1,7 @@
 import { Button } from '@/components/common/Button'
 import { WrapAsset } from '@/stores/addictionTokens'
 import { Asset, UNKNOWN_TOKEN, cn, getTokenLink } from '@/utils'
-import { formatAmount } from '@/utils/odos'
+import { formatNumber } from '@/utils'
 import {
   Dialog,
   DialogBackdrop,
@@ -14,6 +14,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/16/solid'
 import { useState } from 'react'
+import { formatUnits } from 'viem'
 import { useAccount } from 'wagmi'
 
 type Props = {
@@ -101,10 +102,9 @@ export const TokensDialog = ({ asset, listAssets, handleSetToken }: Props) => {
 
                       <div className="flex items-center gap-2">
                         <p className="text-sm text-textSecondary">
-                          {formatAmount({
-                            amount: token.balance,
-                            decimals: token.decimals,
-                          })}
+                          {formatNumber(
+                            formatUnits(token.balance, token.decimals),
+                          )}
                         </p>
                       </div>
                     </li>

@@ -1,10 +1,10 @@
 import { useTokenPrice } from '@/hooks'
-import { Asset, cn } from '@/utils'
-import { formatAmount } from '@/utils/odos'
+import { WrapAsset } from '@/stores/addictionTokens'
+import { Asset, cn, formatNumber } from '@/utils'
+import { formatUnits } from 'viem'
 import { useAccount } from 'wagmi'
 import { OrderToken } from './OrderToken'
 import { TokensDialog } from './TokensDialog'
-import { WrapAsset } from '@/stores/addictionTokens'
 
 type Props<T> = {
   type: T
@@ -88,10 +88,7 @@ export const OrderInput = <T,>({
           {balance !== undefined ? (
             <span>
               <strong className="mr-1">
-                {formatAmount({
-                  amount: balance,
-                  decimals: asset?.decimals,
-                })}
+                {formatNumber(formatUnits(balance, asset?.decimals ?? 18))}
               </strong>
               {asset?.symbol}
             </span>

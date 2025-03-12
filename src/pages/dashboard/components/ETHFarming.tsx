@@ -16,7 +16,7 @@ import { useFarmState } from '@/stores'
 import { WrapAsset } from '@/stores/addictionTokens'
 import { cn, getTokenLink, shortenAddress } from '@/utils'
 import { contracts } from '@/utils/contracts'
-import { formatAmount } from '@/utils/odos'
+import { formatNumber } from '@/utils'
 import { ArrowDownIcon } from '@heroicons/react/16/solid'
 import { XMarkIcon } from '@heroicons/react/20/solid'
 import { useCallback, useEffect, useState } from 'react'
@@ -434,8 +434,8 @@ function WrapStETH() {
           </span>
           <span className="text-sm text-textPrimary">
             {isWarp
-              ? `1 stETH = ${formatAmount({ amount: wstETHByStETH })} wstETH`
-              : `1 wstETH = ${formatAmount({ amount: stETHByWstETH })} stETH`}
+              ? `1 stETH = ${formatNumber(formatEther(wstETHByStETH))} wstETH`
+              : `1 wstETH = ${formatNumber(formatEther(stETHByWstETH))} stETH`}
           </span>
         </p>
         <p className="flex justify-between">

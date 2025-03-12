@@ -1,15 +1,17 @@
-import { ZERO_ADDRESS, cn } from '@/utils'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { cn } from '@/utils'
 import { Menu } from '@headlessui/react'
 import { Fragment } from 'react'
+import { zeroAddress } from 'viem'
 import { BSC, USDT } from '../icons'
 import { Dropdown } from '../warper'
 
 export const SelectPayToken = ({
   selected,
-  onSelect
+  onSelect,
 }: {
   selected: string
-  onSelect: (_address: string) => void
+  onSelect: any
 }) => {
   const selectedtoken =
     tokenList.find(({ address }) => address === selected) ?? tokenList[0]
@@ -33,7 +35,7 @@ export const SelectPayToken = ({
                   onClick={() => onSelect(address)}
                   className={cn(
                     active ? 'bg-focus text-accent' : 'text-textSecondary',
-                    'flex w-full items-center gap-3 px-4 py-3 text-sm'
+                    'flex w-full items-center gap-3 px-4 py-3 text-sm',
                   )}
                 >
                   <Logo className="size-5" />
@@ -52,11 +54,11 @@ const tokenList = [
   {
     name: 'BNB',
     logo: BSC,
-    address: ZERO_ADDRESS
+    address: zeroAddress,
   },
   {
     name: 'USDT',
     logo: USDT,
-    address: '0xdac17f958d2ee523a2206206994597c13d831ec7'
-  }
+    address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+  },
 ] as const

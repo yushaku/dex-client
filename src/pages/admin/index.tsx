@@ -6,20 +6,14 @@ import {
   NativeToken,
 } from '@/components/common/NativeTokenBalance'
 import { Tab } from '@/components/layout/tab'
-import {
-  SHOP_PAYMENT_ADDRESS,
-  TOPICS,
-  ZERO_ADDRESS,
-  env,
-  getTransactionLink,
-} from '@/utils'
+import { SHOP_PAYMENT_ADDRESS, TOPICS, env, getTransactionLink } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useAccount, useReadContracts, useWatchContractEvent } from 'wagmi'
 import { OnlyAdmin } from './components/OnlyAdmin'
 import { OrderItem } from './components/OrderItem'
-import { formatEther } from 'viem'
+import { formatEther, zeroAddress } from 'viem'
 
 const listFeature = ['Paid', 'Shipping', 'Deliverd'] as const
 
@@ -64,7 +58,7 @@ export const AdminPage = () => {
         address: SHOP_PAYMENT_ADDRESS,
         abi: SHOP_PAYMENT_ABI,
         functionName: 'withdrawable',
-        args: [ZERO_ADDRESS],
+        args: [zeroAddress],
       },
       // {
       //   address: SHOP_PAYMENT_ADDRESS,

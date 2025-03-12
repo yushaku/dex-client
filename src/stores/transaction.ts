@@ -1,18 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from 'zustand'
 
+export type WillExecuteTxs = Record<
+  string,
+  {
+    hash: string | null
+    status: string
+    desc: string
+  }
+>
+
 type State = {
   key: string | null
   popup: boolean
   title: string
-  transactions: Record<
-    string,
-    {
-      hash: string | null
-      status: string
-      desc: string
-    }
-  >
+  transactions: WillExecuteTxs
   final: string | null
   link: string | null
   retryModalIsOpen: boolean
@@ -22,10 +24,7 @@ type State = {
 export type Action = {
   openTransaction: (_payload: {
     title: string
-    transactions: Record<
-      string,
-      { hash: string | null; status: string; desc: string }
-    >
+    transactions: WillExecuteTxs
     key: string
   }) => void
 

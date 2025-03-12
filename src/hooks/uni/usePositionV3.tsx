@@ -1,23 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NPM_V3_ABI } from '@/abi/NPMv3'
-import { getTransactionLink, TXN_STATUS } from '@/utils'
+import { WillExecuteTxs } from '@/stores/transaction'
+import { getTransactionLink, readContract, toWei, TXN_STATUS } from '@/utils'
 import { contracts } from '@/utils/contracts'
+import { Currency, CurrencyAmount, Percent } from '@uniswap/sdk-core'
 import { Position, toHex } from '@uniswap/v3-sdk'
 import JSBI from 'jsbi'
 import { useCallback, useState } from 'react'
+import { toast } from 'react-toastify'
 import invariant from 'tiny-invariant'
 import { v4 as uuidv4 } from 'uuid'
 import {
   Address,
   encodeFunctionData,
+  erc20Abi,
   getAddress,
   maxUint128,
+  maxUint256,
   zeroAddress,
 } from 'viem'
 import { useAccount, useReadContract, useReadContracts } from 'wagmi'
 import { useTxn } from '../useTxn'
-import { Currency, CurrencyAmount, Percent } from '@uniswap/sdk-core'
-import { toast } from 'react-toastify'
 
 export type PositionResponse = {
   tokenId: bigint
@@ -32,7 +35,7 @@ export type PositionResponse = {
 
 const STARTS_WITH = 'data:application/json;base64,'
 
-export const useUniswapPositions = () => {
+export function useUniswapPositions() {
   const { address: userAddress, chainId = 1 } = useAccount()
 
   const { data: balances = 0n } = useReadContract({
@@ -113,12 +116,12 @@ export const useUniswapPositions = () => {
     })
     .filter(Boolean)
 
-  console.log({ positions, balances, tokens })
+  // console.log({ positions, balances, tokens })
 
   return positions
 }
 
-export const useClaim = (autoClose = false) => {
+export function useClaim(autoClose = false) {
   const [pending, setPending] = useState(false)
   const { address: userAddress, chainId = 1 } = useAccount()
 
@@ -189,7 +192,7 @@ export const useClaim = (autoClose = false) => {
   return { claim, pending }
 }
 
-export const useRemoveLiquidity = (autoClose = false) => {
+export function useRemoveLiquidity(autoClose = false) {
   const [pending, setPending] = useState(false)
   const { address: userAddress, chainId = 1 } = useAccount()
 
@@ -424,4 +427,200 @@ export const useRemoveLiquidity = (autoClose = false) => {
   )
 
   return { claim, pending }
+}
+
+export function useAddLiquidity() {
+  const { address: account, chainId = 1 } = useAccount()
+  const [pending, setPending] = useState(false)
+  const { startTxn, writeTxn, endTxn, sendTxn } = useTxn(chainId)
+
+  const addLiquidity = useCallback(
+    async ({
+      amountA: _amountA,
+      amountB: _amountB,
+      baseCurrency,
+      quoteCurrency,
+      mintInfo,
+      slippage,
+      deadline,
+      callback,
+    }: {
+      amountA: string
+      amountB: string
+      baseCurrency: Currency
+      quoteCurrency: Currency
+      mintInfo: any
+      slippage: number
+      deadline: number
+      callback: () => void
+    }) => {
+      try {
+        const key = uuidv4()
+        const approve1Id = uuidv4()
+        const approve2Id = uuidv4()
+        const createPoolId = uuidv4()
+        const addLiquidityId = uuidv4()
+
+        const allowedSlippage = new Percent(
+          JSBI.BigInt(slippage * 100),
+          JSBI.BigInt(10000),
+        )
+
+        const amountA = toWei(_amountA, baseCurrency.decimals)
+        const amountB = toWei(_amountB, quoteCurrency.decimals)
+
+        const { position, noLiquidity } = mintInfo
+        const NPM_V3_ADDRESS = getAddress(contracts.uniswap.NFP[chainId])
+        const baseCurrencyAddress = getAddress(baseCurrency.wrapped.address)
+        const quoteCurrencyAddress = getAddress(quoteCurrency.wrapped.address)
+
+        const allowance1 = (await readContract({
+          abi: erc20Abi,
+          functionName: 'allowance',
+          address: baseCurrencyAddress,
+          args: [account, NPM_V3_ADDRESS],
+        })) as bigint
+
+        const isFirstApproved = amountA.lte(allowance1.toString())
+
+        const allowance2 = (await readContract({
+          abi: erc20Abi,
+          functionName: 'allowance',
+          address: quoteCurrencyAddress,
+          args: [account, NPM_V3_ADDRESS],
+        })) as bigint
+
+        const isSecondApproved = amountB.lte(allowance2.toString())
+
+        const transactions: WillExecuteTxs = {}
+        if (!isFirstApproved) {
+          transactions[approve1Id] = {
+            desc: `Approve ${baseCurrency.symbol}`,
+            status: TXN_STATUS.START,
+            hash: null,
+          }
+        }
+
+        if (!isSecondApproved) {
+          transactions[approve2Id] = {
+            desc: `Approve ${quoteCurrency.symbol}`,
+            status: TXN_STATUS.START,
+            hash: null,
+          }
+        }
+
+        if (noLiquidity) {
+          transactions[createPoolId] = {
+            desc: 'Create pool',
+            status: TXN_STATUS.START,
+            hash: null,
+          }
+        }
+
+        transactions[addLiquidityId] = {
+          desc: noLiquidity ? 'Create pool and add liquidity' : 'Add Liquidity',
+          status: TXN_STATUS.START,
+          hash: null,
+        }
+
+        startTxn({
+          key,
+          transactions,
+          title: noLiquidity
+            ? 'Create pool and add liquidity'
+            : 'Add Liquidity',
+        })
+        setPending(true)
+
+        // MARK: APPROVE TOKENS
+        if (!isFirstApproved) {
+          if (
+            !(await writeTxn(key, approve1Id, {
+              abi: erc20Abi,
+              address: baseCurrencyAddress,
+              functionName: 'approve',
+              args: [NPM_V3_ADDRESS, maxUint256],
+            }))
+          ) {
+            setPending(false)
+            return
+          }
+        }
+
+        if (!isSecondApproved) {
+          if (
+            !(await writeTxn(key, approve1Id, {
+              abi: erc20Abi,
+              address: quoteCurrencyAddress,
+              functionName: 'approve',
+              args: [NPM_V3_ADDRESS, maxUint256],
+            }))
+          ) {
+            setPending(false)
+            return
+          }
+        }
+
+        // MARK: CREATE NEW NORMAL POOL
+        if (noLiquidity) {
+          const txHash = await writeTxn(key, createPoolId, {
+            abi: NPM_V3_ABI,
+            address: NPM_V3_ADDRESS,
+            functionName: 'createAndInitializePoolIfNecessary',
+            args: [
+              position.pool.sqrtRatioX96,
+              position.pool.token0.address,
+              position.pool.token1.address,
+            ],
+          })
+          if (!txHash) {
+            setPending(false)
+            return
+          }
+        }
+
+        // MARK: ADD LIQUIDITY TO POOL
+        const timestamp =
+          Math.floor(new Date().getTime() / 1000) + deadline * 60
+        const useNative = baseCurrency.isNative
+          ? baseCurrency
+          : quoteCurrency.isNative
+            ? quoteCurrency
+            : undefined
+
+        const calldata: `0x${string}`[] = []
+        // const { calldata, value } =
+        //   NonfungiblePositionManager.addCallParameters(position, {
+        //     slippageTolerance: allowedSlippage,
+        //     recipient: account,
+        //     deadline: timestamp.toString(),
+        //     useNative,
+        //     createPool: noLiquidity,
+        //     chainId,
+        //   })
+
+        const txHash = await sendTxn(
+          key,
+          addLiquidityId,
+          NPM_V3_ADDRESS,
+          calldata,
+          // value,
+        )
+        if (!txHash) {
+          setPending(false)
+          return
+        }
+
+        endTxn({ key, final: 'Liquidity Add Successful' })
+        setPending(false)
+        if (callback) callback()
+      } catch (e) {
+        setPending(false)
+        throw e
+      }
+    },
+    [account, chainId, endTxn, sendTxn, startTxn, writeTxn],
+  )
+
+  return { addLiquidity, pending }
 }
