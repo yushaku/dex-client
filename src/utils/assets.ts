@@ -74,7 +74,7 @@ export const getTopAssets = (chainId: number) => {
     case mainnet.id:
       return [
         {
-          name: 'BTCB Token',
+          name: 'WBTC Token',
           symbol: 'BTC',
           decimals: 18,
           chainId: 56,

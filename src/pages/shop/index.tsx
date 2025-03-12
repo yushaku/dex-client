@@ -3,24 +3,23 @@ import { useGetProducts } from '@/apis'
 import { useGetPrice } from '@/apis/price'
 import { Button } from '@/components/common/Button'
 import { BSC, USDT } from '@/components/icons'
-import { useGetTx } from '@/hooks/useGetTx'
 import { useCartState, useNotificationsState } from '@/stores'
-import { SHOP_PAYMENT_ADDRESS, TOPICS, cn } from '@/utils'
+import { SHOP_PAYMENT_ADDRESS, TOPICS, cn, getTransactionLink } from '@/utils'
 import { ShoppingCartIcon, XMarkIcon } from '@heroicons/react/16/solid'
 import { toast } from 'react-toastify'
-import { useWatchContractEvent } from 'wagmi'
+import { useAccount, useWatchContractEvent } from 'wagmi'
 
 export const ShopPage = () => {
   // const { address } = useAccount()
   const { add, remove, itemList } = useCartState()
   const { add: addNoti } = useNotificationsState()
   const idsList = new Set(itemList.map((item) => item.product_id))
-  const { transactionHref } = useGetTx()
+  const { chainId = 1 } = useAccount()
 
   const { data: price } = useGetPrice({ params: { symbol: 'BNB' } })
   const { data: products } = useGetProducts({
     params: { page: 1 },
-    options: { enabled: true }
+    options: { enabled: true },
   })
 
   useWatchContractEvent({
@@ -37,12 +36,20 @@ export const ShopPage = () => {
             txHash: logs[0].transactionHash,
             title: 'Payment success',
             description: 'Thanks for your purchase',
-            link: transactionHref(logs[0].transactionHash)
+            link: getTransactionLink({
+              hash: logs[0].transactionHash,
+              chainId,
+            }),
           })
           toast.success(
-            <a href={transactionHref(logs[0].transactionHash)}>
+            <a
+              href={getTransactionLink({
+                hash: logs[0].transactionHash,
+                chainId,
+              })}
+            >
               Payment success. Click here to view.
-            </a>
+            </a>,
           )
           break
 
@@ -51,12 +58,20 @@ export const ShopPage = () => {
             txHash: logs[0].transactionHash,
             title: 'Canceled order success',
             description: 'You canceled order successfully',
-            link: transactionHref(logs[0].transactionHash)
+            link: getTransactionLink({
+              hash: logs[0].transactionHash,
+              chainId,
+            }),
           })
           toast.success(
-            <a href={transactionHref(logs[0].transactionHash)}>
+            <a
+              href={getTransactionLink({
+                hash: logs[0].transactionHash,
+                chainId,
+              })}
+            >
               Order canceled. Click here to view.
-            </a>
+            </a>,
           )
           break
         }
@@ -64,7 +79,7 @@ export const ShopPage = () => {
         default:
           break
       }
-    }
+    },
   })
 
   return (
@@ -81,7 +96,7 @@ export const ShopPage = () => {
                 key={index}
                 className={cn(
                   'group relative overflow-hidden rounded-lg',
-                  isAdded ? 'border border-gray-500' : ''
+                  isAdded ? 'border border-gray-500' : '',
                 )}
               >
                 <img
@@ -110,7 +125,7 @@ export const ShopPage = () => {
                   icon={isAdded ? XMarkIcon : ShoppingCartIcon}
                   className={cn(
                     'animate absolute -bottom-6 right-5 z-50 opacity-0 delay-100 group-hover:bottom-5 group-hover:opacity-100',
-                    isAdded ? 'bg-gray-500' : ''
+                    isAdded ? 'bg-gray-500' : '',
                   )}
                   onClick={() => {
                     if (isAdded) {
