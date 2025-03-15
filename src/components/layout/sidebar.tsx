@@ -134,6 +134,18 @@ export const navlinks = [
     ],
   },
   {
+    icon: BanknotesIcon,
+    title: 'Pools',
+    href: routes.pools,
+    childrens: [
+      {
+        icon: PlusIcon,
+        title: 'Add Liquidity',
+        href: routes.addLiquidity,
+      },
+    ],
+  },
+  {
     icon: PhotoIcon,
     title: 'NFTs',
     href: routes.nfts,
@@ -147,18 +159,6 @@ export const navlinks = [
         icon: ScissorsIcon,
         title: 'Studio',
         href: routes.nftStudio,
-      },
-    ],
-  },
-  {
-    icon: BanknotesIcon,
-    title: 'Pools',
-    href: routes.pools,
-    childrens: [
-      {
-        icon: PlusIcon,
-        title: 'Add Liquidity',
-        href: routes.addLiquidity,
       },
     ],
   },
