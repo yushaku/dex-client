@@ -9,8 +9,8 @@ export const PairSelection = () => {
   const { listTokens } = useContext(AssetsContext)
 
   const [searchParams] = useSearchParams()
-  const token1 = searchParams.get('token1') ?? ''
-  const token2 = searchParams.get('token2') ?? ''
+  const token1 = searchParams.get('token0') ?? ''
+  const token2 = searchParams.get('token1') ?? ''
 
   const { asset0, asset1, handleSetToken } = useMintState()
 

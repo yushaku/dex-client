@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/warper'
-import { useGetGetMintInfo } from '@/hooks'
+import { useAddLiquidity, useGetGetMintInfo } from '@/hooks'
 import { FIELD, useMintState } from '@/stores'
-import { cn } from '@/utils'
+import { cn, isInvalidAmount } from '@/utils'
 import { ChevronDownIcon } from '@heroicons/react/16/solid'
 import { useEffect, useMemo } from 'react'
 import { useAccount } from 'wagmi'
@@ -11,6 +11,9 @@ import { InputTokenAmount } from './components/InputTokenAmount'
 import { PairSelection } from './components/PairSelection'
 import { PresetRanges } from './components/PresetRanges'
 import { RangeSelector } from './components/RangeSelector'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { TriangleAlert } from 'lucide-react'
+import { toast } from 'react-toastify'
 
 export const AddLiquidity = () => {
   const { address: account } = useAccount()
@@ -26,6 +29,7 @@ export const AddLiquidity = () => {
   } = useMintState()
 
   const mintInfo = useGetGetMintInfo({ asset0, asset1 })
+  const { addLiquidity } = useAddLiquidity()
   const { pool, tokenB, tokenA, poolAddress, price, isInvert } = mintInfo
 
   const currentPrice = useMemo(() => {
@@ -58,6 +62,26 @@ export const AddLiquidity = () => {
     ],
   )
 
+  const amountA = formattedAmounts[FIELD.CURRENCY_A]
+  const amountB = formattedAmounts[FIELD.CURRENCY_B]
+  function handleAddLiquidity() {
+    if (!account || !tokenA || !tokenB) {
+      toast.error('Please connect wallet')
+      return
+    }
+
+    addLiquidity({
+      tokenA,
+      tokenB,
+      amountA,
+      amountB,
+      mintInfo,
+      callback: () => {
+        toast.info('Success')
+      },
+    })
+  }
+
   return (
     <div className="container mx-auto flex min-h-[80dvh] flex-col justify-center p-4">
       <div className="flex flex-col justify-center gap-6 lg:flex-row">
@@ -71,6 +95,19 @@ export const AddLiquidity = () => {
 
           <PairSelection />
           <FeeSelection />
+
+          <Alert
+            variant="warning"
+            className={cn('space-y-2', pool && 'hidden')}
+          >
+            <TriangleAlert className="size-8 stroke-yellow-500" />
+            <AlertTitle className="ml-3">Creating new pool</AlertTitle>
+            <AlertDescription className="ml-3">
+              Your selections will create a new liquidity pool which may result
+              in lower initial liquidity and increased volatility. Consider
+              adding to an existing pool to minimize these risks.
+            </AlertDescription>
+          </Alert>
         </Card>
 
         <Card
@@ -107,7 +144,15 @@ export const AddLiquidity = () => {
 
             <div className="mt-5">
               {account ? (
-                <Button className="w-full text-white">Add Liquidity</Button>
+                <Button
+                  onClick={handleAddLiquidity}
+                  className="w-full text-white"
+                  disabled={
+                    isInvalidAmount(amountA) || isInvalidAmount(amountB)
+                  }
+                >
+                  {pool ? 'Add Liquidity' : 'Create new Pool & add liquidity'}
+                </Button>
               ) : (
                 <Button className="w-full text-white">Connect Wallet</Button>
               )}

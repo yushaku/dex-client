@@ -2,6 +2,8 @@ import { Asset } from '@/utils'
 import { FeeAmount } from '@uniswap/v3-sdk'
 import { create } from 'zustand'
 
+export type FullRange = true
+
 export const FIELD = {
   CURRENCY_A: 'CURRENCY_A',
   CURRENCY_B: 'CURRENCY_B',
@@ -44,8 +46,8 @@ type State = {
   initialPrice: string
   typedValue: string
   independentField: keyof typeof FIELD
-  leftRangeInput: string
-  rightRangeInput: string
+  leftRangeInput: string | FullRange
+  rightRangeInput: string | FullRange
   preset: (typeof listRanges)[number]
   asset0: Asset | null
   asset1: Asset | null
@@ -57,6 +59,7 @@ type Action = {
   selectPreset: (_preset: (typeof listRanges)[number]) => void
   updateLeftRangeInput: (_amount: string) => void
   updateRightRangeInput: (_amount: string) => void
+  setFullRange: () => void
   updateTypedValue: (
     _typedValue: string,
     _independentField: keyof typeof FIELD,
@@ -115,6 +118,16 @@ export const useMintState = create<State & Action>()((set) => ({
       return {
         ...state,
         rightRangeInput: amount,
+      }
+    })
+  },
+
+  setFullRange: () => {
+    set((state) => {
+      return {
+        ...state,
+        leftRangeInput: true,
+        rightRangeInput: true,
       }
     })
   },

@@ -1,7 +1,7 @@
 import { Highlight } from '@/components/common/Highlight'
+import { IconGroup } from '@/components/common/IconGroup'
 import { useTokenPrice } from '@/hooks'
 import { AssetsContext } from '@/hooks/useAssets'
-import { IconGroup } from '@/pages/pools/components/IconGroup'
 import { UNKNOWN_TOKEN, cn, formatNumber } from '@/utils'
 import { Token } from '@uniswap/sdk-core'
 import { LockIcon } from 'lucide-react'

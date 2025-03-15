@@ -1,95 +1,85 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { IconGroup } from '@/components/common/IconGroup'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel'
 import { Card } from '@/components/warper'
-import { useUniswapPositions } from '@/hooks/uni/usePositionV3'
-import { ManualPosition } from './components/ManualPosition'
-import { useQuery } from '@tanstack/react-query'
-import { useAccount } from 'wagmi'
-import { uniswapClient, formatNumber } from '@/utils'
 import { useGetAsset } from '@/hooks/useAssets'
+import { formatNumber } from '@/utils'
+import { useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import { getAddress } from 'viem'
-import { IconGroup } from './components/IconGroup'
+import { useAccount } from 'wagmi'
+import { UniPools, fetchPools } from './api'
+import { TablePool } from './components/table'
 
 export const Pools = () => {
-  const positions = useUniswapPositions()
   const { chainId = 1 } = useAccount()
 
-  const uni = uniswapClient(3, chainId)
   const { data } = useQuery({
-    queryKey: ['uniswapPools', 3, chainId],
+    queryKey: ['top_uniswap_pools', chainId],
     queryFn: async () => {
-      const query = `{
-        pools(first: 12, orderBy: volumeUSD, orderDirection: desc) {
-          id
-          feesUSD
-          feeTier
-          volumeUSD
-          volumeToken1
-          volumeToken0
-          totalValueLockedUSD
-          token0 {
-            symbol
-            id
-          }
-          token1 {
-            id
-            symbol
-          }
-        }
-      }`
-
-      return uni.request(query) as Promise<any>
+      const fetchedData = await fetchPools({
+        version: 3,
+        chainId,
+        first: 10,
+      })
+      return fetchedData
     },
-    refetchInterval: 1000 * 60 * 60,
-    staleTime: Infinity,
-    refetchIntervalInBackground: true,
+    refetchOnWindowFocus: false,
   })
 
   return (
     <article className="space-y-8">
-      <div className="flex-1">
-        <h4 className="mb-5 text-xl">Your Positions</h4>
+      <h3 className="my-5 text-xl">Top Pools</h3>
+      <div className="px-5">
+        <Carousel>
+          <CarouselContent>
+            {data?.pools?.map((pool) => <PoolItem pool={pool} key={pool.id} />)}
+          </CarouselContent>
 
-        <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3">
-          {positions.map((position) => {
-            return (
-              <li key={position.tokenId}>
-                <ManualPosition position={position} />
-              </li>
-            )
-          })}
-        </ul>
+          <CarouselPrevious className="" />
+          <CarouselNext />
+        </Carousel>
       </div>
 
-      <div className="flex-1">
-        <h4 className="text-xl">Top Pools</h4>
+      <h3 className="my-5 text-xl">Pools List</h3>
 
-        <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3">
-          {data?.pools.map((pool: any) => {
-            return <PoolItem pool={pool} key={pool.id} />
-          })}
-        </ul>
-      </div>
+      <TablePool />
     </article>
   )
 }
 
-function PoolItem({ pool }: { pool: any }) {
+function PoolItem({ pool }: { pool: UniPools }) {
+  const navigate = useNavigate()
   const token0 = useGetAsset(getAddress(pool.token0.id))
   const token1 = useGetAsset(getAddress(pool.token1.id))
 
   return (
-    <li>
-      <Card className="p-4">
-        <div className="space-y-2">
-          <p className="flex items-center gap-2">
+    <CarouselItem className="cursor-pointer md:basis-1/2 lg:basis-1/5">
+      <Card
+        onClick={() =>
+          navigate(
+            `/pools/add-liquidity?token0=${pool.token0.id}&token1=${pool.token1.id}`,
+          )
+        }
+        className="group p-4"
+      >
+        <div className="space-y-2 text-textSecondary">
+          <p className="flex items-center gap-2 pb-2">
             <IconGroup logo1={token0?.logoURI} logo2={token1?.logoURI} />
-            {pool.token0?.symbol}/{pool.token1?.symbol}
+            <span className="text-primary group-hover:text-accent">
+              {pool.token0?.symbol}/{pool.token1?.symbol}
+            </span>
           </p>
           <p>fees: ${formatNumber(pool.feesUSD)}</p>
           <p>volume: ${formatNumber(pool.volumeUSD)}</p>
           <p>TVL: ${formatNumber(pool.totalValueLockedUSD)}</p>
         </div>
       </Card>
-    </li>
+    </CarouselItem>
   )
 }

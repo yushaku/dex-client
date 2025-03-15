@@ -2,17 +2,17 @@ import { Bound, FIELD, useMintState } from '@/stores'
 import { Asset } from '@/utils'
 import { CurrencyAmount, Price } from '@uniswap/sdk-core'
 import {
-  Pool,
   Position,
   TICK_SPACINGS,
   TickMath,
   nearestUsableTick,
-  priceToClosestTick,
 } from '@uniswap/v3-sdk'
 import JSBI from 'jsbi'
 import { useMemo } from 'react'
-import { getTickToPrice, tryParseAmount, tryParseTick } from './util'
 import { useGetPool } from './usePoolV3'
+import { getTickToPrice, tryParseAmount, tryParseTick } from './util'
+
+const BIG_INT_ZERO = JSBI.BigInt(0)
 
 export type MintInfo = Awaited<ReturnType<typeof useGetGetMintInfo>>
 
@@ -70,15 +70,15 @@ export function useGetGetMintInfo({
         (!isInvert && typeof leftRangeInput === 'boolean')
           ? tickSpaceLimits[Bound.LOWER]
           : isInvert
-            ? tryParseTick(sortedB, sortedA, fee, rightRangeInput)
-            : tryParseTick(sortedA, sortedB, fee, leftRangeInput),
+            ? tryParseTick(sortedB, sortedA, fee, rightRangeInput.toString())
+            : tryParseTick(sortedA, sortedB, fee, leftRangeInput.toString()),
       [Bound.UPPER]:
         (!isInvert && typeof rightRangeInput === 'boolean') ||
         (isInvert && typeof leftRangeInput === 'boolean')
           ? tickSpaceLimits[Bound.UPPER]
           : isInvert
-            ? tryParseTick(sortedB, sortedA, fee, leftRangeInput)
-            : tryParseTick(sortedA, sortedB, fee, rightRangeInput),
+            ? tryParseTick(sortedB, sortedA, fee, leftRangeInput.toString())
+            : tryParseTick(sortedA, sortedB, fee, rightRangeInput.toString()),
     }),
     [
       isInvert,
@@ -125,23 +125,23 @@ export function useGetGetMintInfo({
     return undefined
   }, [_pool, sortedA, sortedB, initialPrice, isInvert])
 
-  const mockPool = useMemo(() => {
-    if (tokenA && tokenB && fee && price && !_pool) {
-      const currentTick = priceToClosestTick(price)
-      const currentSqrt = TickMath.getSqrtRatioAtTick(currentTick)
-      return new Pool(
-        tokenA,
-        tokenB,
-        fee,
-        currentSqrt,
-        JSBI.BigInt(0),
-        currentTick,
-        [],
-      )
-    }
-    return undefined
-  }, [fee, _pool, price, tokenA, tokenB])
-  const pool = _pool ?? mockPool
+  // const mockPool = useMemo(() => {
+  //   if (tokenA && tokenB && fee && price && !_pool) {
+  //     const currentTick = priceToClosestTick(price)
+  //     const currentSqrt = TickMath.getSqrtRatioAtTick(currentTick)
+  //     return new Pool(
+  //       tokenA,
+  //       tokenB,
+  //       fee,
+  //       currentSqrt,
+  //       JSBI.BigInt(0),
+  //       currentTick,
+  //       [],
+  //     )
+  //   }
+  //   return undefined
+  // }, [fee, _pool, price, tokenA, tokenB])
+  const pool = _pool
 
   const pricesAtTicks = useMemo(
     () => ({
@@ -244,8 +244,63 @@ export function useGetGetMintInfo({
     [dependentAmount, independentAmount, independentField],
   )
 
+  // MARK: Estimate position
+  const deposit0Disabled = Boolean(
+    typeof tickUpper === 'number' && pool && pool.tickCurrent >= tickUpper,
+  )
+  const deposit1Disabled = Boolean(
+    typeof tickLower === 'number' && pool && pool.tickCurrent <= tickLower,
+  )
+
+  const position = useMemo(() => {
+    if (
+      !pool ||
+      !tokenA ||
+      !tokenB ||
+      typeof tickLower !== 'number' ||
+      typeof tickUpper !== 'number' ||
+      invalidRange
+    ) {
+      return undefined
+    }
+
+    // mark as 0 if disabled because out of range
+    const amount0 = !deposit0Disabled
+      ? parsedAmounts?.[
+          tokenA.equals(pool.token0) ? FIELD.CURRENCY_A : FIELD.CURRENCY_B
+        ]?.quotient
+      : BIG_INT_ZERO
+    const amount1 = !deposit1Disabled
+      ? parsedAmounts?.[
+          tokenA.equals(pool.token0) ? FIELD.CURRENCY_B : FIELD.CURRENCY_A
+        ]?.quotient
+      : BIG_INT_ZERO
+
+    if (amount0 === undefined || amount1 === undefined) return undefined
+
+    return Position.fromAmounts({
+      pool,
+      tickLower,
+      tickUpper,
+      amount0,
+      amount1,
+      useFullPrecision: true, // we want full precision for the theoretical position
+    })
+  }, [
+    pool,
+    tokenA,
+    tokenB,
+    tickLower,
+    tickUpper,
+    invalidRange,
+    parsedAmounts,
+    deposit0Disabled,
+    deposit1Disabled,
+  ])
+
   return {
     pool: _pool,
+    position,
     poolAddress,
     isInvert,
     pricesAtTicks,
@@ -256,5 +311,7 @@ export function useGetGetMintInfo({
     parsedAmounts,
     ticks,
     ticksAtLimit,
+    deposit0Disabled,
+    deposit1Disabled,
   }
 }
