@@ -17,7 +17,7 @@ export const AssetsProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const { tokenList: storageTokens } = useTokensState()
 
-  const { address: account, chainId = 56 } = useAccount()
+  const { address: account, chainId = 1 } = useAccount()
   const { data: assets = [] } = useFetchTokenList(chainId)
   const allTokens = useMemo(
     () => storageTokens.concat(assets as unknown as WrapAsset),

@@ -22,7 +22,7 @@ import { Button } from '@/components/ui/button'
 
 export const SwapPane = () => {
   // GLOBAL state
-  const { address: account, chainId = 56 } = useAccount()
+  const { address: account, chainId = 1 } = useAccount()
   const { listTokens } = useContext(AssetsContext)
   const { switchChain } = useSwitchChain()
   const { setting } = useSettingState()

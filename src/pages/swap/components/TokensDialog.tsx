@@ -24,7 +24,7 @@ type Props = {
 }
 
 export const TokensDialog = ({ asset, listAssets, handleSetToken }: Props) => {
-  const { chainId = 56 } = useAccount()
+  const { chainId = 1 } = useAccount()
   const [isOpen, setIsOpen] = useState(false)
 
   return (

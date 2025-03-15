@@ -27,7 +27,7 @@ export const OrderInput = <T,>({
   setFromAmount,
   handleSetToken,
 }: Props<T>) => {
-  const { chainId = 56 } = useAccount()
+  const { chainId = 1 } = useAccount()
   const { data: price } = useTokenPrice({
     token: asset?.address ?? '',
     chainId,

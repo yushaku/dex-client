@@ -126,7 +126,7 @@ export const useOdosQuoteSwap = ({
 
 export const useOdosSwap = (autoClose = false) => {
   const [pending, setPending] = useState(false)
-  const { address: account = zeroAddress, chainId = 56 } = useAccount()
+  const { address: account = zeroAddress, chainId = 1 } = useAccount()
 
   const { startTxn, endTxn, sendTxn, closeTxnModal, writeTxn } = useTxn(chainId)
 

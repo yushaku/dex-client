@@ -38,7 +38,7 @@ type Props = {
 type AssetList = Array<WrapAsset>
 
 export const OrderToken = ({ asset, handleSetToken, className }: Props) => {
-  const { address: account, chainId = 56 } = useAccount()
+  const { address: account, chainId = 1 } = useAccount()
   const { tokenList: storageTokens, add, remove } = useTokensState()
   const { listTokens } = useContext(AssetsContext)
   const topAssets = getTopAssets(chainId)
