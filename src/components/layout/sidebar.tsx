@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@/hooks/useMediaQuery'
+import { useMediaQuery } from '@/hooks'
 import { cn, routes } from '@/utils'
 import {
   ArrowLeftIcon,

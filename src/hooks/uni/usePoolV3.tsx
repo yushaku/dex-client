@@ -13,6 +13,7 @@ import {
 import { useCallback, useMemo } from 'react'
 import { Address, isAddress, zeroAddress } from 'viem'
 import { useAccount, useReadContracts } from 'wagmi'
+import { PoolState } from './types'
 
 // const tickSpaceLimits = [
 //   nearestUsableTick(TickMath.MIN_TICK, TICK_SPACINGS[FeeAmount.MEDIUM]),
@@ -26,8 +27,8 @@ export function getPoolAddress({
   fee = FeeAmount.MEDIUM,
 }: {
   chainId: number
-  asset0?: Asset | null
-  asset1?: Asset | null
+  asset0?: Asset | Token | null
+  asset1?: Asset | Token | null
   fee?: number
 }) {
   if (!asset0 || !asset1 || asset0.address === asset1.address)
@@ -113,6 +114,70 @@ export function useGetPool({
 
   return {
     pool: pool,
+    poolAddress,
+    tokenA,
+    tokenB,
+  }
+}
+
+export function usePool({
+  baseCurrency,
+  quoteCurrency,
+  fee = 3000, // 0,3% fee
+}: {
+  baseCurrency?: Currency
+  quoteCurrency?: Currency
+  fee?: number
+}) {
+  const { chainId = 1 } = useAccount()
+  const { poolAddress, tokenA, tokenB } = getPoolAddress({
+    asset0: baseCurrency?.wrapped,
+    asset1: quoteCurrency?.wrapped,
+    fee,
+    chainId,
+  })
+
+  const { data } = useReadContracts({
+    contracts: [
+      {
+        abi: UniPoolV3,
+        functionName: 'liquidity',
+        address: poolAddress as Address,
+      },
+      {
+        abi: UniPoolV3,
+        functionName: 'slot0',
+        address: poolAddress as Address,
+      },
+    ],
+    query: {
+      enabled: isAddress(poolAddress ?? zeroAddress),
+    },
+  })
+  let poolState = PoolState.NOT_EXISTS
+  const liquidity = data?.[0]?.result
+  const slot0 = data?.[1]?.result
+
+  if (!liquidity) poolState = PoolState.INVALID
+  if (!slot0) poolState = PoolState.INVALID
+  if (!slot0 && !liquidity) PoolState.NOT_EXISTS
+
+  let pool = null
+  if (tokenA && tokenB && slot0 && liquidity) {
+    poolState = PoolState.EXISTS
+    pool = new V3Pool(
+      tokenA,
+      tokenB,
+      fee,
+      slot0[0].toString(),
+      liquidity.toString(),
+      Number(slot0[1]),
+    )
+  }
+
+  return {
+    pool,
+    poolState,
     poolAddress,
     tokenA,
     tokenB,

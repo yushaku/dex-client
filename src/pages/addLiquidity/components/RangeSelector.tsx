@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { MintInfo, useRangeHopCallbacks } from '@/hooks'
-import { Bound, FIELD, useMintState } from '@/stores'
+import { Bound, Field, useMintState } from '@/stores'
 import { cn } from '@/utils'
 import { FeeAmount, Pool } from '@uniswap/v3-sdk'
 import { ArrowRightLeft, Minus, Plus } from 'lucide-react'
@@ -42,20 +42,6 @@ export const RangeSelector = ({ pool, mintInfo }: Props) => {
     }
   }, [isInvert, price])
 
-  // const leftPrice = useMemo(
-  //   () => (isInvert ? priceLower : priceUpper?.invert()),
-  //   [isInvert, priceLower, priceUpper],
-  // )
-  //
-  // const rightPrice = useMemo(
-  //   () => (isInvert ? priceUpper : priceLower?.invert()),
-  //   [isInvert, priceUpper, priceLower],
-  // )
-
-  // const tokenA = (currencyA ?? undefined)?.wrapped
-  // const tokenB = (currencyB ?? undefined)?.wrapped
-  // const isSorted = tokenA && tokenB && tokenA.sortsBefore(tokenB)
-
   const leftPrice = isInvert ? priceLower : priceUpper?.invert()
   const rightPrice = isInvert ? priceUpper : priceLower?.invert()
 
@@ -77,7 +63,7 @@ export const RangeSelector = ({ pool, mintInfo }: Props) => {
     const _asset0 = asset0
     handleSetToken('asset0', asset1)
     handleSetToken('asset1', _asset0)
-    updateTypedValue('0', FIELD.CURRENCY_A)
+    updateTypedValue('0', Field.CURRENCY_A)
   }
 
   return (

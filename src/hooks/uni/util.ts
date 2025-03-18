@@ -90,200 +90,45 @@ export function tryParsePrice<T extends Currency>(
 
   return price
 }
+function truncateValue(value: string, decimals: number): string {
+  const parts = value.split(/[.,]/)
+  const symbol = value.includes('.') ? '.' : ','
+  if (parts.length > 1 && parts[1].length > decimals) {
+    return parts[0] + symbol + parts[1].slice(0, decimals)
+  }
+  return value
+}
 
-// export function getV3PriceRangeInfo({
-//   state,
-//   positionState,
-//   derivedPositionInfo,
-// }: {
-//   state: PriceRangeState
-//   positionState: PositionState
-//   derivedPositionInfo: CreateV3PositionInfo
-// }): V3PriceRangeInfo {
-//   const { fee } = positionState
-//   const { protocolVersion, currencies } = derivedPositionInfo
-//   const pool = derivedPositionInfo.pool
-//
-//   const tokenA = getCurrencyWithWrap(currencies[0], protocolVersion)
-//   const tokenB = getCurrencyWithWrap(currencies[1], protocolVersion)
-//   const sortedTokens = getSortedCurrenciesTuple(tokenA, tokenB)
-//   const [sortedToken0, sortedToken1] = sortedTokens
-//
-//   const [baseCurrency, quoteCurrency] = getInvertedTuple(
-//     currencies,
-//     state.priceInverted,
-//   )
-//   const [baseToken, quoteToken] = [
-//     getCurrencyWithWrap(baseCurrency, protocolVersion),
-//     getCurrencyWithWrap(quoteCurrency, protocolVersion),
-//   ]
-//
-//   const initialPriceTokens = getInvertedTuple(
-//     [
-//       getCurrencyWithWrap(currencies[0], protocolVersion),
-//       getCurrencyWithWrap(currencies[1], protocolVersion),
-//     ],
-//     state.priceInverted,
-//   )
-//
-//   const price = derivedPositionInfo.creatingPoolOrPair
-//     ? getInitialPrice({
-//         baseCurrency: initialPriceTokens[0],
-//         sortedCurrencies: sortedTokens,
-//         initialPrice: state.initialPrice,
-//       })
-//     : getPrice({
-//         type: ProtocolVersion.V3,
-//         pool,
-//         currency0: sortedToken0,
-//       })
-//   const invalidPrice = isInvalidPrice(price)
-//   const mockPool = createMockV3Pool({
-//     baseToken,
-//     quoteToken,
-//     fee: fee.feeAmount,
-//     price,
-//     invalidPrice,
-//   })
-//
-//   const poolForPosition = pool ?? mockPool
-//   const tickSpaceLimits: [number, number] = [
-//     nearestUsableTick(TickMath.MIN_TICK, fee.tickSpacing),
-//     nearestUsableTick(TickMath.MAX_TICK, fee.tickSpacing),
-//   ]
-//
-//   const invertPrice = Boolean(
-//     baseToken && sortedToken0 && !baseToken.equals(sortedToken0),
-//   )
-//   const [baseRangeInput, quoteRangeInput] = invertPrice
-//     ? [state.maxPrice, state.minPrice]
-//     : [state.minPrice, state.maxPrice]
-//
-//   const lowerTick =
-//     baseRangeInput === ''
-//       ? tickSpaceLimits[0]
-//       : invertPrice
-//         ? tryParseTick(
-//             sortedToken1,
-//             sortedToken0,
-//             fee.feeAmount,
-//             state.maxPrice,
-//           )
-//         : tryParseTick(
-//             sortedToken0,
-//             sortedToken1,
-//             fee.feeAmount,
-//             state.minPrice,
-//           )
-//   const upperTick =
-//     quoteRangeInput === ''
-//       ? tickSpaceLimits[1]
-//       : invertPrice
-//         ? tryParseTick(
-//             sortedToken1,
-//             sortedToken0,
-//             fee.feeAmount,
-//             state.minPrice,
-//           )
-//         : tryParseTick(
-//             sortedToken0,
-//             sortedToken1,
-//             fee.feeAmount,
-//             state.maxPrice,
-//           )
-//
-//   const ticks: [OptionalNumber, OptionalNumber] = [lowerTick, upperTick]
-//   const invalidRange = Boolean(
-//     lowerTick !== undefined &&
-//       upperTick !== undefined &&
-//       lowerTick >= upperTick,
-//   )
-//
-//   const ticksAtLimit: [boolean, boolean] = state.fullRange
-//     ? [true, true]
-//     : [lowerTick === tickSpaceLimits[0], upperTick === tickSpaceLimits[1]]
-//
-//   const pricesAtLimit: [OptionalCurrencyPrice, OptionalCurrencyPrice] = [
-//     getTickToPrice(sortedToken0, sortedToken1, tickSpaceLimits[0]),
-//     getTickToPrice(sortedToken0, sortedToken1, tickSpaceLimits[1]),
-//   ]
-//
-//   const pricesAtTicks: [OptionalCurrencyPrice, OptionalCurrencyPrice] = [
-//     getTickToPrice(sortedToken0, sortedToken1, ticks[0]),
-//     getTickToPrice(sortedToken0, sortedToken1, ticks[1]),
-//   ]
-//
-//   const isSorted = areCurrenciesEqual(baseToken, sortedToken0)
-//   const prices = getPrices({
-//     baseCurrency: baseToken,
-//     quoteCurrency: quoteToken,
-//     pricesAtLimit,
-//     pricesAtTicks,
-//     state,
-//   })
-//
-//   const outOfRange = Boolean(
-//     !invalidRange &&
-//       price &&
-//       prices[0] &&
-//       prices[1] &&
-//       (price.lessThan(prices[0]) || price.greaterThan(prices[1])),
-//   )
-//
-//   // This is in terms of the sorted tokens
-//   const deposit0Disabled = Boolean(
-//     upperTick !== undefined &&
-//       poolForPosition &&
-//       poolForPosition.tickCurrent >= upperTick,
-//   )
-//   const deposit1Disabled = Boolean(
-//     lowerTick !== undefined &&
-//       poolForPosition &&
-//       poolForPosition.tickCurrent <= lowerTick,
-//   )
-//
-//   const depositADisabled =
-//     invalidRange ||
-//     Boolean(
-//       (deposit0Disabled &&
-//         poolForPosition &&
-//         tokenA &&
-//         poolForPosition.token0.equals(tokenA)) ||
-//         (deposit1Disabled &&
-//           poolForPosition &&
-//           tokenA &&
-//           poolForPosition.token1.equals(tokenA)),
-//     )
-//
-//   const depositBDisabled =
-//     invalidRange ||
-//     Boolean(
-//       (deposit0Disabled &&
-//         poolForPosition &&
-//         tokenB &&
-//         poolForPosition.token0.equals(tokenB)) ||
-//         (deposit1Disabled &&
-//           poolForPosition &&
-//           tokenB &&
-//           poolForPosition.token1.equals(tokenB)),
-//     )
-//
-//   return {
-//     protocolVersion,
-//     ticks,
-//     ticksAtLimit,
-//     isSorted,
-//     price,
-//     prices,
-//     pricesAtTicks,
-//     pricesAtLimit,
-//     tickSpaceLimits,
-//     invertPrice,
-//     invalidPrice,
-//     invalidRange,
-//     outOfRange,
-//     deposit0Disabled: depositADisabled,
-//     deposit1Disabled: depositBDisabled,
-//     mockPool,
-//   } satisfies V3PriceRangeInfo
-// }
+/**
+ * Parses a CurrencyAmount from the passed string.
+ * Returns the CurrencyAmount, or undefined if parsing fails.
+ */
+export default function tryParseCurrencyAmount<T extends Currency>(
+  value?: string,
+  currency?: T,
+): CurrencyAmount<T> | undefined {
+  if (!value || !currency || isNaN(parseFloat(value))) {
+    return undefined
+  }
+  try {
+    const typedValueParsed = parseUnits(
+      truncateValue(value, currency.decimals),
+      currency.decimals,
+    ).toString()
+    if (typedValueParsed !== '0') {
+      return CurrencyAmount.fromRawAmount(
+        currency,
+        JSBI.BigInt(typedValueParsed),
+      )
+    }
+  } catch (error) {
+    // fails if the user specifies too many decimal places of precision (or maybe exceed max uint?)
+    console.debug(
+      'tryParseCurrencyAmount',
+      'tryParseCurrencyAmount',
+      `Failed to parse input amount: "${value}"`,
+      error,
+    )
+  }
+  return undefined
+}

@@ -1,19 +1,19 @@
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/warper'
-import { useAddLiquidity, useGetGetMintInfo } from '@/hooks'
-import { FIELD, useMintState } from '@/stores'
+import { useAddLiquidity, useGetGetMintInfo, useToken } from '@/hooks'
+import { Field, useMintState } from '@/stores'
 import { cn, isInvalidAmount } from '@/utils'
 import { ChevronDownIcon } from '@heroicons/react/16/solid'
+import { TriangleAlert } from 'lucide-react'
 import { useEffect, useMemo } from 'react'
+import { toast } from 'react-toastify'
 import { useAccount } from 'wagmi'
 import { FeeSelection } from './components/FeeSelection'
 import { InputTokenAmount } from './components/InputTokenAmount'
 import { PairSelection } from './components/PairSelection'
 import { PresetRanges } from './components/PresetRanges'
 import { RangeSelector } from './components/RangeSelector'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { TriangleAlert } from 'lucide-react'
-import { toast } from 'react-toastify'
 
 export const AddLiquidity = () => {
   const { address: account } = useAccount()
@@ -28,7 +28,14 @@ export const AddLiquidity = () => {
     updateTypedValue,
   } = useMintState()
 
-  const mintInfo = useGetGetMintInfo({ asset0, asset1 })
+  const baseCurrency = useToken(asset0?.address)
+  const quoteCurrency = useToken(asset1?.address)
+
+  const mintInfo = useGetGetMintInfo({
+    currencyA: baseCurrency,
+    currencyB: quoteCurrency,
+    baseCurrency,
+  })
   const { addLiquidity } = useAddLiquidity()
   const { pool, tokenB, tokenA, poolAddress, price, isInvert } = mintInfo
 
@@ -62,8 +69,8 @@ export const AddLiquidity = () => {
     ],
   )
 
-  const amountA = formattedAmounts[FIELD.CURRENCY_A]
-  const amountB = formattedAmounts[FIELD.CURRENCY_B]
+  const amountA = formattedAmounts[Field.CURRENCY_A]
+  const amountB = formattedAmounts[Field.CURRENCY_B]
   function handleAddLiquidity() {
     if (!account || !tokenA || !tokenB) {
       toast.error('Please connect wallet')
@@ -125,18 +132,18 @@ export const AddLiquidity = () => {
               <InputTokenAmount
                 title="Asset 1"
                 token={tokenA}
-                value={formattedAmounts[FIELD.CURRENCY_A]}
+                value={formattedAmounts[Field.CURRENCY_A]}
                 handleInput={(amount) =>
-                  updateTypedValue(amount, FIELD.CURRENCY_A)
+                  updateTypedValue(amount, Field.CURRENCY_A)
                 }
                 // locked={mintInfo.depositADisabled}
               />
               <InputTokenAmount
                 title="Asset 2"
                 token={tokenB}
-                value={formattedAmounts[FIELD.CURRENCY_B]}
+                value={formattedAmounts[Field.CURRENCY_B]}
                 handleInput={(amount) =>
-                  updateTypedValue(amount, FIELD.CURRENCY_B)
+                  updateTypedValue(amount, Field.CURRENCY_B)
                 }
                 // locked={mintInfo.depositBDisabled}
               />

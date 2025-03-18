@@ -4,15 +4,20 @@ import { create } from 'zustand'
 
 export type FullRange = true
 
-export const FIELD = {
+export const Field = {
   CURRENCY_A: 'CURRENCY_A',
   CURRENCY_B: 'CURRENCY_B',
 } as const
 
-export const Bound = {
-  LOWER: 'LOWER',
-  UPPER: 'UPPER',
-} as const
+export enum Bound {
+  LOWER = 'LOWER',
+  UPPER = 'UPPER',
+}
+
+// export const Bound = {
+//   LOWER: 'LOWER',
+//   UPPER: 'UPPER',
+// } as const
 
 export const listRanges = [
   {
@@ -45,7 +50,7 @@ type State = {
   fee: FeeAmount
   initialPrice: string
   typedValue: string
-  independentField: keyof typeof FIELD
+  independentField: keyof typeof Field
   leftRangeInput: string | FullRange
   rightRangeInput: string | FullRange
   preset: (typeof listRanges)[number]
@@ -62,7 +67,7 @@ type Action = {
   setFullRange: () => void
   updateTypedValue: (
     _typedValue: string,
-    _independentField: keyof typeof FIELD,
+    _independentField: keyof typeof Field,
   ) => void
 }
 
@@ -71,7 +76,7 @@ export const useMintState = create<State & Action>()((set) => ({
   leftRangeInput: '',
   rightRangeInput: '',
   typedValue: '',
-  independentField: FIELD.CURRENCY_A,
+  independentField: Field.CURRENCY_A,
   preset: listRanges[1],
   initialPrice: '0',
   asset0: null,
@@ -134,7 +139,7 @@ export const useMintState = create<State & Action>()((set) => ({
 
   updateTypedValue: (
     typedValue: string,
-    independentField: keyof typeof FIELD,
+    independentField: keyof typeof Field,
   ) => {
     set((state) => {
       return {

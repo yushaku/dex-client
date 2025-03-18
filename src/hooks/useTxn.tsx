@@ -59,7 +59,7 @@ export const useTxn = (chainId: number) => {
           abi,
           functionName: functionName,
           args: args,
-          value: msgValue,
+          value: BigInt(msgValue ?? 0),
           chainId,
           address,
         })
