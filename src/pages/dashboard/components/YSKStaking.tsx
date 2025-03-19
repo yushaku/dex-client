@@ -1,9 +1,8 @@
-import { Card } from '@/components/warper'
+import { Card } from '@/components/common'
 import { useDebounce } from '@/hooks'
 import { useFarmState } from '@/stores'
-import { cn } from '@/utils'
+import { cn, formatNumber } from '@/utils'
 import { contracts } from '@/utils/contracts'
-import { formatAmount } from '@/utils/odos'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { erc20Abi, formatEther, zeroAddress } from 'viem'
@@ -61,7 +60,7 @@ export const YSKStakeForm = () => {
         <p className="text-center">
           <span className="block text-sm text-textSecondary">Your Balance</span>
           <strong className="flex items-center gap-2 text-xl font-bold text-textPrimary">
-            {formatAmount({ amount: balance })}
+            {formatNumber(formatEther(balance ?? 0n))}
             <img className="size-7" src="/logo.png" alt="logo" />
           </strong>
         </p>
@@ -89,7 +88,7 @@ export const YSKStakeForm = () => {
           <span className="block text-sm text-textSecondary">Total Staked</span>
           <strong className="flex-start gap-2 text-xl font-bold text-textPrimary">
             <img className="size-7" src="/logo.png" alt="logo" />
-            {formatAmount({ amount: total })}
+            {formatNumber(formatEther(total ?? 0n))}
           </strong>
         </p>
       </article>

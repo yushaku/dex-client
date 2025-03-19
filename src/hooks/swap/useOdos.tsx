@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Asset, TXN_STATUS, readContract } from '@/utils'
 import { contracts } from '@/utils/contracts'
-import { isInvalidAmount, quoteUrl } from '@/utils/odos'
+import { isInvalidAmount } from '@/utils'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { useCallback, useState } from 'react'
@@ -47,6 +47,7 @@ export type Props = {
   chainId: number
 }
 
+export const quoteUrl = 'https://api.odos.xyz/sor/quote/v2'
 export const BEST_TRADE_ODOS = 'BEST_TRADE_ODOS'
 
 export const useOdosQuoteSwap = ({
@@ -125,7 +126,7 @@ export const useOdosQuoteSwap = ({
 
 export const useOdosSwap = (autoClose = false) => {
   const [pending, setPending] = useState(false)
-  const { address: account = zeroAddress, chainId = 56 } = useAccount()
+  const { address: account = zeroAddress, chainId = 1 } = useAccount()
 
   const { startTxn, endTxn, sendTxn, closeTxnModal, writeTxn } = useTxn(chainId)
 

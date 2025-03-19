@@ -1,11 +1,11 @@
 import { stakeModuleABI } from '@/abi/stakeModule'
 import { Button } from '@/components/common/Button'
-import ModalWarp from '@/components/warper/ModalWarper'
-import { MAX_VALUE, STAKE_ADRESS, YSK_ADDRESS, cn } from '@/utils'
+import { ModalWarp } from '@/components/common'
+import { STAKE_ADRESS, YSK_ADDRESS, cn } from '@/utils'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Address, erc20Abi, formatEther, parseUnits } from 'viem'
+import { Address, erc20Abi, formatEther, maxInt256, parseUnits } from 'viem'
 import {
   useReadContract,
   useWaitForTransactionReceipt as useWaitTx,
@@ -64,7 +64,7 @@ export const StakeForm = ({ isOpen, setOpen, address, balance }: Props) => {
       address: YSK_ADDRESS,
       abi: erc20Abi,
       functionName: 'approve',
-      args: [STAKE_ADRESS, MAX_VALUE],
+      args: [STAKE_ADRESS, maxInt256],
     })
 
     console.log(res)

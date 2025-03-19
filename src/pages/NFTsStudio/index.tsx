@@ -1,6 +1,6 @@
-import { CreateCollectionTab } from '@/components/common/nfts/CreateCollectionTab'
-import { CreateNftTab } from '@/components/common/nfts/CreateNftTab'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { CreateNftTab } from './components/CreateNftTab'
+import { CreateCollectionTab } from './components/CreateCollectionTab'
 
 const listFeature = ['create_nft', 'create_collection']
 

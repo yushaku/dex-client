@@ -8,7 +8,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/warper'
+import { Card } from '@/components/common'
 import { useStakeEth, useWstETH } from '@/hooks/stake/useLido'
 import { useRenzo } from '@/hooks/stake/useRenzo'
 import { OrderInput } from '@/pages/swap/components/OrderInput'
@@ -16,7 +16,7 @@ import { useFarmState } from '@/stores'
 import { WrapAsset } from '@/stores/addictionTokens'
 import { cn, getTokenLink, shortenAddress } from '@/utils'
 import { contracts } from '@/utils/contracts'
-import { formatAmount } from '@/utils/odos'
+import { formatNumber } from '@/utils'
 import { ArrowDownIcon } from '@heroicons/react/16/solid'
 import { XMarkIcon } from '@heroicons/react/20/solid'
 import { useCallback, useEffect, useState } from 'react'
@@ -91,7 +91,9 @@ export const ETHFarming = () => {
   const { chainId } = useAccount()
   const { data: earnOnToken, toggleFarmin } = useFarmState()
   const [protocol, setProtocol] = useState<string>('LIDO')
-  const [description, setDescription] = useState<any>([])
+  const [description, setDescription] = useState<any>(
+    listProtocols[0].list[0].description,
+  )
 
   if (earnOnToken !== 'ETH' || chainId !== mainnet.id) return null
 
@@ -108,9 +110,10 @@ export const ETHFarming = () => {
             return (
               <li className="mt-3">
                 <p>{type}</p>
-                {list.map((item) => {
+                {list.map((item, index) => {
                   return (
                     <button
+                      key={index}
                       onClick={(event) => {
                         event.preventDefault()
                         setProtocol(item.name)
@@ -138,9 +141,12 @@ export const ETHFarming = () => {
           <Accordion type="single" collapsible className="w-full">
             {description.map((item: any, index: number) => {
               return (
-                <AccordionItem value={`item-${index}`}>
+                <AccordionItem key={index} value={`item-${index}`}>
                   <AccordionTrigger>{item.title}</AccordionTrigger>
-                  <AccordionContent> {item.detail} </AccordionContent>
+                  <AccordionContent className="text-textSecondary">
+                    {' '}
+                    {item.detail}{' '}
+                  </AccordionContent>
                 </AccordionItem>
               )
             })}
@@ -178,7 +184,7 @@ const lidoAssets: Array<WrapAsset> = [
   },
 ]
 
-const LidoStake = () => {
+function LidoStake() {
   const [assetList, setAssetList] = useState<WrapAsset[]>(lidoAssets)
   const [fromAsset, setFromAsset] = useState<WrapAsset>(assetList[0])
   const [toAsset, setToAsset] = useState<WrapAsset>(assetList[1])
@@ -313,7 +319,7 @@ const LidoStake = () => {
 }
 
 // eslint-disable-next-line no-unused-vars
-const WrapStETH = () => {
+function WrapStETH() {
   const { address, chainId } = useAccount()
 
   const [isWarp, setIsWarp] = useState(true)
@@ -428,8 +434,8 @@ const WrapStETH = () => {
           </span>
           <span className="text-sm text-textPrimary">
             {isWarp
-              ? `1 stETH = ${formatAmount({ amount: wstETHByStETH })} wstETH`
-              : `1 wstETH = ${formatAmount({ amount: stETHByWstETH })} stETH`}
+              ? `1 stETH = ${formatNumber(formatEther(wstETHByStETH))} wstETH`
+              : `1 wstETH = ${formatNumber(formatEther(stETHByWstETH))} stETH`}
           </span>
         </p>
         <p className="flex justify-between">
@@ -522,7 +528,7 @@ const assets: Array<WrapAsset> = [
       'https://app.renzoprotocol.com/_next/static/media/ezETH-dark.5e60f776.svg',
   },
 ]
-const RenzoStake = () => {
+function RenzoStake() {
   const [assetList, setAssetList] = useState<WrapAsset[]>(assets)
   const [fromAsset, setFromAsset] = useState<WrapAsset>(assetList[0])
   const [toAsset, setToAsset] = useState<WrapAsset>(assetList[2])
@@ -645,7 +651,7 @@ const RenzoStake = () => {
           {/* </p> */}
           <p className="flex justify-between">
             <span>APY</span>
-            <span>4.11%</span>
+            <span>Auto-compounded 4.11%</span>
           </p>
           <p className="flex justify-between">
             <span>Reward Fee</span>

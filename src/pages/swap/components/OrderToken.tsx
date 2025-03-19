@@ -2,8 +2,9 @@ import { Button } from '@/components/common/Button'
 import { useDebounce, useTokenMetadata } from '@/hooks'
 import { AssetsContext } from '@/hooks/useAssets'
 import { WrapAsset, useTokensState } from '@/stores/addictionTokens'
-import { Asset, cn, getTokenLink } from '@/utils'
+import { Asset, UNKNOWN_TOKEN, cn, getTokenLink } from '@/utils'
 import { getTopAssets } from '@/utils/assets'
+import { formatNumber } from '@/utils'
 import {
   Dialog,
   DialogBackdrop,
@@ -18,18 +19,26 @@ import {
   XMarkIcon,
 } from '@heroicons/react/16/solid'
 import { useContext, useEffect, useMemo, useState } from 'react'
-import { Address, erc20Abi, formatUnits, isAddress, zeroAddress } from 'viem'
+import {
+  Address,
+  erc20Abi,
+  formatEther,
+  formatUnits,
+  isAddress,
+  zeroAddress,
+} from 'viem'
 import { useAccount, useReadContract } from 'wagmi'
 
 type Props = {
+  className?: string
   asset: Asset | null
   handleSetToken: (_asset: Asset) => void
 }
 
 type AssetList = Array<WrapAsset>
 
-export const OrderToken = ({ asset, handleSetToken }: Props) => {
-  const { address: account, chainId = 56 } = useAccount()
+export const OrderToken = ({ asset, handleSetToken, className }: Props) => {
+  const { address: account, chainId = 1 } = useAccount()
   const { tokenList: storageTokens, add, remove } = useTokensState()
   const { listTokens } = useContext(AssetsContext)
   const topAssets = getTopAssets(chainId)
@@ -98,15 +107,18 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
     <>
       <div
         onClick={() => setIsOpen(true)}
-        className="flex cursor-pointer items-center gap-3 rounded-full bg-focus p-2"
+        className={cn(
+          'flex cursor-pointer items-center gap-3 rounded-full bg-focus p-2',
+          className,
+        )}
       >
         <img
-          src={asset?.logoURI}
+          src={asset?.logoURI ?? UNKNOWN_TOKEN}
           alt="icon logo"
           className="size-8 overflow-hidden rounded-full"
         />
         <span className={cn('hidden md:block')}>{asset?.symbol}</span>
-        <ChevronDownIcon className="size-5" />
+        <ChevronDownIcon className="ml-auto size-5" />
       </div>
 
       <Dialog
@@ -219,7 +231,7 @@ export const OrderToken = ({ asset, handleSetToken }: Props) => {
 
                       <div className="flex items-center gap-2">
                         <p className="text-sm text-textSecondary">
-                          {token?.formatted ?? '--'}
+                          {formatNumber(formatEther(token?.balance))}
                         </p>
                         <button
                           onClick={() => handleTogglenewToken(token)}

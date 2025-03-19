@@ -7,9 +7,10 @@ import {
   waitForTransactionReceipt as _waitForTransactionReceipt,
   writeContract as _writeContract,
 } from '@wagmi/core'
-import { Address } from 'viem'
-import { createConfig, http } from 'wagmi'
+import { Abi, Address } from 'viem'
+import { createConfig, fallback, http, unstable_connector } from 'wagmi'
 import { arbitrum, bsc, bscTestnet, mainnet } from 'wagmi/chains'
+import { injected } from 'wagmi/connectors'
 
 export const supportedChain = [mainnet, bsc, arbitrum, bscTestnet] as const
 export const config = createConfig({
@@ -19,10 +20,13 @@ export const config = createConfig({
     // walletConnect({ projectId: env.VITE_WALLET_CONNECT_ID }),
   ],
   transports: {
-    [bsc.id]: http(),
-    [mainnet.id]: http('https://eth.llamarpc.com'),
-    [arbitrum.id]: http(),
-    [bscTestnet.id]: http(),
+    [mainnet.id]: fallback([
+      unstable_connector(injected),
+      http('https://eth.llamarpc.com'),
+    ]),
+    [arbitrum.id]: fallback([unstable_connector(injected), http()]),
+    [bsc.id]: fallback([unstable_connector(injected), http()]),
+    [bscTestnet.id]: fallback([unstable_connector(injected), http()]),
   },
 }) as any
 
@@ -37,9 +41,9 @@ export const writeContract = async (contract: {
   functionName: string
   args: Array<any>
   address: Address
-  abi: any
+  abi: Abi
   chainId: number
-  value: any
+  value: bigint
 }) =>
   _writeContract(config, {
     ...contract,
@@ -47,7 +51,7 @@ export const writeContract = async (contract: {
 
 export const sendTransaction = async (contract: {
   to: Address
-  data: any
+  data: `0x${string}`
   value: any
   chainId: number
 }) =>
@@ -64,7 +68,7 @@ export const simulateContract = async (contract: {
   functionName: string
   args: Array<any>
   address: Address
-  abi: any
+  abi: Abi
   chainId: number
 }) => {
   const res = await _simulateContract(config, {

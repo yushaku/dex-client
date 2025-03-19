@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from '@/components/common/Button'
 import { NativeToken } from '@/components/common/NativeTokenBalance'
-import { Card } from '@/components/warper'
+import { Card } from '@/components/common'
 import { cn } from '@/utils'
 import {
   ArrowLeftIcon,

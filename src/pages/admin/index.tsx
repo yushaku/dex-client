@@ -3,26 +3,24 @@ import { orderKeyAdmin, useGetAllOrders } from '@/apis'
 import { EmptyBox } from '@/components/common/EmptyBox'
 import {
   NativeBalance,
-  NativeToken
+  NativeToken,
 } from '@/components/common/NativeTokenBalance'
 import { Tab } from '@/components/layout/tab'
-import { useGetTx } from '@/hooks/useGetTx'
-import { SHOP_PAYMENT_ADDRESS, TOPICS, ZERO_ADDRESS, env } from '@/utils'
+import { SHOP_PAYMENT_ADDRESS, TOPICS, env, getTransactionLink } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useAccount, useReadContracts, useWatchContractEvent } from 'wagmi'
 import { OnlyAdmin } from './components/OnlyAdmin'
 import { OrderItem } from './components/OrderItem'
-import { formatEther } from 'viem'
+import { formatEther, zeroAddress } from 'viem'
 
 const listFeature = ['Paid', 'Shipping', 'Deliverd'] as const
 
 export const AdminPage = () => {
   // GLOBAL STATE
-  const { address } = useAccount()
+  const { address, chainId = 1 } = useAccount()
   const queryClient = useQueryClient()
-  const { transactionHref } = useGetTx()
 
   // LOCAL STATE
   const [type, setType] = useState<(typeof listFeature)[number]>('Paid')
@@ -32,26 +30,26 @@ export const AdminPage = () => {
   const { data: orders } = useGetAllOrders({
     params: {
       page: 1,
-      perPage: 50
+      perPage: 50,
     },
     options: {
-      enabled: address === env.VITE_OWNER_ADDRESS
-    }
+      enabled: address === env.VITE_OWNER_ADDRESS,
+    },
   })
 
   const paiedOrders = useMemo(
     () => orders?.data.filter((item) => item.status === 'paid'),
-    [orders]
+    [orders],
   )
 
   const shippingOrders = useMemo(
     () => orders?.data.filter((item) => item.status === 'delivering'),
-    [orders]
+    [orders],
   )
 
   const shippedOrder = useMemo(
     () => orders?.data.filter((item) => item.status === 'shipped'),
-    [orders]
+    [orders],
   )
 
   const { data: withdrawable } = useReadContracts({
@@ -60,15 +58,15 @@ export const AdminPage = () => {
         address: SHOP_PAYMENT_ADDRESS,
         abi: SHOP_PAYMENT_ABI,
         functionName: 'withdrawable',
-        args: [ZERO_ADDRESS]
-      }
+        args: [zeroAddress],
+      },
       // {
       //   address: SHOP_PAYMENT_ADDRESS,
       //   abi: SHOP_PAYMENT_ABI,
       //   functionName: 'withdrawable',
       //   args: ['0x6b175474e89094c44da98b954eedeac495271d0f']
       // }
-    ]
+    ],
   })
 
   console.log(withdrawable)
@@ -84,9 +82,14 @@ export const AdminPage = () => {
       switch (logs[0].topics[0]) {
         case TOPICS.ORDER_DELIVERED:
           toast.info(
-            <a href={transactionHref(logs[0].transactionHash)}>
+            <a
+              href={getTransactionLink({
+                hash: logs[0].transactionHash,
+                chainId,
+              })}
+            >
               Deliver success. Click here to view.
-            </a>
+            </a>,
           )
           await queryClient.invalidateQueries({ queryKey: [orderKeyAdmin] })
           break
@@ -94,7 +97,7 @@ export const AdminPage = () => {
         default:
           break
       }
-    }
+    },
   })
 
   if (address !== env.VITE_OWNER_ADDRESS) {

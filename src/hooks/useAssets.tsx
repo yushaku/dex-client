@@ -1,10 +1,9 @@
 import { WrapAsset, useTokensState } from '@/stores/addictionTokens'
-import React, { createContext, useMemo } from 'react'
+import React, { createContext, useContext, useMemo } from 'react'
 import { Address, erc20Abi, formatUnits, zeroAddress } from 'viem'
 import { useAccount, useBalance, useReadContracts } from 'wagmi'
 import { useFetchTokenList } from './useGetTokenMetadata'
 
-// Create context for assets
 export const AssetsContext = createContext<{
   mappedToken: Record<string, WrapAsset>
   listTokens: Array<WrapAsset>
@@ -18,7 +17,7 @@ export const AssetsProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const { tokenList: storageTokens } = useTokensState()
 
-  const { address: account, chainId = 56 } = useAccount()
+  const { address: account, chainId = 1 } = useAccount()
   const { data: assets = [] } = useFetchTokenList(chainId)
   const allTokens = useMemo(
     () => storageTokens.concat(assets as unknown as WrapAsset),
@@ -75,4 +74,14 @@ export const AssetsProvider: React.FC<{ children: React.ReactNode }> = ({
       {children}
     </AssetsContext.Provider>
   )
+}
+
+// eslint-disable-next-line react-refresh/only-export-components
+export function useGetAsset(tokenAddress?: Address | string | null) {
+  const { mappedToken } = useContext(AssetsContext)
+
+  return useMemo(() => {
+    if (!tokenAddress) return undefined
+    return mappedToken[tokenAddress]
+  }, [mappedToken, tokenAddress])
 }

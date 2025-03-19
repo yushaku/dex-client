@@ -18,7 +18,7 @@ export const Dropdown = ({
   btnStyle,
   hidden,
   className,
-  isHiddenChevDown = false
+  isHiddenChevDown = false,
 }: Props) => {
   return (
     <Menu
@@ -29,14 +29,14 @@ export const Dropdown = ({
         <Menu.Button
           className={cn(
             'flex-center w-full gap-3 rounded-xl border border-gray-700 bg-layer px-6 py-3 text-sm font-semibold hover:bg-focus',
-            btnStyle
+            btnStyle,
           )}
         >
           {title}
           <ChevronDownIcon
             className={cn(
               '-mr-1 size-5 text-gray-200',
-              isHiddenChevDown && 'hidden'
+              isHiddenChevDown && 'hidden',
             )}
             aria-hidden="true"
           />
@@ -55,7 +55,7 @@ export const Dropdown = ({
         <Menu.Items
           className={cn(
             'absolute right-0 z-10 mt-2 min-w-40 origin-top-right rounded-md bg-layer py-1 shadow-lg ring-1 ring-gray-700 focus:outline-none',
-            className
+            className,
           )}
         >
           {children}

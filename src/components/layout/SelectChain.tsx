@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 import { arbitrum, bsc, bscTestnet, mainnet } from 'viem/chains'
 import { useChainId, useSwitchChain } from 'wagmi'
 import { Arbitrum, BSC, ETH } from '../icons'
-import { Dropdown } from '../warper'
+import { Dropdown } from '../common'
 
 export const SelectChain = () => {
   const chainId = useChainId()

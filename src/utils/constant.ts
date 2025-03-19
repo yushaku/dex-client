@@ -9,6 +9,7 @@ export const env = cleanEnv(import.meta.env, {
   VITE_THIRD_WEB_SECRET: str(),
   VITE_OWNER_ADDRESS: str(),
   VITE_GRAPHQL_CMS_ENDPOINT: str(),
+  VITE_SUBGRAPH_TOKEN: str(),
   VITE_GRAPHQL_CMS_TOKEN: str(),
   VITE_PINATA_KEY: str(),
   VITE_PINATA_SECRET: str(),
@@ -24,7 +25,8 @@ export const routes = {
   myNFTs: '/nfts/my-collection',
   nftStudio: '/nfts/studio',
   nftLaunchpad: '/nfts/launchpad',
-  vaults: '/vaults',
+  pools: '/pools',
+  addLiquidity: '/pools/add-liquidity',
   history: '/history',
   admin: '/admin',
   dashboard: '/dashboard',
@@ -32,6 +34,7 @@ export const routes = {
   order: '/shop/order',
 } as const
 
+export const UNKNOWN_TOKEN = 'https://cdn.thena.fi/assets/UNKNOWN_TOKEN.png'
 export const GATEWAY_URL = 'https://ipfs.io/ipfs/'
 export const TOKEN_LIST = 'https://gateway.ipfs.io/ipns/tokens.uniswap.org'
 export const UNI = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
@@ -49,10 +52,6 @@ export const MARKETPLACE_ADDRESS = '0x7175AAA9f0b6B05fe713AEFDD7B0026e61bd7aC5'
 export const NFT_FACTORY_ADDRESS = '0x64FFE32eCb2D433fc0868920c98Bf33Bee4f072A'
 export const PUBLIC_NFTS_ADDRESS = '0x284C5d066a4A2fD0163D190887fC5EFB6b4E0540'
 export const SHOP_PAYMENT_ADDRESS = '0x6b3De2f71bbeeEc360Cd50f6C19Daf13534bE8EA'
-
-export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
-
-export const MAX_VALUE = parseUnits('9999999999999999999999', 18)
 
 export const LOGIN_MESSAGE =
   'Welcome to Yushaku! Please sign this message to verify account ownership.'

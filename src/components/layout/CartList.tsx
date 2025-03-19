@@ -1,12 +1,11 @@
-import { ShoppingBagIcon, XMarkIcon } from '@heroicons/react/16/solid'
-import { Button } from './Button'
-import { useState } from 'react'
 import { ItemNft, LOCAL_STORAGE, NftCart, cn } from '@/utils'
+import { ShoppingBagIcon, XMarkIcon } from '@heroicons/react/16/solid'
+import { useState } from 'react'
 import useLocalStorage from 'use-local-storage'
-import { ImgLoading } from './Loading'
-import { NativeToken } from './NativeTokenBalance'
+import { ImgLoading, NativeToken } from '../common'
+import { Button } from '../ui/button'
 
-export const CartList = () => {
+export const NFTCartList = () => {
   const [value, setValue] = useLocalStorage<NftCart>(LOCAL_STORAGE.SHOP_NFT, {})
   const [toggle, setToggle] = useState(false)
   const styled = toggle ? 'right-0 top-0' : '-right-full top-0'
@@ -23,18 +22,16 @@ export const CartList = () => {
 
   return (
     <>
-      <Button
-        variant="outline"
-        icon={ShoppingBagIcon}
-        title={Object.keys(value).length.toString()}
-        onClick={() => setToggle(!toggle)}
-      />
+      <Button variant="outline" onClick={() => setToggle(!toggle)}>
+        <ShoppingBagIcon className="size-5" />
+        {Object.keys(value).length.toString()}
+      </Button>
 
       <div
         onClick={() => setToggle(false)}
         className={cn(
           'animate delay-50 duration-100 fixed top-0 -right-full z-30 h-screen w-screen bg-gray-500/20',
-          toggle && 'right-0'
+          toggle && 'right-0',
         )}
       />
 

@@ -3,7 +3,7 @@ import { cn } from '@/utils'
 import { Menu } from '@headlessui/react'
 import { ArrowRightIcon, BellIcon } from '@heroicons/react/16/solid'
 import { Fragment } from 'react'
-import { Dropdown } from '../warper'
+import { Dropdown } from '../common'
 
 export const NotificationDropdown = () => {
   const { itemList, remove, clearAll } = useNotificationsState()
@@ -35,7 +35,7 @@ export const NotificationDropdown = () => {
               {() => (
                 <div
                   className={cn(
-                    'text-sm group px-4 py-2 hover:bg-focus rounded'
+                    'text-sm group px-4 py-2 hover:bg-focus rounded',
                   )}
                 >
                   <strong className="flex items-center justify-between text-sm text-textSecondary">
@@ -65,7 +65,7 @@ export const NotificationDropdown = () => {
         <div
           className={cn(
             'px-4 py-2 text-sm text-textSecondary',
-            itemList.length > 0 && 'hidden'
+            itemList.length > 0 && 'hidden',
           )}
         >
           <p>Notification is empty</p>

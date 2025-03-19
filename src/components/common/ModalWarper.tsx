@@ -10,12 +10,12 @@ type Props = {
   subtitle?: string
 }
 
-export default function ModalWarp({
+export function ModalWarp({
   children,
   title,
   subtitle,
   isOpen,
-  handleClose
+  handleClose,
 }: Props) {
   return (
     <Transition appear show={isOpen} as={Fragment}>

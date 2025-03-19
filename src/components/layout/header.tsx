@@ -3,10 +3,11 @@ import { cn, routes } from '@/utils'
 import createAvatar from '@/utils/avatar'
 import { ConnectKitButton } from 'connectkit'
 import { Link, useLocation } from 'react-router-dom'
-import { CartList } from '../common/CartList'
-import { SelectChain } from '../common/SelectChain'
+
+import { NFTCartList } from './CartList'
 import { MobileSidebar } from './MobileSidebar'
 import { NotificationDropdown } from './Notification'
+import { SelectChain } from './SelectChain'
 
 type Props = {
   theme: string
@@ -37,7 +38,7 @@ export const Header = (_prop: Props) => {
         {/* </button> */}
 
         <span className={`${location.includes('nft') ? '' : 'hidden'}`}>
-          <CartList />
+          <NFTCartList />
         </span>
 
         <span className={`${location.includes('shop') ? '' : 'hidden'}`}>
@@ -124,4 +125,6 @@ const headTitle = {
   [routes.myNFTs]: 'Your NFTs Collection',
   [routes.shop]: 'My store',
   [routes.admin]: 'Admin Dashboard',
+  [routes.addLiquidity]: 'New position',
+  [routes.pools]: 'Pools',
 }

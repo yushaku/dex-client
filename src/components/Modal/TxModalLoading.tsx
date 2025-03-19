@@ -6,12 +6,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react'
-import {
-  CheckCircleIcon,
-  PauseCircleIcon,
-  XCircleIcon,
-  XMarkIcon,
-} from '@heroicons/react/16/solid'
+import { CircleCheckIcon, CircleXIcon, Clock2Icon, XIcon } from 'lucide-react'
 import { Button } from '../common/Button'
 import { Spinner } from '../common/Loading'
 
@@ -20,10 +15,10 @@ export const TxModalLoading = () => {
 
   return (
     <Dialog open={popup} onClose={closeTransaction} className="relative z-50">
-      <DialogBackdrop className="fixed inset-0 bg-black/40" />
+      <DialogBackdrop className="fixed inset-0 bg-black/80" />
 
       <div className="fixed inset-0 flex w-screen items-center justify-center p-2">
-        <DialogPanel className="relative w-96 space-y-4 bg-layer p-12">
+        <DialogPanel className="relative w-96 space-y-4 rounded-lg bg-layer p-5">
           <DialogTitle className="text-lg font-bold text-lighterAccent">
             {title}
           </DialogTitle>
@@ -31,7 +26,7 @@ export const TxModalLoading = () => {
           <Button
             variant="standard"
             onClick={closeTransaction}
-            icon={XMarkIcon}
+            icon={XIcon}
             className="absolute right-3 top-2 border-none p-2"
           />
 
@@ -51,7 +46,7 @@ export const TxModalLoading = () => {
                       hidden: value.status !== TXN_STATUS.PENDING,
                     })}
                   >
-                    <Spinner />
+                    <Spinner className="size-5" />
                   </span>
 
                   <span
@@ -59,7 +54,7 @@ export const TxModalLoading = () => {
                       hidden: value.status !== TXN_STATUS.WAITING,
                     })}
                   >
-                    <Spinner />
+                    <Spinner className="size-5" />
                   </span>
 
                   <span
@@ -67,7 +62,7 @@ export const TxModalLoading = () => {
                       hidden: value.status !== TXN_STATUS.SUCCESS,
                     })}
                   >
-                    <CheckCircleIcon className="size-5 stroke-green-500" />
+                    <CircleCheckIcon className="size-5 stroke-green-500" />
                   </span>
 
                   <span
@@ -75,7 +70,7 @@ export const TxModalLoading = () => {
                       hidden: value.status !== TXN_STATUS.FAILED,
                     })}
                   >
-                    <XCircleIcon className="size-5 stroke-red-500" />
+                    <CircleXIcon className="size-5 stroke-red-500" />
                   </span>
 
                   <span
@@ -83,7 +78,7 @@ export const TxModalLoading = () => {
                       hidden: value.status !== TXN_STATUS.START,
                     })}
                   >
-                    <PauseCircleIcon className="size-5 fill-gray-400" />
+                    <Clock2Icon className="size-5 fill-gray-400" />
                   </span>
                 </li>
               )

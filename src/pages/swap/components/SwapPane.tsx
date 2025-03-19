@@ -7,13 +7,13 @@ import { useAccount, useBalance, useSwitchChain } from 'wagmi'
 
 import { DotLoader } from '@/components/common/Loading'
 import { WalletButton } from '@/components/layout/header'
-import { Card } from '@/components/warper'
+import { Card } from '@/components/common'
 import { useDebounce, useOdosQuoteSwap, useOdosSwap } from '@/hooks'
 import { AssetsContext } from '@/hooks/useAssets'
 import { useSettingState } from '@/stores'
 import { Asset, cn, supportedChain } from '@/utils'
 import { getTopAssets } from '@/utils/assets'
-import { findAsset } from '@/utils/odos'
+import { findAsset } from '@/utils'
 import { OrderChart } from './OrderChart'
 import { OrderInput } from './OrderInput'
 import { OrderRouting } from './OrderRouting'
@@ -22,7 +22,7 @@ import { Button } from '@/components/ui/button'
 
 export const SwapPane = () => {
   // GLOBAL state
-  const { address: account, chainId = 56 } = useAccount()
+  const { address: account, chainId = 1 } = useAccount()
   const { listTokens } = useContext(AssetsContext)
   const { switchChain } = useSwitchChain()
   const { setting } = useSettingState()

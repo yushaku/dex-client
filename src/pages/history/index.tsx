@@ -3,28 +3,27 @@ import { orderKey, useDeleteOrders, useGetOrders } from '@/apis'
 import { LoadingModal } from '@/components/Modal'
 import { Button } from '@/components/common/Button'
 import { EmptyBox } from '@/components/common/EmptyBox'
-import { useGetTx } from '@/hooks/useGetTx'
 import { useNotificationsState } from '@/stores'
-import { SHOP_PAYMENT_ADDRESS, TOPICS, cn } from '@/utils'
+import { SHOP_PAYMENT_ADDRESS, TOPICS, cn, getTransactionLink } from '@/utils'
 import { TrashIcon } from '@heroicons/react/16/solid'
 
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import { useWatchContractEvent, useWriteContract } from 'wagmi'
+import { useAccount, useWatchContractEvent, useWriteContract } from 'wagmi'
 import { HistoryItem } from './components/HistoryItem'
 import { useQueryClient } from '@tanstack/react-query'
 import { toastContractError } from '@/utils/error'
 
 export const HistoryPage = () => {
-  const { transactionHref } = useGetTx()
   const { writeContract, isPending } = useWriteContract()
   const queryClient = useQueryClient()
   const { mutate: deleteOrders, isPending: isDeleting } = useDeleteOrders()
   const { add: addNoti } = useNotificationsState()
   const [selected, setSelected] = useState<Array<string>>([])
+  const { chainId = 1 } = useAccount()
 
   const { data: orderHistory } = useGetOrders({
-    params: { page: 1, perPage: 10 }
+    params: { page: 1, perPage: 10 },
   })
 
   const handleCancel = (orderId: string) => {
@@ -33,11 +32,11 @@ export const HistoryPage = () => {
         address: SHOP_PAYMENT_ADDRESS,
         abi: SHOP_PAYMENT_ABI,
         functionName: 'cancelOrder',
-        args: [orderId]
+        args: [orderId],
       },
       {
-        onError: toastContractError
-      }
+        onError: toastContractError,
+      },
     )
   }
 
@@ -64,12 +63,20 @@ export const HistoryPage = () => {
             txHash: logs[0].transactionHash,
             title: 'Payment success',
             description: 'Thanks for your purchase',
-            link: transactionHref(logs[0].transactionHash)
+            link: getTransactionLink({
+              hash: logs[0].transactionHash,
+              chainId,
+            }),
           })
           toast.info(
-            <a href={transactionHref(logs[0].transactionHash)}>
+            <a
+              href={getTransactionLink({
+                hash: logs[0].transactionHash,
+                chainId,
+              })}
+            >
               Payment success. Click here to view.
-            </a>
+            </a>,
           )
           await queryClient.invalidateQueries({ queryKey: [orderKey] })
           break
@@ -79,12 +86,20 @@ export const HistoryPage = () => {
             txHash: logs[0].transactionHash,
             title: 'Canceled order success',
             description: 'You canceled order successfully',
-            link: transactionHref(logs[0].transactionHash)
+            link: getTransactionLink({
+              hash: logs[0].transactionHash,
+              chainId,
+            }),
           })
           toast.info(
-            <a href={transactionHref(logs[0].transactionHash)}>
+            <a
+              href={getTransactionLink({
+                hash: logs[0].transactionHash,
+                chainId,
+              })}
+            >
               Order canceled. Click here to view.
-            </a>
+            </a>,
           )
           await queryClient.invalidateQueries({ queryKey: [orderKey] })
           break
@@ -93,7 +108,7 @@ export const HistoryPage = () => {
         default:
           break
       }
-    }
+    },
   })
 
   return (
@@ -105,7 +120,7 @@ export const HistoryPage = () => {
           <span
             className={cn(
               'text-sm text-textSecondary mr-2',
-              selected.length === 0 && 'hidden'
+              selected.length === 0 && 'hidden',
             )}
           >
             Selected to delete {selected.length}/20
@@ -115,7 +130,7 @@ export const HistoryPage = () => {
             variant="outline"
             className={cn(
               'inline p-1 px-2 hover:bg-red-400',
-              selected.length === 0 && 'hidden'
+              selected.length === 0 && 'hidden',
             )}
             onClick={() => deleteOrders(selected)}
             icon={TrashIcon}

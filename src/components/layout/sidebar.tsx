@@ -1,19 +1,18 @@
-import { useMediaQuery } from '@/hooks/useMediaQuery'
+import { useMediaQuery } from '@/hooks'
 import { cn, routes } from '@/utils'
 import {
   ArrowLeftIcon,
   ArrowPathIcon,
   BanknotesIcon,
   CalendarIcon,
-  ChartPieIcon,
+  ForwardIcon,
   HomeIcon,
   PhotoIcon,
+  PlusIcon,
   ScissorsIcon,
   ShoppingBagIcon,
-  UserIcon,
   WalletIcon,
 } from '@heroicons/react/16/solid'
-import { ForwardIcon } from '@heroicons/react/20/solid'
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 
@@ -89,7 +88,7 @@ export const Sidebar = () => {
                     return (
                       <li key={href} className="group w-full">
                         <NavLink
-                          className={`${pickedStyle} ${isSmall ? 'px-4' : 'px-16'} flex gap-3 py-4 group-hover:text-accent`}
+                          className={`${pickedStyle} ${isSmall ? 'px-4' : 'px-12'} flex gap-3 py-4 group-hover:text-accent`}
                           to={href}
                         >
                           <SecondIcon className="size-6 group-hover:fill-accent" />
@@ -135,6 +134,18 @@ export const navlinks = [
     ],
   },
   {
+    icon: BanknotesIcon,
+    title: 'Pools',
+    href: routes.pools,
+    childrens: [
+      {
+        icon: PlusIcon,
+        title: 'Add Liquidity',
+        href: routes.addLiquidity,
+      },
+    ],
+  },
+  {
     icon: PhotoIcon,
     title: 'NFTs',
     href: routes.nfts,
@@ -150,11 +161,6 @@ export const navlinks = [
         href: routes.nftStudio,
       },
     ],
-  },
-  {
-    icon: BanknotesIcon,
-    title: 'Vaults',
-    href: routes.vaults,
   },
   {
     icon: CalendarIcon,

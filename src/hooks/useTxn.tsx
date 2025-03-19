@@ -3,6 +3,7 @@ import { useCallback } from 'react'
 
 import {
   TXN_STATUS,
+  getTransactionLink,
   sendTransaction,
   waitForTransaction,
   writeContract,
@@ -10,11 +11,8 @@ import {
 import { toast } from 'react-toastify'
 import { useTransactionStore } from '@/stores/transaction'
 import { Address } from 'viem'
-import { useGetTx } from './useGetTx'
 
 export const useTxn = (chainId: number) => {
-  const { transactionHref } = useGetTx()
-
   const {
     openTransaction,
     updateTransaction,
@@ -61,7 +59,7 @@ export const useTxn = (chainId: number) => {
           abi,
           functionName: functionName,
           args: args,
-          value: msgValue,
+          value: BigInt(msgValue ?? 0),
           chainId,
           address,
         })
@@ -73,7 +71,7 @@ export const useTxn = (chainId: number) => {
         updateTxn({ key, uuid, hash, status: TXN_STATUS.SUCCESS })
 
         toast.success(
-          <a href={transactionHref(hash as any)}>
+          <a href={getTransactionLink({ chainId, hash })}>
             transaction confirmed. Click here to view.
           </a>,
         )
@@ -83,7 +81,7 @@ export const useTxn = (chainId: number) => {
         if (error && error.name === 'TransactionReceiptNotFoundError') {
           updateTxn({ key, uuid, hash, status: TXN_STATUS.SUCCESS })
           toast.success(
-            <a href={transactionHref(hash as any)}>
+            <a href={getTransactionLink({ chainId, hash })}>
               transaction confirmed. Click here to view.
             </a>,
           )
@@ -111,7 +109,7 @@ export const useTxn = (chainId: number) => {
         return false
       }
     },
-    [updateTxn, chainId, transactionHref, askUserToRetry],
+    [updateTxn, chainId, askUserToRetry],
   )
 
   const sendTxn = useCallback(
@@ -129,17 +127,17 @@ export const useTxn = (chainId: number) => {
         updateTxn({ key, uuid, hash, status: TXN_STATUS.SUCCESS })
 
         toast.success(
-          <a href={transactionHref(hash)}>
+          <a href={getTransactionLink({ hash, chainId })}>
             transaction confirmed. Click here to view.
           </a>,
         )
 
-        return true
+        return hash
       } catch (error: any) {
         if (error && error.name === 'TransactionReceiptNotFoundError') {
           updateTxn({ key, uuid, hash, status: TXN_STATUS.SUCCESS })
           toast('Transaction confirmed')
-          return true
+          return hash
         }
 
         updateTxn({ key, uuid, hash, status: TXN_STATUS.FAILED })
@@ -148,7 +146,7 @@ export const useTxn = (chainId: number) => {
         return false
       }
     },
-    [updateTxn, chainId, transactionHref],
+    [updateTxn, chainId],
   )
 
   return {

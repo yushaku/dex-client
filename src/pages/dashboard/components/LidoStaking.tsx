@@ -1,11 +1,11 @@
 import { LIDO_ABI } from '@/abi/lido'
 import { ETH } from '@/components/icons'
-import { Card } from '@/components/warper'
+import { Card } from '@/components/common'
 import { useFarmState } from '@/stores'
 import { cn } from '@/utils'
 import { contracts } from '@/utils/contracts'
-import { formatAmount } from '@/utils/odos'
-import { zeroAddress } from 'viem'
+import { formatNumber } from '@/utils'
+import { formatEther, zeroAddress } from 'viem'
 import { mainnet } from 'viem/chains'
 import { useAccount, useBalance, useReadContracts, useSwitchChain } from 'wagmi'
 
@@ -56,7 +56,7 @@ export const LidoStakeForm = () => {
             you are staking:
           </span>
           <strong className="text-xl font-bold text-textPrimary">
-            {formatAmount({ amount: balance, decimals: 18 })}
+            {formatNumber(formatEther(balance ?? 0n))}
           </strong>
         </p>
         <p className="text-center">
@@ -65,7 +65,7 @@ export const LidoStakeForm = () => {
           </span>
           <strong className="flex-start gap-2 text-xl text-textPrimary">
             <ETH className="inline-block size-6" />
-            {formatAmount({ amount: ethBalance?.value, decimals: 18 })}
+            {formatNumber(formatEther(ethBalance?.value ?? 0n))}
           </strong>
         </p>
       </article>
@@ -80,7 +80,7 @@ export const LidoStakeForm = () => {
           <span className="block text-sm text-textSecondary">Total Staked</span>
           <strong className="flex-start gap-2 text-xl font-bold text-textPrimary">
             <ETH className="inline-block size-6" />
-            {formatAmount({ amount: total, decimals: 18 })}
+            {formatNumber(formatEther(total ?? 0n))}
           </strong>
         </p>
       </article>

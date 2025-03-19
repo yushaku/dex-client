@@ -36,9 +36,3 @@ export const Nftmedia = ({ url, isOn }: Props) => {
       )
   }
 }
-
-// <video
-//   className="animate group-hover:scale-110"
-//   src={`${GATEWAY_URL}${item.url}`}
-//   width="100%"
-// />

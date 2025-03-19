@@ -30,7 +30,7 @@ type UseTokenMetadataParams = {
 export const useTokenMetadata = ({
   token,
   enabled = true,
-  chainId = 56,
+  chainId = 1,
 }: UseTokenMetadataParams) => {
   return useQuery<TokenMetadata[]>({
     queryKey: ['tokenMetadata', token, chainId],
@@ -66,7 +66,7 @@ interface TokenPriceData {
 export const useTokenPrice = ({
   token,
   enabled = true,
-  chainId = 56,
+  chainId = 1,
 }: UseTokenMetadataParams) => {
   return useQuery<TokenPriceData>({
     queryKey: ['tokenPrice', token, chainId],
