@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { BSC, USDT } from '@/components/icons'
+import { Dropdown } from '@/components/common'
 import { cn } from '@/utils'
 import { Menu } from '@headlessui/react'
 import { Fragment } from 'react'
 import { zeroAddress } from 'viem'
-import { BSC, USDT } from '../icons'
-import { Dropdown } from '../warper'
 
 export const SelectPayToken = ({
   selected,

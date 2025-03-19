@@ -5,7 +5,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-import { Card } from '@/components/warper'
+import { Card } from '@/components/common'
 import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
 
 const chartData = [

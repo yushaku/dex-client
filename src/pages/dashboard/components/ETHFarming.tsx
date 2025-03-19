@@ -8,7 +8,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/warper'
+import { Card } from '@/components/common'
 import { useStakeEth, useWstETH } from '@/hooks/stake/useLido'
 import { useRenzo } from '@/hooks/stake/useRenzo'
 import { OrderInput } from '@/pages/swap/components/OrderInput'

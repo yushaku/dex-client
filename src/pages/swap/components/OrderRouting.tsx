@@ -1,4 +1,4 @@
-import { Card } from '@/components/warper/Card'
+import { Card } from '@/components/common'
 import { OdosData } from '@/hooks'
 import { Asset, cn } from '@/utils'
 

@@ -1,6 +1,6 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/warper'
+import { Card } from '@/components/common'
 import { useAddLiquidity, useGetGetMintInfo, useToken } from '@/hooks'
 import { Field, useMintState } from '@/stores'
 import { cn, isInvalidAmount } from '@/utils'

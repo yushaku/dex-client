@@ -1,12 +1,12 @@
 import { NFT_FACTOARY_ABI } from '@/abi/nftFactory'
+import { DotLoader } from '@/components/common'
+import { Button } from '@/components/ui/button'
 import { NFT_FACTORY_ADDRESS, cn, waitForTransaction } from '@/utils'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useWriteContract } from 'wagmi'
 import * as yup from 'yup'
-import { Button } from '../Button'
-import { DotLoader } from '../Loading'
 
 type Inputs = {
   name: string
@@ -75,7 +75,6 @@ export const CreateCollectionTab = () => {
           className={cn(styleInput, { 'border-red-400': errors.name?.message })}
           {...register('name', { required: true })}
         />
-
         <input
           type="text"
           placeholder="Symbol"
@@ -84,7 +83,6 @@ export const CreateCollectionTab = () => {
           })}
           {...register('symbol', { required: true })}
         />
-
         <input
           type="text"
           placeholder="Set royalty from 0% to 5%"
@@ -93,7 +91,6 @@ export const CreateCollectionTab = () => {
           })}
           {...register('royalty', { required: true })}
         />
-
         <input
           type="file"
           placeholder="file"
@@ -107,13 +104,9 @@ export const CreateCollectionTab = () => {
         <label className="text-gray-400">
           Set avatar for your NFTs collection
         </label>
-
-        <Button
-          loading={isPending}
-          disabled={isPending}
-          type="submit"
-          title="Create new collection"
-        />
+        <Button disabled={isPending} type="submit">
+          Create new collection
+        </Button>
       </form>
 
       <article className="flex-center flex-1 flex-col gap-5">

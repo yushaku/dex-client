@@ -7,7 +7,7 @@ import { useAccount, useBalance, useSwitchChain } from 'wagmi'
 
 import { DotLoader } from '@/components/common/Loading'
 import { WalletButton } from '@/components/layout/header'
-import { Card } from '@/components/warper'
+import { Card } from '@/components/common'
 import { useDebounce, useOdosQuoteSwap, useOdosSwap } from '@/hooks'
 import { AssetsContext } from '@/hooks/useAssets'
 import { useSettingState } from '@/stores'

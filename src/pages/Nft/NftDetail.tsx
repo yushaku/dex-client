@@ -1,7 +1,7 @@
 import { Button } from '@/components/common/Button'
 import { NativeToken } from '@/components/common/NativeTokenBalance'
 import { LoadingPage } from '@/components/ui/LoadingPage'
-import { Card } from '@/components/warper'
+import { Card } from '@/components/common'
 import { getNameFromId } from '@/hooks'
 import { NftDetail } from '@/hooks/NFTs/type'
 import { shortenAddress } from '@/utils'

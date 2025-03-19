@@ -1,6 +1,6 @@
 import { LIDO_ABI } from '@/abi/lido'
 import { ETH } from '@/components/icons'
-import { Card } from '@/components/warper'
+import { Card } from '@/components/common'
 import { useFarmState } from '@/stores'
 import { cn } from '@/utils'
 import { contracts } from '@/utils/contracts'

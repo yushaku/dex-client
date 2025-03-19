@@ -1,4 +1,4 @@
-import { Card } from '@/components/warper'
+import { Card, GradientCard } from '@/components/common'
 import { WalletButton } from '@/components/layout/header'
 import TypeIt from 'typeit-react'
 
@@ -16,23 +16,20 @@ export const HelloGuy = () => {
               options={{
                 strings: ['the YuMarket', "Let's order your NFTs"],
                 lifeLike: true,
-                waitUntilVisible: true
+                waitUntilVisible: true,
               }}
             />
           </h3>
         </div>
       </Card>
 
-      <Card className="flex w-full flex-col items-center text-center lg:w-1/2">
+      <GradientCard
+        title="Click on the button to connect to your Wallet"
+        description="To try out, mint your first NFT and do what ever shit you want if you can"
+        className="flex items-center justify-center border-focus bg-[#1e2431]/50"
+      >
         <WalletButton />
-        <p className="mt-5 text-textSecondary">
-          Click on the button to connect to your Wallet
-        </p>
-        <p className="text-textSecondary">
-          To try out, mint your first NFT and do what ever shit you want if you
-          can
-        </p>
-      </Card>
+      </GradientCard>
     </section>
   )
 }

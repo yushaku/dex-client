@@ -15,8 +15,16 @@ export const Dashboard = () => {
   const positions = useGetUniswapPositions()
   const ens = useEnsName({ address: address })
 
+  if (!address) {
+    return (
+      <section className="flex min-h-[80dvh] items-center justify-center">
+        <HelloGuy />
+      </section>
+    )
+  }
+
   return (
-    <>
+    <section className="min-h-[80dvh]">
       <h3
         className={cn('hidden items-center gap-3 text-lg text-textSecondary', {
           flex: address,
@@ -26,14 +34,10 @@ export const Dashboard = () => {
         <NativeBalance address={address} />
       </h3>
 
-      {!address ? (
-        <HelloGuy />
-      ) : (
-        <section className="mt-10 flex flex-wrap gap-10 lg:flex-nowrap">
-          <YSKStakeForm />
-          <LidoStakeForm />
-        </section>
-      )}
+      <section className="mt-10 flex flex-wrap gap-10 lg:flex-nowrap">
+        <YSKStakeForm />
+        <LidoStakeForm />
+      </section>
 
       <ETHFarming />
 
@@ -56,6 +60,6 @@ export const Dashboard = () => {
         </ul>
       </div>
       {/* <StakedValueLockChart /> */}
-    </>
+    </section>
   )
 }

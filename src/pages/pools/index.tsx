@@ -6,7 +6,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
-import { Card } from '@/components/warper'
+import { Card } from '@/components/common'
 import { useGetAsset } from '@/hooks/useAssets'
 import { formatNumber } from '@/utils'
 import { useQuery } from '@tanstack/react-query'

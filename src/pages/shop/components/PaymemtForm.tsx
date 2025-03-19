@@ -6,7 +6,6 @@ import {
 } from '@/apis'
 import { useGetPrice } from '@/apis/price'
 import { Button } from '@/components/common/Button'
-import { SelectPayToken } from '@/components/common/SelectPayToken'
 import { BSC, USDT } from '@/components/icons'
 import { useCartState } from '@/stores/shopCart'
 import { SHOP_PAYMENT_ADDRESS, cn, shortenAddress } from '@/utils'
@@ -25,6 +24,7 @@ import { useEffect, useState } from 'react'
 import { parseEther, zeroAddress } from 'viem'
 import { useSendTransaction } from 'wagmi'
 import { AddressForm } from './AddressForm'
+import { SelectPayToken } from './SelectPayToken'
 
 type Step = 'address' | 'confirm'
 

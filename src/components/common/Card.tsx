@@ -22,7 +22,7 @@ export const Card = ({ className, children, ...props }: Props) => {
   )
 }
 
-export const MainMenusGradientCard = ({
+export const GradientCard = ({
   title,
   description,
   withArrow = false,
@@ -46,7 +46,7 @@ export const MainMenusGradientCard = ({
       ref={parentRef}
     >
       {withArrow && (
-        <ArrowUpRightIcon className="absolute right-2 top-2 z-10 size-5 translate-y-4 text-neutral-700 opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100 dark:text-neutral-300 " />
+        <ArrowUpRightIcon className="absolute right-2 top-2 z-10 size-5 translate-y-4 text-neutral-300 opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100 " />
       )}
       <div
         className={cn(
@@ -67,11 +67,11 @@ export const MainMenusGradientCard = ({
             'linear-gradient(135deg, #3BC4F2, #7A69F9,#F26378,#F5833F)',
         }}
       />
-      <div className="absolute inset-px rounded-[19px] bg-neutral-100/80 dark:bg-neutral-900/80" />
+      <div className="absolute inset-px rounded-[19px] bg-neutral-900/80" />
       {children && (
         <div
           className={cn(
-            'gird relative h-40 place-content-center overflow-hidden rounded-[15px] border-white bg-white/70 dark:border-neutral-950 dark:bg-black/50',
+            'gird relative h-40 place-content-center overflow-hidden rounded-[15px] border-neutral-950 bg-black/50',
             className,
           )}
         >
@@ -79,14 +79,8 @@ export const MainMenusGradientCard = ({
         </div>
       )}
       <div className="relative px-4 pb-2 pt-4">
-        <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-300">
-          {title}
-        </h3>
-        {description && (
-          <p className="mt-2 text-neutral-600 dark:text-neutral-400">
-            {description}
-          </p>
-        )}
+        <h3 className="text-lg font-semibold text-neutral-300">{title}</h3>
+        {description && <p className="mt-2 text-neutral-400">{description}</p>}
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 import { stakeModuleABI } from '@/abi/stakeModule'
 import { Button } from '@/components/common/Button'
-import ModalWarp from '@/components/warper/ModalWarper'
+import { ModalWarp } from '@/components/common'
 import { STAKE_ADRESS, YSK_ADDRESS, cn } from '@/utils'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'

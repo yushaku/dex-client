@@ -1,4 +1,4 @@
-import { Card } from '@/components/warper'
+import { Card } from '@/components/common'
 import { useDebounce } from '@/hooks'
 import { useFarmState } from '@/stores'
 import { cn, formatNumber } from '@/utils'

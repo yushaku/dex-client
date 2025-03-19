@@ -1,6 +1,6 @@
 import { NPM_V3_ABI } from '@/abi/NPMv3'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/warper/Card'
+import { Card } from '@/components/common'
 import { useGetPool } from '@/hooks'
 import { PositionResponse, useClaim } from '@/hooks/uni/usePositionV3'
 import { useGetAsset } from '@/hooks/useAssets'
