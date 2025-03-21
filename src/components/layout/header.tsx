@@ -1,9 +1,9 @@
 import { ShopCartList } from '@/pages/shop/components/shopCartList'
-import { cn, routes } from '@/utils'
-import createAvatar from '@/utils/avatar'
-import { ConnectKitButton } from 'connectkit'
+import { cn, routes, shortenAddress } from '@/utils'
+import { useAccountModal, useConnectModal } from '@rainbow-me/rainbowkit'
 import { Link, useLocation } from 'react-router-dom'
 
+import { useAccount, useEnsName } from 'wagmi'
 import { NFTCartList } from './CartList'
 import { MobileSidebar } from './MobileSidebar'
 import { NotificationDropdown } from './Notification'
@@ -53,12 +53,8 @@ export const Header = (_prop: Props) => {
           <SelectChain />
         </span>
 
-        <span className="hidden md:block">
+        <span className="">
           <WalletButton />
-        </span>
-
-        <span className="md:hidden">
-          <WalletAvatar />
         </span>
 
         <MobileSidebar />
@@ -73,46 +69,31 @@ export const WalletButton = (
     HTMLButtonElement
   >,
 ) => {
+  const { openConnectModal } = useConnectModal()
+  const { openAccountModal } = useAccountModal()
+
+  const { address } = useAccount()
+  const { data: ensName } = useEnsName({ address })
+  // const { data: avatar } = useEnsAvatar({ name: ensName ?? '' })
+
+  if (!address) {
+    return (
+      <button
+        onClick={() => openConnectModal?.()}
+        className={cn('rounded-lg bg-accent px-6 py-2', props.className)}
+      >
+        Connect Wallet
+      </button>
+    )
+  }
+
   return (
-    <ConnectKitButton.Custom>
-      {({ isConnected, show, truncatedAddress, ensName }) => {
-        return (
-          <button
-            onClick={show}
-            className={cn('rounded-lg bg-accent px-6 py-2', props.className)}
-          >
-            {isConnected ? ensName ?? truncatedAddress : 'Connect Wallet'}
-          </button>
-        )
-      }}
-    </ConnectKitButton.Custom>
-  )
-}
-
-export const WalletAvatar = () => {
-  return (
-    <ConnectKitButton.Custom>
-      {({ isConnected, show, address = '' }) => {
-        const style = createAvatar(address)
-
-        if (!isConnected) {
-          return (
-            <button onClick={show} className="rounded-lg bg-accent px-6 py-2">
-              Connect
-            </button>
-          )
-        }
-
-        return (
-          <button
-            style={style}
-            id="avatar"
-            onClick={show}
-            className="size-10 rounded-full"
-          ></button>
-        )
-      }}
-    </ConnectKitButton.Custom>
+    <button
+      onClick={() => openAccountModal?.()}
+      className={cn('rounded-lg bg-accent px-6 py-2', props.className)}
+    >
+      {ensName ?? shortenAddress(address)}
+    </button>
   )
 }
 

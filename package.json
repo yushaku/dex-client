@@ -17,6 +17,7 @@
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-dialog": "^1.1.6",
     "@radix-ui/react-slot": "^1.1.2",
+    "@rainbow-me/rainbowkit": "^2.2.4",
     "@tanstack/react-query": "^5.28.9",
     "@tanstack/react-table": "^8.21.2",
     "@tanstack/react-virtual": "^3.13.4",
@@ -28,8 +29,6 @@
     "axios": "^1.7.7",
     "bignumber.js": "^9.1.2",
     "class-variance-authority": "^0.7.1",
-    "connectkit": "^1.7.3",
-    "d3": "^7.9.0",
     "embla-carousel-react": "^8.5.2",
     "envalid": "^8.0.0",
     "graphql": "^16.10.0",
@@ -37,7 +36,6 @@
     "jsbi": "3.2.5",
     "lucide-react": "^0.474.0",
     "luxon": "^3.5.0",
-    "polished": "^4.3.1",
     "react": "^18.2.0",
     "react-countup": "^6.5.3",
     "react-dom": "^18.2.0",
@@ -51,8 +49,8 @@
     "typeit-react": "^2.7.1",
     "use-local-storage": "^3.0.0",
     "uuid": "^11.0.3",
-    "viem": "~2.9.5",
-    "wagmi": "^2.5.16",
+    "viem": "~2.9.32",
+    "wagmi": "^2.14.15",
     "yup": "^1.4.0",
     "zustand": "5.0.0-rc.2"
   },
@@ -79,5 +77,10 @@
     "typescript": "^5.4.3",
     "vite": "^5.2.7",
     "vite-plugin-vercel": "^9.0.1"
+  },
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "bufferutil"
+    ]
   }
 }

@@ -1,4 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { connectorsForWallets, darkTheme } from '@rainbow-me/rainbowkit'
+import {
+  binanceWallet,
+  coinbaseWallet,
+  injectedWallet,
+  metaMaskWallet,
+  rabbyWallet,
+  safeWallet,
+  trustWallet,
+  walletConnectWallet,
+} from '@rainbow-me/rainbowkit/wallets'
 import {
   ReadContractParameters,
   readContract as _readContract,
@@ -11,14 +22,55 @@ import { Abi, Address } from 'viem'
 import { createConfig, fallback, http, unstable_connector } from 'wagmi'
 import { arbitrum, bsc, bscTestnet, mainnet } from 'wagmi/chains'
 import { injected } from 'wagmi/connectors'
+import { env } from './constant'
+
+const connectors = connectorsForWallets(
+  [
+    // {
+    //   groupName: 'Social login',
+    //   wallets: [particleGoogleWallet, particleAppleWallet, particleTwitterWallet, particleWallet],
+    // },
+    {
+      groupName: 'Wallets',
+      wallets: [
+        binanceWallet,
+        rabbyWallet,
+        metaMaskWallet,
+        walletConnectWallet,
+        coinbaseWallet,
+        trustWallet,
+        safeWallet,
+        injectedWallet,
+      ],
+    },
+  ],
+  {
+    appName: 'YUSHAKU',
+    projectId: env.VITE_WALLET_CONNECT_ID,
+  },
+)
+
+const theme = darkTheme()
+export const walletTheme = {
+  ...theme,
+  colors: {
+    ...theme.colors,
+    accentColor: '#3a78ff',
+    modalBackground: '#1e2431',
+    menuItemBackground: '#2d3549',
+  },
+  radii: {
+    ...theme.radii,
+    modal: '12px',
+    menuButton: '4px',
+  },
+}
 
 export const supportedChain = [mainnet, bsc, arbitrum, bscTestnet] as const
 export const config = createConfig({
   ssr: true,
   chains: supportedChain,
-  connectors: [
-    // walletConnect({ projectId: env.VITE_WALLET_CONNECT_ID }),
-  ],
+  connectors,
   transports: {
     [mainnet.id]: fallback([
       unstable_connector(injected),
