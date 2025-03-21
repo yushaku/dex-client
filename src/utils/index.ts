@@ -7,7 +7,6 @@ import { twMerge } from 'tailwind-merge'
 export * from './constant'
 export * from './gqlClient'
 export * from './mocs.ts'
-export * from './theme'
 export * from './types'
 export * from './wagmiConfig.ts'
 
