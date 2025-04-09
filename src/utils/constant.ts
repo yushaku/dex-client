@@ -1,5 +1,4 @@
 import { cleanEnv, str } from 'envalid'
-import { parseUnits } from 'viem'
 
 export const env = cleanEnv(import.meta.env, {
   VITE_WALLET_CONNECT_ID: str(),
@@ -15,6 +14,8 @@ export const env = cleanEnv(import.meta.env, {
   VITE_PINATA_SECRET: str(),
   VITE_API_ENPOINT: str({ default: 'http://localhost:8080' }),
   VITE_ENV: str({ default: 'development' }),
+  VITE_ENABLE_TESTNETS: str({ default: 'false' }),
+  VITE_TENDERLY_VIRTUAL_RPC: str(),
 })
 
 export const routes = {

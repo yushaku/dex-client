@@ -105,7 +105,11 @@ export const AddLiquidity = () => {
 
           <Alert
             variant="warning"
-            className={cn('space-y-2', pool && 'hidden')}
+            className={cn(
+              'space-y-2',
+              (!tokenA || !tokenB) && 'hidden',
+              pool && 'hidden',
+            )}
           >
             <TriangleAlert className="size-8 stroke-yellow-500" />
             <AlertTitle className="ml-3">Creating new pool</AlertTitle>
@@ -136,7 +140,7 @@ export const AddLiquidity = () => {
                 handleInput={(amount) =>
                   updateTypedValue(amount, Field.CURRENCY_A)
                 }
-                // locked={mintInfo.depositADisabled}
+                locked={mintInfo.depositADisabled}
               />
               <InputTokenAmount
                 title="Asset 2"
@@ -145,7 +149,7 @@ export const AddLiquidity = () => {
                 handleInput={(amount) =>
                   updateTypedValue(amount, Field.CURRENCY_B)
                 }
-                // locked={mintInfo.depositBDisabled}
+                locked={mintInfo.depositBDisabled}
               />
             </div>
 
