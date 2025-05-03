@@ -1,8 +1,9 @@
 import { WrapAsset, useTokensState } from '@/stores/addictionTokens'
 import React, { createContext, useContext, useMemo } from 'react'
-import { Address, erc20Abi, formatUnits, zeroAddress } from 'viem'
+import { Address, erc20Abi, formatUnits, getAddress, zeroAddress } from 'viem'
 import { useAccount, useBalance, useReadContracts } from 'wagmi'
-import { useFetchTokenList } from './useGetTokenMetadata'
+import { useFetchTokenList, useTokenMetadata } from './useGetTokenMetadata'
+import { UNKNOWN_TOKEN } from '@/utils'
 
 export const AssetsContext = createContext<{
   mappedToken: Record<string, WrapAsset>
@@ -78,10 +79,50 @@ export const AssetsProvider: React.FC<{ children: React.ReactNode }> = ({
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useGetAsset(tokenAddress?: Address | string | null) {
+  const { chainId = 1 } = useAccount()
   const { mappedToken } = useContext(AssetsContext)
 
-  return useMemo(() => {
+  const token = useMemo(() => {
     if (!tokenAddress) return undefined
     return mappedToken[tokenAddress]
   }, [mappedToken, tokenAddress])
+
+  const { data: aaa } = useTokenMetadata({
+    token: tokenAddress ?? zeroAddress,
+    chainId: chainId,
+    enabled: Boolean(tokenAddress) && !token,
+  })
+
+  // const { data: balance } = useBalance({
+  //   address: getAddress(tokenAddress ?? zeroAddress),
+  //   chainId,
+  //   query: {
+  //     enabled: Boolean(tokenAddress) && !token,
+  //   },
+  // })
+
+  // if (aaa) {
+  //   token = {
+  //     logoURI: aaa[0].logo,
+  //     decimals: aaa[0].decimals ?? 18,
+  //     symbol: aaa[0].symbol,
+  //     name: aaa[0].name,
+  //     address: tokenAddress ?? zeroAddress,
+  //     balance: 0n,
+  //   }
+  //   console.log(token)
+  // }
+
+  if (!token && aaa) {
+    return {
+      logoURI: UNKNOWN_TOKEN,
+      decimals: 18,
+      symbol: 'UNKNOWN_TOKEN',
+      name: 'UNKNOWN_TOKEN',
+      address: tokenAddress,
+      balance: 0n,
+    }
+  }
+
+  return token
 }
