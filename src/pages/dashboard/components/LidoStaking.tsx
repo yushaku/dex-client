@@ -42,7 +42,7 @@ export const LidoStakeForm = () => {
 
   return (
     <Card className="h-fit w-full lg:w-1/2">
-      <h3 className="flex items-center gap-2 text-xl font-bold text-textPrimary">
+      <h3 className="flex items-center gap-2 text-xl font-bold text-text-primary">
         <img
           src="https://etherscan.io/token/images/steth_32.svg"
           className="inline-block size-9"
@@ -52,18 +52,18 @@ export const LidoStakeForm = () => {
 
       <article className="mt-5 flex justify-between">
         <p className="text-center">
-          <span className="block text-sm text-textSecondary">
+          <span className="block text-sm text-text-secondary">
             you are staking:
           </span>
-          <strong className="text-xl font-bold text-textPrimary">
+          <strong className="text-xl font-bold text-text-primary">
             {formatNumber(formatEther(balance ?? 0n))}
           </strong>
         </p>
         <p className="text-center">
-          <span className="block text-sm text-textSecondary">
+          <span className="block text-sm text-text-secondary">
             Available to stake
           </span>
-          <strong className="flex-start gap-2 text-xl text-textPrimary">
+          <strong className="flex-start gap-2 text-xl text-text-primary">
             <ETH className="inline-block size-6" />
             {formatNumber(formatEther(ethBalance?.value ?? 0n))}
           </strong>
@@ -72,13 +72,13 @@ export const LidoStakeForm = () => {
 
       <article className="my-10 flex justify-between">
         <p className="text-center">
-          <span className="block text-sm text-textSecondary">stake APR</span>
-          <strong className="text-xl font-bold text-textPrimary">3%</strong>
+          <span className="block text-sm text-text-secondary">stake APR</span>
+          <strong className="text-xl font-bold text-text-primary">3%</strong>
         </p>
 
         <p className="text-center">
-          <span className="block text-sm text-textSecondary">Total Staked</span>
-          <strong className="flex-start gap-2 text-xl font-bold text-textPrimary">
+          <span className="block text-sm text-text-secondary">Total Staked</span>
+          <strong className="flex-start gap-2 text-xl font-bold text-text-primary">
             <ETH className="inline-block size-6" />
             {formatNumber(formatEther(total ?? 0n))}
           </strong>

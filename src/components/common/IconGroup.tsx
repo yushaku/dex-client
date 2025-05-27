@@ -13,7 +13,7 @@ export const IconGroup = ({ className, logo1, logo2 }: Props) => {
     <div className={cn('flex items-center -space-x-2', className?.default)}>
       <img
         className={cn(
-          'size-8 rounded-full outline outline-2 outline-[#1C2027]',
+          'size-8 rounded-full outline-solid outline-2 outline-[#1C2027]',
           className?.image,
         )}
         src={logo1 ?? UNKNOWN_TOKEN}
@@ -21,7 +21,7 @@ export const IconGroup = ({ className, logo1, logo2 }: Props) => {
       />
       <img
         className={cn(
-          'z-1 rounded-full size-8 outline outline-2 outline-[#1C2027]',
+          'z-1 rounded-full size-8 outline-solid outline-2 outline-[#1C2027]',
           className?.image,
         )}
         src={logo2 ?? UNKNOWN_TOKEN}

@@ -51,7 +51,7 @@ export const TokensDialog = ({ asset, listAssets, handleSetToken }: Props) => {
 
         <div className="fixed inset-0 flex w-screen items-center justify-center p-2">
           <DialogPanel className="relative min-w-96 space-y-6 bg-layer p-4">
-            <DialogTitle className="text-xl font-bold text-lighterAccent">
+            <DialogTitle className="text-xl font-bold text-lighter-accent">
               Select Asset
             </DialogTitle>
 
@@ -74,7 +74,7 @@ export const TokensDialog = ({ asset, listAssets, handleSetToken }: Props) => {
                       }}
                       className={cn(
                         'flex justify-between rounded-lg p-2 cursor-pointer',
-                        'hover:bg-focus hover:text-lighterAccent',
+                        'hover:bg-focus hover:text-lighter-accent',
                         asset?.address === token.address && 'bg-focus',
                       )}
                     >
@@ -91,17 +91,17 @@ export const TokensDialog = ({ asset, listAssets, handleSetToken }: Props) => {
                               href={getTokenLink(token.address, chainId)}
                               target="_blank"
                             >
-                              <ArrowUpRightIcon className="size-5 stroke-textSecondary hover:stroke-lighterAccent" />
+                              <ArrowUpRightIcon className="size-5 stroke-text-secondary hover:stroke-lighter-accent" />
                             </a>
                           </p>
-                          <p className="text-sm text-textSecondary">
+                          <p className="text-sm text-text-secondary">
                             {token.name}
                           </p>
                         </h6>
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <p className="text-sm text-textSecondary">
+                        <p className="text-sm text-text-secondary">
                           {formatNumber(
                             formatUnits(token.balance, token.decimals),
                           )}

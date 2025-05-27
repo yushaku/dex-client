@@ -39,7 +39,7 @@ export const NFTCartList = () => {
         className={cn('animate fixed h-screen p-5 z-50 w-96 bg-layer', styled)}
       >
         <h3 className="mt-5 flex justify-between">
-          <span className="text-2xl font-bold text-lighterAccent">
+          <span className="text-2xl font-bold text-lighter-accent">
             Your cart
           </span>
 
@@ -73,7 +73,7 @@ export const NFTCartList = () => {
         <article className="absolute bottom-0 left-0 w-full bg-focus p-5">
           <h3 className="mb-5 flex justify-between">
             <span>Total:</span>
-            <span className="text-xl font-bold text-lighterAccent">
+            <span className="text-xl font-bold text-lighter-accent">
               123 <NativeToken />
             </span>
           </h3>

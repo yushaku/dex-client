@@ -39,7 +39,7 @@ export const OrderChart = ({
         <button
           className={cn(
             'bg-focus p-2 rounded-md',
-            isMini && 'bg-lighterAccent',
+            isMini && 'bg-lighter-accent',
           )}
           onClick={() => setisMini(true)}
         >
@@ -48,7 +48,7 @@ export const OrderChart = ({
         <button
           className={cn(
             'bg-focus p-2 rounded-md',
-            !isMini && 'bg-lighterAccent',
+            !isMini && 'bg-lighter-accent',
           )}
           onClick={() => setisMini(false)}
         >

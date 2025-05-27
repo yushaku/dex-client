@@ -38,7 +38,7 @@ export const OrderInput = <T,>({
       id="TOKEN-INPUT"
       className={cn(
         'mt-5 space-y-1 rounded-xl border border-focus bg-background p-4',
-        'focus-within:border-lighterAccent hover:border-lighterAccent',
+        'focus-within:border-lighter-accent hover:border-lighter-accent',
       )}
     >
       <div className="flex justify-between">
@@ -54,7 +54,7 @@ export const OrderInput = <T,>({
               setToAmount('0')
             }
           }}
-          className="no-spinner w-3/4 flex-1 bg-transparent text-lg focus:outline-none lg:text-2xl"
+          className="no-spinner w-3/4 flex-1 bg-transparent text-lg focus:outline-hidden lg:text-2xl"
           style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
         />
 
@@ -79,10 +79,10 @@ export const OrderInput = <T,>({
       </div>
 
       <div className="flex justify-between text-sm lg:text-lg">
-        <p className="text-textSecondary">
+        <p className="text-text-secondary">
           ${Number(Number(price) * Number(amount)).toFixed(4)}
         </p>
-        <p className="space-x-2 text-textSecondary">
+        <p className="space-x-2 text-text-secondary">
           <span>Balance:</span>
 
           {balance !== undefined ? (

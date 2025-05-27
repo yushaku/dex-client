@@ -22,7 +22,7 @@ export const Dashboard = () => {
   return (
     <section className="min-h-[80dvh]">
       <h3
-        className={cn('hidden items-center gap-3 text-lg text-textSecondary', {
+        className={cn('hidden items-center gap-3 text-lg text-text-secondary', {
           flex: address,
         })}
       >

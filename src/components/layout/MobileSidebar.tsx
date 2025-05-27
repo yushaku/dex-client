@@ -40,9 +40,9 @@ export const MobileSidebar = () => {
                   to={href}
                   className={`${pickedStyle} group flex gap-3 px-8 py-5 hover:border-l-4 hover:border-l-accent hover:bg-focus`}
                 >
-                  <Icon className="size-6 fill-textPrimary group-hover:fill-accent" />
+                  <Icon className="size-6 fill-text-primary group-hover:fill-accent" />
                   <span
-                    className={`text-textSecondary group-hover:text-accent`}
+                    className={`text-text-secondary group-hover:text-accent`}
                   >
                     {title}
                   </span>

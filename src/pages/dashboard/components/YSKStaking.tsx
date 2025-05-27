@@ -43,23 +43,23 @@ export const YSKStakeForm = () => {
 
   return (
     <Card className="h-fit w-full lg:w-1/2">
-      <h3 className="flex items-center gap-2 text-xl font-bold text-textPrimary">
+      <h3 className="flex items-center gap-2 text-xl font-bold text-text-primary">
         <img className="size-10" src="/logo.png" alt="logo" /> YSK
       </h3>
 
       <article className="mt-5 flex justify-between">
         <p className="text-center">
-          <span className="block text-sm text-textSecondary">
+          <span className="block text-sm text-text-secondary">
             You are staking:
           </span>
-          <strong className="inline-flex items-center gap-2 text-xl font-bold text-textPrimary">
+          <strong className="inline-flex items-center gap-2 text-xl font-bold text-text-primary">
             0
             <img className="size-7" src="/logo.png" alt="logo" />
           </strong>
         </p>
         <p className="text-center">
-          <span className="block text-sm text-textSecondary">Your Balance</span>
-          <strong className="flex items-center gap-2 text-xl font-bold text-textPrimary">
+          <span className="block text-sm text-text-secondary">Your Balance</span>
+          <strong className="flex items-center gap-2 text-xl font-bold text-text-primary">
             {formatNumber(formatEther(balance ?? 0n))}
             <img className="size-7" src="/logo.png" alt="logo" />
           </strong>
@@ -68,25 +68,25 @@ export const YSKStakeForm = () => {
 
       <article className="my-10 flex justify-between">
         <p className="text-center">
-          <span className="block text-sm text-textSecondary">
+          <span className="block text-sm text-text-secondary">
             XVS Stake APR
           </span>
-          <strong className="text-xl font-bold text-textPrimary">8.31%</strong>
+          <strong className="text-xl font-bold text-text-primary">8.31%</strong>
         </p>
 
         <p className="text-center">
-          <span className="block text-sm text-textSecondary">
+          <span className="block text-sm text-text-secondary">
             Daily Emission
           </span>
-          <strong className="flex-start gap-2 text-xl font-bold text-textPrimary">
+          <strong className="flex-start gap-2 text-xl font-bold text-text-primary">
             <img className="size-7" src="/logo.png" alt="logo" />
             1.672k
           </strong>
         </p>
 
         <p className="text-center">
-          <span className="block text-sm text-textSecondary">Total Staked</span>
-          <strong className="flex-start gap-2 text-xl font-bold text-textPrimary">
+          <span className="block text-sm text-text-secondary">Total Staked</span>
+          <strong className="flex-start gap-2 text-xl font-bold text-text-primary">
             <img className="size-7" src="/logo.png" alt="logo" />
             {formatNumber(formatEther(total ?? 0n))}
           </strong>
@@ -110,7 +110,7 @@ export const YSKStakeForm = () => {
                 const value = e.target.value
                 setAmount(value)
               }}
-              className="no-spinner w-full flex-1 bg-transparent text-lg focus:outline-none lg:text-2xl"
+              className="no-spinner w-full flex-1 bg-transparent text-lg focus:outline-hidden lg:text-2xl"
               style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
             />
             <button onClick={() => setAmount(formatEther(balance ?? 0n))}>
@@ -119,10 +119,10 @@ export const YSKStakeForm = () => {
           </label>
 
           <p className="mt-5 flex justify-between">
-            <span className="block text-sm text-textSecondary">
+            <span className="block text-sm text-text-secondary">
               You will receive
             </span>
-            <strong className="text-sm font-bold text-textPrimary">
+            <strong className="text-sm font-bold text-text-primary">
               {debounceAmount}
             </strong>
           </p>

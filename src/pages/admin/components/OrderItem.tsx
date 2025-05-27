@@ -52,7 +52,7 @@ export const OrderItem = ({ item }: Props) => {
     <li key={item.order_id} className="group">
       <Card>
         <div>
-          <i className="text-sm text-textSecondary">ID: {item.order_id}</i>
+          <i className="text-sm text-text-secondary">ID: {item.order_id}</i>
           <p className="flex justify-between gap-1">
             <span>
               Order Date:{' '}
@@ -88,7 +88,7 @@ export const OrderItem = ({ item }: Props) => {
                     alt={order.total_price}
                     className="w-32 rounded-lg"
                   />
-                  <p className="text-sm text-textSecondary">
+                  <p className="text-sm text-text-secondary">
                     {order.product.name}
                   </p>
                   <p className="flex gap-5">

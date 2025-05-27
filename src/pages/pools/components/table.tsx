@@ -101,7 +101,7 @@ export function TablePool() {
               )
             }
             variant="outline"
-            className="text-lighterAccent group-hover:bg-accent group-hover:text-primary"
+            className="text-lighter-accent group-hover:bg-accent group-hover:text-primary"
           >
             Add Liquidity
             <ArrowRight className="hidden size-5 group-hover:block" />

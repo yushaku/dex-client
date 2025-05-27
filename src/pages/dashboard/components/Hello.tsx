@@ -10,7 +10,7 @@ export const HelloGuy = () => {
 
         <div>
           <h6 className="text-lg">Hello, my Friend</h6>
-          <h3 className="text-3xl text-lighterAccent">
+          <h3 className="text-3xl text-lighter-accent">
             Wellcome to{' '}
             <TypeIt
               options={{

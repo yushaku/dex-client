@@ -54,7 +54,7 @@ export const Dropdown = ({
       >
         <Menu.Items
           className={cn(
-            'absolute right-0 z-10 mt-2 min-w-40 origin-top-right rounded-md bg-layer py-1 shadow-lg ring-1 ring-gray-700 focus:outline-none',
+            'absolute right-0 z-10 mt-2 min-w-40 origin-top-right rounded-md bg-layer py-1 shadow-lg ring-1 ring-gray-700 focus:outline-hidden',
             className,
           )}
         >

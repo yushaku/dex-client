@@ -31,7 +31,7 @@ const chartConfig = {
 export const StakedValueLockChart = () => {
   return (
     <Card className="mt-10">
-      <h3 className="my-5 p-4 text-lg font-bold text-lighterAccent">
+      <h3 className="my-5 p-4 text-lg font-bold text-lighter-accent">
         Staked Value
       </h3>
 

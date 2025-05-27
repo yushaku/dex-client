@@ -18,7 +18,7 @@ export const SelectPayToken = ({
   const Logo = selectedtoken.logo
 
   const Title = (
-    <h6 className="flex gap-2 text-textSecondary">
+    <h6 className="flex gap-2 text-text-secondary">
       <Logo className="size-5" />
       <span className="hidden md:inline">{selectedtoken.name}</span>
     </h6>
@@ -34,7 +34,7 @@ export const SelectPayToken = ({
                 <button
                   onClick={() => onSelect(address)}
                   className={cn(
-                    active ? 'bg-focus text-accent' : 'text-textSecondary',
+                    active ? 'bg-focus text-accent' : 'text-text-secondary',
                     'flex w-full items-center gap-3 px-4 py-3 text-sm',
                   )}
                 >

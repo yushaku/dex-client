@@ -105,7 +105,7 @@ export const ShopPage = () => {
                   className="w-full bg-cover object-cover"
                 />
                 <div className="animate absolute -bottom-11 left-5 z-10 group-hover:bottom-5">
-                  <p className="mb-2 text-xl font-bold text-lighterAccent">
+                  <p className="mb-2 text-xl font-bold text-lighter-accent">
                     {item.name}
                   </p>
                   <ol className="grid gap-1 text-sm text-white">
@@ -136,7 +136,7 @@ export const ShopPage = () => {
                   }}
                 />
 
-                <article className="absolute inset-0 w-full bg-gradient-to-t from-[rgba(0,0,0,0.9)] to-[rgba(255,255,255,0.01)] group-hover:-bottom-5" />
+                <article className="absolute inset-0 w-full bg-linear-to-t from-[rgba(0,0,0,0.9)] to-[rgba(255,255,255,0.01)] group-hover:-bottom-5" />
               </li>
             )
           })}

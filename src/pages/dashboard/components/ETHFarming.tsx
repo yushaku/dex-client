@@ -99,7 +99,7 @@ export const ETHFarming = () => {
 
   return (
     <Card className="mt-10">
-      <h3 className="flex justify-between text-lg font-bold text-lighterAccent">
+      <h3 className="flex justify-between text-lg font-bold text-lighter-accent">
         <span>EARN MORE</span>
         <XMarkIcon onClick={() => toggleFarmin(null)} className="size-6" />
       </h3>
@@ -143,7 +143,7 @@ export const ETHFarming = () => {
               return (
                 <AccordionItem key={index} value={`item-${index}`}>
                   <AccordionTrigger>{item.title}</AccordionTrigger>
-                  <AccordionContent className="text-textSecondary">
+                  <AccordionContent className="text-text-secondary">
                     {' '}
                     {item.detail}{' '}
                   </AccordionContent>
@@ -259,7 +259,7 @@ function LidoStake() {
   return (
     <article className="col-span-2 rounded-lg bg-focus p-2 py-4">
       <h4 className="flex items-center justify-between">
-        <strong className="text-lighterAccent">Restake on Renzo</strong>
+        <strong className="text-lighter-accent">Restake on Renzo</strong>
       </h4>
 
       <div className="relative">
@@ -279,7 +279,7 @@ function LidoStake() {
             // onClick={handleSwapPosition}
             className="group rounded-lg border border-focus bg-layer p-3"
           >
-            <ArrowDownIcon className="animate size-5 hover:stroke-lighterAccent" />
+            <ArrowDownIcon className="animate size-5 hover:stroke-lighter-accent" />
           </button>
         </div>
 
@@ -411,7 +411,7 @@ function WrapStETH() {
             const value = e.target.value
             setAmount(value)
           }}
-          className="no-spinner w-full flex-1 bg-transparent text-lg focus:outline-none"
+          className="no-spinner w-full flex-1 bg-transparent text-lg focus:outline-hidden"
           style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
         />
         <button
@@ -429,20 +429,20 @@ function WrapStETH() {
 
       <div className="mt-5 space-y-2">
         <p className="flex justify-between">
-          <span className="block text-sm text-textSecondary">
+          <span className="block text-sm text-text-secondary">
             Exchange rate
           </span>
-          <span className="text-sm text-textPrimary">
+          <span className="text-sm text-text-primary">
             {isWarp
               ? `1 stETH = ${formatNumber(formatEther(wstETHByStETH))} wstETH`
               : `1 wstETH = ${formatNumber(formatEther(stETHByWstETH))} stETH`}
           </span>
         </p>
         <p className="flex justify-between">
-          <span className="block text-sm text-textSecondary">
+          <span className="block text-sm text-text-secondary">
             {isWarp ? 'stETH' : 'wstETH'} balance
           </span>
-          <strong className="text-sm font-bold text-textPrimary">
+          <strong className="text-sm font-bold text-text-primary">
             <img
               src={
                 isWarp
@@ -457,10 +457,10 @@ function WrapStETH() {
           </strong>
         </p>
         <p className="flex justify-between">
-          <span className="block text-sm text-textSecondary">
+          <span className="block text-sm text-text-secondary">
             You will receive
           </span>
-          <strong className="text-sm font-bold text-textPrimary">
+          <strong className="text-sm font-bold text-text-primary">
             <img
               src={
                 !isWarp
@@ -473,12 +473,12 @@ function WrapStETH() {
           </strong>
         </p>
         <p className="flex justify-between">
-          <span className="block text-sm text-textSecondary">
+          <span className="block text-sm text-text-secondary">
             contract address
           </span>
           <a
             href={getTokenLink(contracts.STAKING_ETH.WST_ETH, mainnet.id)}
-            className="text-sm font-bold text-textPrimary"
+            className="text-sm font-bold text-text-primary"
           >
             {shortenAddress(contracts.STAKING_ETH.WST_ETH)}
           </a>
@@ -609,7 +609,7 @@ function RenzoStake() {
   return (
     <article className="col-span-2 rounded-lg bg-focus p-2 py-4">
       <h4 className="flex items-center justify-between">
-        <strong className="text-lighterAccent">Restake on Renzo</strong>
+        <strong className="text-lighter-accent">Restake on Renzo</strong>
       </h4>
 
       <div className="relative">
@@ -629,7 +629,7 @@ function RenzoStake() {
         {/*     // onClick={handleSwapPosition} */}
         {/*     className="group rounded-lg border border-focus bg-layer p-3" */}
         {/*   > */}
-        {/*     <ArrowDownIcon className="animate size-5 hover:stroke-lighterAccent" /> */}
+        {/*     <ArrowDownIcon className="animate size-5 hover:stroke-lighter-accent" /> */}
         {/*   </button> */}
         {/* </div> */}
 

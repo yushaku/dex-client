@@ -49,11 +49,11 @@ export function ModalWarp({
                 <button className="absolute right-5 top-5">
                   <XCircleIcon
                     onClick={handleClose}
-                    className="size-6 fill-white hover:fill-lighterAccent"
+                    className="size-6 fill-white hover:fill-lighter-accent"
                   />
                 </button>
 
-                <Dialog.Title className="text-xl font-medium text-lighterAccent">
+                <Dialog.Title className="text-xl font-medium text-lighter-accent">
                   {title}
                 </Dialog.Title>
 

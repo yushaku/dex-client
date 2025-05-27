@@ -41,7 +41,7 @@ export const Sidebar = () => {
       >
         <img src="/logo.png" className="size-10" alt="Vite logo" />
         <h3
-          className={`${isSmall ? 'hidden' : 'block'} heading-2xl text-lighterAccent`}
+          className={`${isSmall ? 'hidden' : 'block'} heading-2xl text-lighter-accent`}
         >
           Yushaku
         </h3>
@@ -52,7 +52,7 @@ export const Sidebar = () => {
         onClick={() => setIsSmall(!isSmall)}
       >
         <ArrowLeftIcon
-          className={`${isSmall ? 'rotate-180' : ''} size-4 stroke-textSecondary transition-all duration-300`}
+          className={`${isSmall ? 'rotate-180' : ''} size-4 stroke-text-secondary transition-all duration-300`}
         />
       </span>
 
@@ -70,9 +70,9 @@ export const Sidebar = () => {
                 to={href}
                 className={`${pickedStyle} ${isSmall ? 'px-4 py-5' : 'px-8 py-5'} group flex gap-3 hover:border-l-4 hover:border-l-accent hover:bg-focus`}
               >
-                <Icon className="size-6 fill-textPrimary group-hover:fill-accent" />
+                <Icon className="size-6 fill-text-primary group-hover:fill-accent" />
                 <span
-                  className={`${isSmall ? 'hidden' : 'block'} text-textSecondary group-hover:text-accent`}
+                  className={`${isSmall ? 'hidden' : 'block'} text-text-secondary group-hover:text-accent`}
                 >
                   {title}
                 </span>

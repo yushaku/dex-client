@@ -83,7 +83,7 @@ export const AddressForm = ({ disabled = false }: { disabled?: boolean }) => {
                     onChange={handleChange('recipient')}
                     className={cn(
                       'mt-3 block w-full rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white',
-                      'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
+                      'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25'
                     )}
                   />
                 </Field>
@@ -97,7 +97,7 @@ export const AddressForm = ({ disabled = false }: { disabled?: boolean }) => {
                     type="tel"
                     className={cn(
                       'mt-3 block w-full rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white',
-                      'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
+                      'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25'
                     )}
                   />
                 </Field>
@@ -111,7 +111,7 @@ export const AddressForm = ({ disabled = false }: { disabled?: boolean }) => {
                   onChange={handleChange('address')}
                   className={cn(
                     'mt-3 block w-full rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white',
-                    'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
+                    'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25'
                   )}
                 />
               </Field>
@@ -125,7 +125,7 @@ export const AddressForm = ({ disabled = false }: { disabled?: boolean }) => {
                   <Select
                     className={cn(
                       'mt-3 block w-full appearance-none rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white',
-                      'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25',
+                      'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25',
                       '*:text-black'
                     )}
                   >
@@ -149,7 +149,7 @@ export const AddressForm = ({ disabled = false }: { disabled?: boolean }) => {
                   onChange={handleChange('note')}
                   className={cn(
                     'mt-3 block w-full resize-none rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white',
-                    'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
+                    'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25'
                   )}
                   rows={3}
                 />

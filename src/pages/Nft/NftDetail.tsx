@@ -132,7 +132,7 @@ export const DetailNFT = () => {
 
         <article className="col-span-1">
           <Card>
-            <h3 className="text-2xl text-lighterAccent">{nft?.token?.name}</h3>
+            <h3 className="text-2xl text-lighter-accent">{nft?.token?.name}</h3>
             <p className="mt-5 w-fit rounded-lg bg-background px-3 py-1">
               Owned by {shortenAddress(nft?.token?.owner)}
             </p>

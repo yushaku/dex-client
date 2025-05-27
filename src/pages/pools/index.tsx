@@ -68,7 +68,7 @@ function PoolItem({ pool }: { pool: UniPools }) {
         }
         className="group p-4"
       >
-        <div className="space-y-2 text-textSecondary">
+        <div className="space-y-2 text-text-secondary">
           <p className="flex items-center gap-2 pb-2">
             <IconGroup logo1={token0?.logoURI} logo2={token1?.logoURI} />
             <span className="text-primary group-hover:text-accent">

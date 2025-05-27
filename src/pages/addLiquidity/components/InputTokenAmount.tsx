@@ -62,7 +62,7 @@ export const InputTokenAmount = ({
                     <button
                       onClick={() => handleSetAmount(number)}
                       className={cn(
-                        'px-4 py-2 text-sm text-textSecondary rounded border border-focus hover:bg-focus',
+                        'px-4 py-2 text-sm text-text-secondary rounded-sm border border-focus hover:bg-focus',
                       )}
                     >
                       {number}%
@@ -115,7 +115,7 @@ export const InputTokenAmount = ({
               </div>
             </div>
 
-            <div className="flex items-center justify-between gap-2 text-textSecondary">
+            <div className="flex items-center justify-between gap-2 text-text-secondary">
               <p>${formatNumber(Number(value) * Number(price ?? 0))}</p>
               <h3>Balance: {formatNumber(asset?.formatted)}</h3>
             </div>

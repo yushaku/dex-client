@@ -130,7 +130,7 @@ export const OrderToken = ({ asset, handleSetToken, className }: Props) => {
 
         <div className="fixed inset-0 flex w-screen items-center justify-center p-2">
           <DialogPanel className="relative min-w-96 space-y-6 bg-layer p-4">
-            <DialogTitle className="text-xl font-bold text-lighterAccent">
+            <DialogTitle className="text-xl font-bold text-lighter-accent">
               Select Asset
             </DialogTitle>
 
@@ -147,13 +147,13 @@ export const OrderToken = ({ asset, handleSetToken, className }: Props) => {
                 setSearch(e.target.value)
               }}
               placeholder="Search by name or symbol"
-              className="w-full rounded-lg bg-background p-4 focus:outline-none"
+              className="w-full rounded-lg bg-background p-4 focus:outline-hidden"
             />
 
             <div id="TOP-TOKENS">
               <h6
                 className={cn(
-                  'mb-2 text-textSecondary',
+                  'mb-2 text-text-secondary',
                   topAssets.length === 0 && 'hidden',
                 )}
               >
@@ -167,7 +167,7 @@ export const OrderToken = ({ asset, handleSetToken, className }: Props) => {
                       key={token.address}
                       className={cn(
                         'flex grid-cols-1 items-center gap-2 cursor-pointer rounded-lg bg-background p-2',
-                        'hover:bg-focus hover:text-lighterAccent',
+                        'hover:bg-focus hover:text-lighter-accent',
                         asset?.address === token.address && 'bg-focus',
                       )}
                       onClick={() => {
@@ -189,7 +189,7 @@ export const OrderToken = ({ asset, handleSetToken, className }: Props) => {
             <div className="h-0.5 w-full bg-focus" />
 
             <div id="token list">
-              <h6 className="mb-2 text-textSecondary">Token List</h6>
+              <h6 className="mb-2 text-text-secondary">Token List</h6>
 
               <ul className="scroll-container h-96 space-y-2 overflow-y-scroll">
                 {tokenList.map((token) => {
@@ -203,7 +203,7 @@ export const OrderToken = ({ asset, handleSetToken, className }: Props) => {
                       }}
                       className={cn(
                         'flex justify-between rounded-lg p-2 cursor-pointer',
-                        'hover:bg-focus hover:text-lighterAccent',
+                        'hover:bg-focus hover:text-lighter-accent',
                         asset?.address === token.address && 'bg-focus',
                       )}
                     >
@@ -220,17 +220,17 @@ export const OrderToken = ({ asset, handleSetToken, className }: Props) => {
                               href={getTokenLink(token.address, chainId)}
                               target="_blank"
                             >
-                              <ArrowUpRightIcon className="size-5 stroke-textSecondary hover:stroke-lighterAccent" />
+                              <ArrowUpRightIcon className="size-5 stroke-text-secondary hover:stroke-lighter-accent" />
                             </a>
                           </p>
-                          <p className="text-sm text-textSecondary">
+                          <p className="text-sm text-text-secondary">
                             {token.name}
                           </p>
                         </h6>
                       </div>
 
                       <div className="flex items-center gap-2">
-                        <p className="text-sm text-textSecondary">
+                        <p className="text-sm text-text-secondary">
                           {formatNumber(formatEther(token?.balance))}
                         </p>
                         <button
@@ -242,14 +242,14 @@ export const OrderToken = ({ asset, handleSetToken, className }: Props) => {
                         >
                           <PlusIcon
                             className={cn(
-                              'size-5 stroke-textSecondary',
+                              'size-5 stroke-text-secondary',
                               !token?.isCustom && 'hidden',
                             )}
                           />
 
                           <TrashIcon
                             className={cn(
-                              'size-5 stroke-textSecondary',
+                              'size-5 stroke-text-secondary',
                               !token?.isLocal && 'hidden',
                             )}
                           />

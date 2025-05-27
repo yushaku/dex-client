@@ -19,7 +19,7 @@ export const TxModalLoading = () => {
 
       <div className="fixed inset-0 flex w-screen items-center justify-center p-2">
         <DialogPanel className="relative w-96 space-y-4 rounded-lg bg-layer p-5">
-          <DialogTitle className="text-lg font-bold text-lighterAccent">
+          <DialogTitle className="text-lg font-bold text-lighter-accent">
             {title}
           </DialogTitle>
 
@@ -39,7 +39,7 @@ export const TxModalLoading = () => {
                   key={key}
                   className="flex justify-between rounded-lg bg-background p-4"
                 >
-                  <span className="text-textSecondary"> {value.desc} </span>
+                  <span className="text-text-secondary"> {value.desc} </span>
 
                   <span
                     className={cn({

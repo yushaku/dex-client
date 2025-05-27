@@ -136,7 +136,7 @@ export const StakeForm = ({ isOpen, setOpen, address, balance }: Props) => {
               type="text"
               placeholder="Amount"
               className={cn(
-                'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-none',
+                'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-hidden',
                 { 'border-red-400': errors.amount?.message },
               )}
               {...register('amount', { required: true })}
@@ -162,7 +162,7 @@ export const StakeForm = ({ isOpen, setOpen, address, balance }: Props) => {
             type="submit"
             value={isPending ? 'Pending...' : 'Stake'}
             disabled={isPending || Number(allowanceData) < getValues('amount')}
-            className="mt-5 w-full cursor-pointer rounded-lg bg-accent p-3 hover:bg-lighterAccent"
+            className="mt-5 w-full cursor-pointer rounded-lg bg-accent p-3 hover:bg-lighter-accent"
           />
         </form>
 

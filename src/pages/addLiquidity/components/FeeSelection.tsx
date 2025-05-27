@@ -31,7 +31,7 @@ export const FeeSelection = () => {
   return (
     <article>
       <h2 className="text-lg font-semibold">Fee tier</h2>
-      <p className="text-sm font-light text-textSecondary">
+      <p className="text-sm font-light text-text-secondary">
         The amount earned providing liquidity. Choose an amount that suits your
         risk tolerance and strategy.
       </p>
@@ -41,7 +41,7 @@ export const FeeSelection = () => {
           {/* <span className="mx-3 rounded-md bg-background px-2 py-1 text-xs"> */}
           {/*   Highest TVL */}
           {/* </span> */}
-          <i className="mt-2 block text-textSecondary">
+          <i className="mt-2 block text-text-secondary">
             The % you will earn in fees
           </i>
         </p>
@@ -62,7 +62,7 @@ export const FeeSelection = () => {
             onClick={() => updateFee(value)}
           >
             <p className="text-sm">{value / 10000}%</p>
-            <p className="mt-1 text-xs text-textSecondary">{title}</p>
+            <p className="mt-1 text-xs text-text-secondary">{title}</p>
           </li>
         ))}
       </ul>

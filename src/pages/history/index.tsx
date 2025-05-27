@@ -119,7 +119,7 @@ export const HistoryPage = () => {
         <div>
           <span
             className={cn(
-              'text-sm text-textSecondary mr-2',
+              'text-sm text-text-secondary mr-2',
               selected.length === 0 && 'hidden',
             )}
           >

@@ -45,7 +45,7 @@ export const ShopCartList = () => {
         className={cn('animate fixed h-screen p-5 z-50 w-96 bg-layer', styled)}
       >
         <h3 className="mt-5 flex justify-between">
-          <span className="text-2xl font-bold text-lighterAccent">
+          <span className="text-2xl font-bold text-lighter-accent">
             Your cart
           </span>
 
@@ -61,7 +61,7 @@ export const ShopCartList = () => {
               <img src={item.banner} alt="nft" className="size-12 rounded-lg" />
               <article>
                 <h3>{item.name}</h3>
-                <p className="flex items-center font-bold text-textSecondary">
+                <p className="flex items-center font-bold text-text-secondary">
                   {bnbPrice ? (
                     (Number(item.price) / (bnbPrice ?? 1)).toFixed(5)
                   ) : (
@@ -87,11 +87,11 @@ export const ShopCartList = () => {
         <article className="absolute bottom-0 left-0 w-full bg-focus p-5">
           <h3 className="flex-center mb-5 gap-2">
             <span>Total:</span>
-            <span className="text-xl font-bold text-lighterAccent">
+            <span className="text-xl font-bold text-lighter-accent">
               {bnbPrice ? totalBnb.toFixed(5) : <Spinner />} <NativeToken />
             </span>
             |
-            <span className="flex-center gap-2 text-xl font-bold text-lighterAccent">
+            <span className="flex-center gap-2 text-xl font-bold text-lighter-accent">
               {totalUsdt.toFixed(5)}
               <USDT className="size-5" />
             </span>

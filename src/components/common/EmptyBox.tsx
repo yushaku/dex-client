@@ -9,7 +9,7 @@ export const EmptyBox = ({ isShow }: { isShow: boolean }) => {
       )}
     >
       <img className="w-96" src="/catinbox.gif" alt="empty" />
-      <h5 className="mt-5 text-xl text-lighterAccent">It's empty here</h5>
+      <h5 className="mt-5 text-xl text-lighter-accent">It's empty here</h5>
     </div>
   )
 }

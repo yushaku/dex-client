@@ -35,7 +35,7 @@ export const OrderSetting = ({ disabled = false }: { disabled?: boolean }) => {
 
         <div className="fixed inset-0 flex w-screen items-center justify-center p-2">
           <DialogPanel className="relative w-96 space-y-6 bg-layer p-4">
-            <DialogTitle className="font-bold text-lighterAccent">
+            <DialogTitle className="font-bold text-lighter-accent">
               Transaction Settings
             </DialogTitle>
 
@@ -83,7 +83,7 @@ export const OrderSetting = ({ disabled = false }: { disabled?: boolean }) => {
                     }}
                     placeholder="0.0"
                     type="number"
-                    className="no-spinner w-16 bg-transparent focus:outline-none"
+                    className="no-spinner w-16 bg-transparent focus:outline-hidden"
                     style={{
                       WebkitAppearance: 'none',
                       MozAppearance: 'textfield'
@@ -107,20 +107,20 @@ export const OrderSetting = ({ disabled = false }: { disabled?: boolean }) => {
                   }}
                   placeholder="0.0"
                   type="number"
-                  className="no-spinner w-full bg-transparent focus:outline-none"
+                  className="no-spinner w-full bg-transparent focus:outline-hidden"
                   style={{
                     WebkitAppearance: 'none',
                     MozAppearance: 'textfield'
                   }}
                 />
-                <span className="text-textSecondary">minutes</span>
+                <span className="text-text-secondary">minutes</span>
               </div>
             </div>
 
             <div>
               <h6 className="mb-2">Liquidity Hub</h6>
 
-              <p className="text-sm text-textSecondary">
+              <p className="text-sm text-text-secondary">
                 <a
                   href="https://www.orbs.com/liquidity-hub/"
                   className="text-accent"

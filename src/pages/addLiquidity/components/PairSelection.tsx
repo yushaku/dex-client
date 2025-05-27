@@ -31,7 +31,7 @@ export const PairSelection = () => {
   return (
     <article>
       <h2 className="text-lg font-semibold">Select pair</h2>
-      <p className="text-sm font-light text-textSecondary">
+      <p className="text-sm font-light text-text-secondary">
         Choose the tokens you want to provide liquidity for. You can select
         tokens on all supported networks.
       </p>

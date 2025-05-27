@@ -144,7 +144,7 @@ export const SwapPane = () => {
     <div className="grid w-full grid-cols-5">
       <Card className="col-span-5 border-focus lg:col-span-2">
         <h4 className="flex items-center justify-between">
-          <strong className="text-lighterAccent">Swap</strong>
+          <strong className="text-lighter-accent">Swap</strong>
 
           <ul className="flex justify-end gap-3">
             {[10, 20, 50, 100].map((number) => {
@@ -153,7 +153,7 @@ export const SwapPane = () => {
                   <button
                     onClick={() => handleSetAmount(number)}
                     className={cn(
-                      'px-4 py-2 text-sm rounded border border-focus hover:bg-focus',
+                      'px-4 py-2 text-sm rounded-sm border border-focus hover:bg-focus',
                     )}
                   >
                     {number}%
@@ -181,7 +181,7 @@ export const SwapPane = () => {
             id="SWAP-PANE-A-TO-B"
             className="group absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg border border-focus bg-focus p-3 hover:bg-focus"
           >
-            <ArrowPathIcon className="animate size-5 hover:stroke-lighterAccent group-hover:rotate-180" />
+            <ArrowPathIcon className="animate size-5 hover:stroke-lighter-accent group-hover:rotate-180" />
           </button>
 
           <OrderInput
@@ -198,7 +198,7 @@ export const SwapPane = () => {
         <article id="BUTTON_GROUP">
           <button
             className={cn(
-              'mt-5 h-10 w-full rounded-lg bg-accent hover:bg-lighterAccent',
+              'mt-5 h-10 w-full rounded-lg bg-accent hover:bg-lighter-accent',
               isSupport ? 'flex-center' : 'hidden',
               {
                 'bg-focus': isSwapping || !bestTrade,
@@ -238,7 +238,7 @@ export const SwapPane = () => {
         </article>
 
         {bestTrade && (
-          <ul className="mt-5 space-y-3 text-sm text-textSecondary">
+          <ul className="mt-5 space-y-3 text-sm text-text-secondary">
             <li className="flex justify-between">
               <span>Rate</span>
               <span>
@@ -258,7 +258,7 @@ export const SwapPane = () => {
             <li className="flex justify-between">
               <span>Order routing</span>
               <a
-                className="text-lighterAccent underline"
+                className="text-lighter-accent underline"
                 href="https://www.odos.xyz/"
               >
                 Odos

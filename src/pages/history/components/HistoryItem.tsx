@@ -29,7 +29,7 @@ export const HistoryItem = ({
     <li key={item.order_id} className="group">
       <Card className={selected ? 'border-focus' : ''}>
         <div onClick={() => toggleSelected(item.order_id)}>
-          <i className="text-sm text-textSecondary">
+          <i className="text-sm text-text-secondary">
             {selected ? (
               <CheckIcon className="mr-2 inline size-5 stroke-green-500" />
             ) : (
@@ -72,7 +72,7 @@ export const HistoryItem = ({
                     alt={order.total_price}
                     className="w-32 rounded-lg"
                   />
-                  <p className="text-sm text-textSecondary">
+                  <p className="text-sm text-text-secondary">
                     {order.product.name}
                   </p>
                   <p className="flex gap-5">

@@ -32,7 +32,7 @@ const Navbar = () => {
 
       <ul className="flex-center gap-5">
         {componets.map((component, index) => (
-          <li key={index} className="text-white hover:text-lighterAccent">
+          <li key={index} className="text-white hover:text-lighter-accent">
             <a href={`#${component}`}>{component}</a>
           </li>
         ))}

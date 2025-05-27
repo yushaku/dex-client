@@ -13,7 +13,7 @@ export const NotificationDropdown = () => {
       <BellIcon className="size-5" />
 
       {itemList.length > 0 ? (
-        <span className="text-textSecondary">{itemList.length}</span>
+        <span className="text-text-secondary">{itemList.length}</span>
       ) : null}
     </button>
   )
@@ -35,10 +35,10 @@ export const NotificationDropdown = () => {
               {() => (
                 <div
                   className={cn(
-                    'text-sm group px-4 py-2 hover:bg-focus rounded',
+                    'text-sm group px-4 py-2 hover:bg-focus rounded-sm',
                   )}
                 >
-                  <strong className="flex items-center justify-between text-sm text-textSecondary">
+                  <strong className="flex items-center justify-between text-sm text-text-secondary">
                     <span>{title}</span>
                     <button
                       onClick={() => remove(txHash)}
@@ -47,7 +47,7 @@ export const NotificationDropdown = () => {
                       remove
                     </button>
                   </strong>
-                  <p className="text-textSecondary">{description}</p>
+                  <p className="text-text-secondary">{description}</p>
                   <a
                     href={link}
                     target="_blank"
@@ -64,7 +64,7 @@ export const NotificationDropdown = () => {
 
         <div
           className={cn(
-            'px-4 py-2 text-sm text-textSecondary',
+            'px-4 py-2 text-sm text-text-secondary',
             itemList.length > 0 && 'hidden',
           )}
         >

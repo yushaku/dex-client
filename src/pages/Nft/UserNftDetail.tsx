@@ -63,7 +63,7 @@ export const UserNftDetail = () => {
 
         <article className="col-span-1">
           <Card>
-            {/* <h3 className="text-2xl text-lighterAccent"> */}
+            {/* <h3 className="text-2xl text-lighter-accent"> */}
             {/*   {nft?.metadata.name ?? <DotLoader />} */}
             {/* </h3> */}
             <p className="text-sm text-gray-50">Owned by Yushaku</p>
@@ -220,7 +220,7 @@ const ListNftForm = ({ className, userAddress }: Props) => {
         type="text"
         placeholder="Amount"
         className={cn(
-          'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-none',
+          'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-hidden',
           { 'border-red-400': errors.amount?.message },
         )}
         {...register('amount', { required: true })}

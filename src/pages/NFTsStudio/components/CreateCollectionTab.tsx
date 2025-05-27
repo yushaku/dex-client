@@ -60,7 +60,7 @@ export const CreateCollectionTab = () => {
   }
 
   const styleInput =
-    'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-none'
+    'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-hidden'
 
   return (
     <div className="mt-10 flex gap-10">
@@ -98,7 +98,7 @@ export const CreateCollectionTab = () => {
             setMedia(e.target.files?.[0])
           }}
           className={cn(
-            'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-none',
+            'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-hidden',
           )}
         />
         <label className="text-gray-400">

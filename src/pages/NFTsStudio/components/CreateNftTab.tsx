@@ -71,7 +71,7 @@ export const CreateNftTab = ({
           placeholder="Name"
           required
           className={cn(
-            'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-none',
+            'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-hidden',
             { 'border-red-400': errors.name?.message }
           )}
           {...register('name', { required: true })}
@@ -84,7 +84,7 @@ export const CreateNftTab = ({
             setMedia(e.target.files?.[0])
           }}
           className={cn(
-            'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-none'
+            'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-hidden'
           )}
         />
 
@@ -92,7 +92,7 @@ export const CreateNftTab = ({
           rows={5}
           placeholder="description"
           className={cn(
-            'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-none',
+            'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-hidden',
             { 'border-red-400': errors.description?.message }
           )}
           {...register('description', { required: true })}
@@ -122,7 +122,7 @@ export const CreateNftTab = ({
               setProperty({ ...property, trait: e.target.value })
             }
             placeholder="trait"
-            className="w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-none"
+            className="w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-hidden"
           />
           <input
             value={property.value}
@@ -130,7 +130,7 @@ export const CreateNftTab = ({
               setProperty({ ...property, value: e.target.value })
             }
             placeholder="value"
-            className="w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-none"
+            className="w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-hidden"
           />
           <Button
             onClick={() => {
@@ -157,7 +157,7 @@ export const CreateNftTab = ({
           perspective={500}
           className="parallax-effect"
         >
-          <article className="h-fit w-[300px] cursor-grab rounded-lg bg-layer p-6 hover:shadow">
+          <article className="h-fit w-[300px] cursor-grab rounded-lg bg-layer p-6 hover:shadow-sm">
             <div className="inner-img">{media && <Media media={media} />}</div>
             <h3 className="inner-text mt-5 text-xl font-bold">
               {getValues('name')}

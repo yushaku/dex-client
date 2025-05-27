@@ -120,7 +120,7 @@ export const ManualPosition = ({
             </span>
           </h2>
 
-          <ul className="group mt-3 grid grid-cols-1 text-sm text-textSecondary">
+          <ul className="group mt-3 grid grid-cols-1 text-sm text-text-secondary">
             <li className="flex justify-between">
               <span>{asset1?.symbol}</span>
               <span className="group-hover:text-primary">

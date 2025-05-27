@@ -4,7 +4,7 @@ import React from 'react'
 
 type Props = React.ComponentProps<'button'> & {
   loading?: boolean
-  variant?: 'filled' | 'outline' | 'standard'
+  variant?: 'filled' | 'outline-solid' | 'standard'
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   icon?: (_props: any) => JSX.Element | any
 }
@@ -21,9 +21,9 @@ export const Button = ({
   let style = ''
   switch (variant) {
     case 'filled':
-      style = 'bg-accent hover:bg-lighterAccent'
+      style = 'bg-accent hover:bg-lighter-accent'
       break
-    case 'outline':
+    case 'outline-solid':
       style = 'border border-gray-600 bg-layer hover:bg-focus'
       break
     case 'standard':

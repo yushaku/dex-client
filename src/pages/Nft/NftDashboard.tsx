@@ -26,7 +26,7 @@ export const NftDashboard = () => {
           src={selected.img}
           alt="NFT"
         />
-        <article className="absolute inset-0 w-full bg-gradient-to-t from-[rgba(0,0,0,0.9)] to-[rgba(255,255,255,0.05)]" />
+        <article className="absolute inset-0 w-full bg-linear-to-t from-[rgba(0,0,0,0.9)] to-[rgba(255,255,255,0.05)]" />
         <article className="absolute bottom-0 left-0 p-10">
           <div className="animate flex translate-y-20 items-center gap-5 group-hover:translate-y-0">
             <img
@@ -77,7 +77,7 @@ export const NftDashboard = () => {
               <h3 className="animate absolute bottom-0 z-10 p-4 text-sm font-bold text-gray-300 group-hover:-bottom-6 group-hover:opacity-0">
                 {col.author}
               </h3>
-              <article className="absolute inset-0 w-full bg-gradient-to-t from-[rgba(0,0,0,1)] to-[rgba(255,255,255,0.2)] group-hover:-bottom-5" />
+              <article className="absolute inset-0 w-full bg-linear-to-t from-[rgba(0,0,0,1)] to-[rgba(255,255,255,0.2)] group-hover:-bottom-5" />
             </li>
           )
         })}
@@ -86,7 +86,7 @@ export const NftDashboard = () => {
       <h3 className="mb-5 mt-20 text-2xl font-bold">Top</h3>
 
       <ul className="space-y-2">
-        <li className="grid grid-cols-5 border-b border-gray-500 pb-3 font-bold text-lighterAccent">
+        <li className="grid grid-cols-5 border-b border-gray-500 pb-3 font-bold text-lighter-accent">
           <p>Name</p>
           <p>floor price usd</p>
           <p>market cap usd</p>

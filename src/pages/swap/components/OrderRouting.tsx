@@ -24,7 +24,7 @@ export const OrderRouting = ({
 }: Props) => {
   return (
     <Card {...props}>
-      <h4 className="mx-10 text-lg font-bold text-lighterAccent">
+      <h4 className="mx-10 text-lg font-bold text-lighter-accent">
         Order Routing
       </h4>
 

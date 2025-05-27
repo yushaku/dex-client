@@ -128,7 +128,7 @@ export const RangeSelector = ({ pool, mintInfo }: Props) => {
       </div>
 
       <div className="mb-4 text-center">
-        <p className="space-x-2 text-sm text-textSecondary">
+        <p className="space-x-2 text-sm text-text-secondary">
           <span>Current Price:</span>
           <strong className="text-primary">{currentPrice}</strong>
           <span>
@@ -212,7 +212,7 @@ const StepCounter = ({
 
   return (
     <div className={cn('rounded-lg bg-focus p-4 w-full')}>
-      <label className="mb-2 block text-sm font-medium text-textSecondary">
+      <label className="mb-2 block text-sm font-medium text-text-secondary">
         {title}
       </label>
       <div className="relative flex items-center space-x-2">
@@ -220,7 +220,7 @@ const StepCounter = ({
           disabled={locked}
           onFocus={handleOnFocus}
           onBlur={() => handleOnBlur()}
-          className="w-full rounded bg-focus text-xl text-white"
+          className="w-full rounded-sm bg-focus text-xl text-white"
           type="text"
           value={localValue}
           onChange={(e) => {
@@ -246,7 +246,7 @@ const StepCounter = ({
           </Button>
         </div>
       </div>
-      <p className="mt-2 text-sm text-textSecondary">
+      <p className="mt-2 text-sm text-text-secondary">
         {tokenA} per {tokenB}
       </p>
     </div>

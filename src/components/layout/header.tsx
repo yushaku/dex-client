@@ -1,17 +1,12 @@
 import { ShopCartList } from '@/pages/shop/components/shopCartList'
 import { cn, routes, shortenAddress } from '@/utils'
-import { useAccountModal, useConnectModal } from '@rainbow-me/rainbowkit'
 import { Link, useLocation } from 'react-router-dom'
 
-import { useAccount, useEnsName } from 'wagmi'
 import { NFTCartList } from './CartList'
 import { MobileSidebar } from './MobileSidebar'
 import { NotificationDropdown } from './Notification'
 import { SelectChain } from './SelectChain'
-import { useUser } from '@account-kit/react'
-import { useAuthModal } from '@account-kit/react'
-import { useSignerStatus } from '@account-kit/react'
-import { useLogout } from '@account-kit/react'
+import { useUser, useAuthModal } from '@account-kit/react'
 
 type Props = {
   theme: string
@@ -28,7 +23,7 @@ export const Header = (_prop: Props) => {
         <img src="/logo.png" className="size-12" alt="Vite logo" />
       </Link>
 
-      <h3 className="heading-lg lg:heading-2xl hidden text-lighterAccent md:block">
+      <h3 className="heading-lg lg:heading-2xl hidden text-lighter-accent md:block">
         {title}
       </h3>
 
@@ -73,17 +68,9 @@ export const WalletButton = (
     HTMLButtonElement
   >,
 ) => {
-  // const { openConnectModal } = useConnectModal()
-  // const { openAccountModal } = useAccountModal()
-
-  // const { address } = useAccount()
-  // const { data: ensName } = useEnsName({ address })
-
   const user = useUser()
   const { openAuthModal } = useAuthModal()
-  // const signerStatus = useSignerStatus()
   // const { logout } = useLogout()
-  // const { data: avatar } = useEnsAvatar({ name: ensName ?? '' })
 
   if (!user) {
     return (

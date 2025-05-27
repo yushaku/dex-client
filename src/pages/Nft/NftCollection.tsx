@@ -47,14 +47,14 @@ export const CollectionNFTs = () => {
               </h3>
 
               {/* <Button */}
-              {/*   variant={value[key] ? 'outline' : 'filled'} */}
+              {/*   variant={value[key] ? 'outline-solid' : 'filled'} */}
               {/*   // onClick={() => handleToggleCart({ address, ...item. })} */}
               {/*   icon={value[key] ? CheckCircleIcon : ShoppingCartIcon} */}
               {/*   className={`${styleBtn} animate absolute bottom-3 z-10 w-4/5 delay-100`} */}
               {/* /> */}
 
               <article
-                className="absolute inset-0 w-full bg-gradient-to-t from-[rgba(0,0,0,0.7)] to-[rgba(255,255,255,0.01)] group-hover:-bottom-5"
+                className="absolute inset-0 w-full bg-linear-to-t from-[rgba(0,0,0,0.7)] to-[rgba(255,255,255,0.01)] group-hover:-bottom-5"
                 onClick={() =>
                   navigate(`/nfts/${address}/${item.token.tokenId}`)
                 }

@@ -159,7 +159,7 @@ const ConfirmTab = ({
 
         <ul
           className={cn(
-            'flex-wrap gap-2 rounded bg-focus p-2',
+            'flex-wrap gap-2 rounded-sm bg-focus p-2',
             isError || isSuccess ? 'hidden' : 'flex',
           )}
         >
@@ -169,7 +169,7 @@ const ConfirmTab = ({
                 <img
                   src={item.banner}
                   alt="image"
-                  className="mb-2 size-32 rounded"
+                  className="mb-2 size-32 rounded-sm"
                 />
                 {token === zeroAddress ? (
                   <p className="flex items-center gap-2">
@@ -294,7 +294,7 @@ const SelectAddress = ({
           <Radio
             key={plan.address_id}
             value={plan}
-            className="group relative flex cursor-pointer rounded-lg bg-white/5 px-5 py-4 text-white shadow-md transition focus:outline-none data-[checked]:bg-white/10 data-[focus]:outline-1 data-[focus]:outline-white"
+            className="group relative flex cursor-pointer rounded-lg bg-white/5 px-5 py-4 text-white shadow-md transition focus:outline-hidden data-checked:bg-white/10 data-focus:outline-1 data-focus:outline-white"
           >
             <div className="flex w-full items-center justify-between">
               <div className="text-sm/6">
@@ -310,7 +310,7 @@ const SelectAddress = ({
                 </div>
               </div>
 
-              <CheckCircleIcon className="size-6 fill-white opacity-0 transition group-data-[checked]:opacity-100" />
+              <CheckCircleIcon className="size-6 fill-white opacity-0 transition group-data-checked:opacity-100" />
             </div>
           </Radio>
         ))}
