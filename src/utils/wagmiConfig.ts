@@ -96,7 +96,7 @@ export const writeContract = async (contract: {
   address: Address
   abi: Abi
   chainId: number
-  value: bigint
+  value?: bigint
 }) =>
   _writeContract(config, {
     ...contract,

@@ -36,6 +36,7 @@ export const GATEWAY_URL = 'https://ipfs.io/ipfs/'
 export const TOKEN_LIST = 'https://gateway.ipfs.io/ipns/tokens.uniswap.org'
 
 export const YSK_ADDRESS = '0x7AFa15757A8012C3ECc0948154AD0f99c3b3c116'
+export const SHOP_PAYMENT_ADDRESS = '0x6b3De2f71bbeeEc360Cd50f6C19Daf13534bE8EA'
 export const STAKE_ADRESS = '0xb407fFcC4D82295790D684F812d97EFdbB6c3122'
 export const NFT_FACTORY_ADDRESS = '0x64FFE32eCb2D433fc0868920c98Bf33Bee4f072A'
 export const PUBLIC_NFTS_ADDRESS = '0x284C5d066a4A2fD0163D190887fC5EFB6b4E0540'

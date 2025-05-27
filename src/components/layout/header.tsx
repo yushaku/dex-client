@@ -8,6 +8,10 @@ import { NFTCartList } from './CartList'
 import { MobileSidebar } from './MobileSidebar'
 import { NotificationDropdown } from './Notification'
 import { SelectChain } from './SelectChain'
+import { useUser } from '@account-kit/react'
+import { useAuthModal } from '@account-kit/react'
+import { useSignerStatus } from '@account-kit/react'
+import { useLogout } from '@account-kit/react'
 
 type Props = {
   theme: string
@@ -69,17 +73,22 @@ export const WalletButton = (
     HTMLButtonElement
   >,
 ) => {
-  const { openConnectModal } = useConnectModal()
-  const { openAccountModal } = useAccountModal()
+  // const { openConnectModal } = useConnectModal()
+  // const { openAccountModal } = useAccountModal()
 
-  const { address } = useAccount()
-  const { data: ensName } = useEnsName({ address })
+  // const { address } = useAccount()
+  // const { data: ensName } = useEnsName({ address })
+
+  const user = useUser()
+  const { openAuthModal } = useAuthModal()
+  // const signerStatus = useSignerStatus()
+  // const { logout } = useLogout()
   // const { data: avatar } = useEnsAvatar({ name: ensName ?? '' })
 
-  if (!address) {
+  if (!user) {
     return (
       <button
-        onClick={() => openConnectModal?.()}
+        onClick={() => openAuthModal?.()}
         className={cn('rounded-lg bg-accent px-6 py-2', props.className)}
       >
         Connect Wallet
@@ -89,10 +98,10 @@ export const WalletButton = (
 
   return (
     <button
-      onClick={() => openAccountModal?.()}
+      onClick={() => openAuthModal?.()}
       className={cn('rounded-lg bg-accent px-6 py-2', props.className)}
     >
-      {ensName ?? shortenAddress(address)}
+      {shortenAddress(user.address)}
     </button>
   )
 }

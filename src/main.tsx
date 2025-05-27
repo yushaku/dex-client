@@ -12,6 +12,8 @@ import { AssetsProvider } from './hooks/useAssets.tsx'
 import './styles/index.css'
 import { config, walletTheme } from './utils'
 import '@rainbow-me/rainbowkit/styles.css'
+import { AlchemyAccountProvider } from '@account-kit/react'
+import { alchemyConfig } from './utils/alchemy.ts'
 
 const queryClient = new QueryClient()
 
@@ -19,32 +21,37 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider
-          appInfo={{
-            appName: 'Yushaku dex',
-            learnMoreUrl: 'https://yushaku-dex.vercel.app',
-          }}
-          theme={walletTheme}
-          modalSize="wide"
+        <AlchemyAccountProvider
+          config={alchemyConfig}
+          queryClient={queryClient}
         >
-          <AssetsProvider>
-            <App />
-          </AssetsProvider>
+          <RainbowKitProvider
+            appInfo={{
+              appName: 'Yushaku dex',
+              learnMoreUrl: 'https://yushaku-dex.vercel.app',
+            }}
+            theme={walletTheme}
+            modalSize="wide"
+          >
+            <AssetsProvider>
+              <App />
+            </AssetsProvider>
 
-          <ToastContainer
-            position="top-center"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="dark"
-          />
-          <TxModalLoading />
-        </RainbowKitProvider>
+            <ToastContainer
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+            />
+            <TxModalLoading />
+          </RainbowKitProvider>
+        </AlchemyAccountProvider>
       </QueryClientProvider>
     </WagmiProvider>
   </React.StrictMode>,
