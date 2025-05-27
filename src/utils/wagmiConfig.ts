@@ -18,27 +18,11 @@ import {
   waitForTransactionReceipt as _waitForTransactionReceipt,
   writeContract as _writeContract,
 } from '@wagmi/core'
-import { Abi, Address, defineChain } from 'viem'
+import { Abi, Address } from 'viem'
 import { createConfig, fallback, http, unstable_connector } from 'wagmi'
 import { arbitrum, bsc, bscTestnet, mainnet } from 'wagmi/chains'
 import { injected } from 'wagmi/connectors'
 import { env } from './constant'
-
-const vMainnet = defineChain({
-  ...mainnet,
-  id: 73571,
-  name: 'Virtual Ethereum Mainnet',
-  nativeCurrency: { name: 'vEther', symbol: 'vETH', decimals: 18 },
-  rpcUrls: {
-    default: { http: [env.VITE_TENDERLY_VIRTUAL_RPC!] },
-  },
-  blockExplorers: {
-    default: {
-      name: 'Tenderly Explorer',
-      url: 'https://dashboard.tenderly.co/explorer/vnet/47cdac98-cda3-431a-8fce-9f31037a3d0c',
-    },
-  },
-})
 
 const connectors = connectorsForWallets(
   [
@@ -82,13 +66,7 @@ export const walletTheme = {
   },
 }
 
-export const supportedChain = [
-  mainnet,
-  bsc,
-  arbitrum,
-  bscTestnet,
-  ...(env.VITE_ENABLE_TESTNETS === 'true' ? [bscTestnet, vMainnet] : []),
-] as const
+export const supportedChain = [mainnet, bsc, arbitrum, bscTestnet] as const
 
 export const config = createConfig({
   ssr: true,
@@ -102,7 +80,6 @@ export const config = createConfig({
     [arbitrum.id]: fallback([unstable_connector(injected), http()]),
     [bsc.id]: fallback([unstable_connector(injected), http()]),
     [bscTestnet.id]: fallback([unstable_connector(injected), http()]),
-    [vMainnet.id]: fallback([unstable_connector(injected), http()]),
   },
 }) as any
 
