@@ -113,13 +113,13 @@ export function useGetAsset(tokenAddress?: Address | string | null) {
   //   console.log(token)
   // }
 
-  if (!token && aaa) {
+  if (!token) {
     return {
       logoURI: UNKNOWN_TOKEN,
       decimals: 18,
       symbol: 'UNKNOWN_TOKEN',
       name: 'UNKNOWN_TOKEN',
-      address: tokenAddress,
+      address: tokenAddress ?? zeroAddress,
       balance: 0n,
     }
   }

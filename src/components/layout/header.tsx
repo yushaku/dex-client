@@ -23,7 +23,7 @@ export const Header = (_prop: Props) => {
         <img src="/logo.png" className="size-12" alt="Vite logo" />
       </Link>
 
-      <h3 className="heading-lg lg:heading-2xl hidden text-lighter-accent md:block">
+      <h3 className="text-lg lg:text-2xl font-bold hidden text-lighter-accent md:block">
         {title}
       </h3>
 

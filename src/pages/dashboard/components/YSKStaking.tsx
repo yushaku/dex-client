@@ -1,4 +1,5 @@
 import { Card } from '@/components/common'
+import { Button } from '@/components/ui/button'
 import { useDebounce } from '@/hooks'
 import { useFarmState } from '@/stores'
 import { cn, formatNumber } from '@/utils'
@@ -58,7 +59,9 @@ export const YSKStakeForm = () => {
           </strong>
         </p>
         <p className="text-center">
-          <span className="block text-sm text-text-secondary">Your Balance</span>
+          <span className="block text-sm text-text-secondary">
+            Your Balance
+          </span>
           <strong className="flex items-center gap-2 text-xl font-bold text-text-primary">
             {formatNumber(formatEther(balance ?? 0n))}
             <img className="size-7" src="/logo.png" alt="logo" />
@@ -78,15 +81,17 @@ export const YSKStakeForm = () => {
           <span className="block text-sm text-text-secondary">
             Daily Emission
           </span>
-          <strong className="flex-start gap-2 text-xl font-bold text-text-primary">
+          <strong className="flex justify-start items-center gap-2 text-xl font-bold text-text-primary">
             <img className="size-7" src="/logo.png" alt="logo" />
             1.672k
           </strong>
         </p>
 
         <p className="text-center">
-          <span className="block text-sm text-text-secondary">Total Staked</span>
-          <strong className="flex-start gap-2 text-xl font-bold text-text-primary">
+          <span className="block text-sm text-text-secondary">
+            Total Staked
+          </span>
+          <strong className="flex justify-start items-center gap-2 text-xl font-bold text-text-primary">
             <img className="size-7" src="/logo.png" alt="logo" />
             {formatNumber(formatEther(total ?? 0n))}
           </strong>
@@ -130,7 +135,7 @@ export const YSKStakeForm = () => {
       </article>
 
       <article className={cn('flex gap-5')}>
-        <button
+        <Button
           onClick={() => {
             if (isOpen) {
               toast.info('Staking Is Paused')
@@ -145,7 +150,7 @@ export const YSKStakeForm = () => {
           disabled={isOpen && Number(amount) <= 0}
         >
           Stake
-        </button>
+        </Button>
 
         <button
           onClick={() => {

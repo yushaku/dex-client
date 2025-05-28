@@ -6,7 +6,7 @@ import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
-  DialogTitle
+  DialogTitle,
 } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/16/solid'
 import { useState } from 'react'
@@ -23,7 +23,7 @@ export const ConfirmModal = ({
   isPending,
   title,
   icon,
-  handleSubmit
+  handleSubmit,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false)
 

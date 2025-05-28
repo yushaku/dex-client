@@ -8,7 +8,7 @@ import { cn } from '@/utils'
 import {
   ShoppingBagIcon,
   TrashIcon,
-  XMarkIcon
+  XMarkIcon,
 } from '@heroicons/react/16/solid'
 import { useState } from 'react'
 import { PaymentForm } from './PaymemtForm'
@@ -37,7 +37,7 @@ export const ShopCartList = () => {
         onClick={() => setToggle(false)}
         className={cn(
           'animate delay-50 duration-100 hidden fixed top-0 -right-full z-30 h-screen w-screen bg-gray-500/20',
-          toggle && 'right-0 block'
+          toggle && 'right-0 block',
         )}
       />
 
@@ -73,7 +73,7 @@ export const ShopCartList = () => {
 
               <article className={`absolute right-0 hidden group-hover:block`}>
                 <Button
-                  variant="outline"
+                  variant="filled"
                   title=""
                   className="bg-red-400 px-3 hover:bg-red-500"
                   icon={TrashIcon}

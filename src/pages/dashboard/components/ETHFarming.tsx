@@ -308,7 +308,6 @@ function LidoStake() {
         <Button
           size="lg"
           onClick={handleDeposit}
-          className={cn('btn btn-solid w-full mt-5')}
           disabled={Number(fromAmount) <= 0}
         >
           Stake
@@ -493,7 +492,6 @@ function WrapStETH() {
             unwrapWstETH({ amount })
           }
         }}
-        className={cn('btn btn-solid w-full mt-10')}
       >
         {isWarp ? 'Unlock and Wrap' : 'Unwrap'}
       </button>
@@ -662,7 +660,6 @@ function RenzoStake() {
         <Button
           size="lg"
           onClick={handleDeposit}
-          className={cn('btn btn-solid w-full mt-5')}
           disabled={Number(fromAmount) <= 0}
         >
           Stake

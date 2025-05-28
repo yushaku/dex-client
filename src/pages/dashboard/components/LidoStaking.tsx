@@ -63,7 +63,7 @@ export const LidoStakeForm = () => {
           <span className="block text-sm text-text-secondary">
             Available to stake
           </span>
-          <strong className="flex-start gap-2 text-xl text-text-primary">
+          <strong className="flex justify-start items-center gap-2 text-xl text-text-primary">
             <ETH className="inline-block size-6" />
             {formatNumber(formatEther(ethBalance?.value ?? 0n))}
           </strong>
@@ -77,8 +77,10 @@ export const LidoStakeForm = () => {
         </p>
 
         <p className="text-center">
-          <span className="block text-sm text-text-secondary">Total Staked</span>
-          <strong className="flex-start gap-2 text-xl font-bold text-text-primary">
+          <span className="block text-sm text-text-secondary">
+            Total Staked
+          </span>
+          <strong className="flex justify-start items-center gap-2 text-xl font-bold text-text-primary">
             <ETH className="inline-block size-6" />
             {formatNumber(formatEther(total ?? 0n))}
           </strong>

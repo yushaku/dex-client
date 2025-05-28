@@ -41,7 +41,7 @@ export const Sidebar = () => {
       >
         <img src="/logo.png" className="size-10" alt="Vite logo" />
         <h3
-          className={`${isSmall ? 'hidden' : 'block'} heading-2xl text-lighter-accent`}
+          className={`${isSmall ? 'hidden' : 'block'} text-2xl font-bold text-lighter-accent`}
         >
           Yushaku
         </h3>
