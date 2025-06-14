@@ -12,6 +12,7 @@ import './styles/index.css'
 import { config } from './utils'
 import { AlchemyAccountProvider } from '@account-kit/react'
 import { alchemyConfig } from './utils/alchemy.ts'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const queryClient = new QueryClient()
 
@@ -27,20 +28,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <App />
           </AssetsProvider>
 
-          <ToastContainer
-            position="top-center"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="dark"
-          />
+          <ToastContainer theme="dark" />
           <TxModalLoading />
         </AlchemyAccountProvider>
+        <ReactQueryDevtools initialIsOpen={true} />
       </QueryClientProvider>
     </WagmiProvider>
   </React.StrictMode>,

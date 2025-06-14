@@ -6,7 +6,7 @@ import { bsc } from 'viem/chains'
 import { useAccount, useBalance, useSwitchChain } from 'wagmi'
 
 import { DotLoader } from '@/components/common/Loading'
-import { WalletButton } from '@/components/layout/header'
+import { WalletButton } from '@/components/layout/WalletButton'
 import { Card } from '@/components/common'
 import { useDebounce, useOdosQuoteSwap, useOdosSwap } from '@/hooks'
 import { AssetsContext } from '@/hooks/useAssets'

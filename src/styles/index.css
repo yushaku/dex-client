@@ -4,6 +4,7 @@ layer(base);
 @import 'tailwindcss';
 
 @plugin 'tailwindcss-animate';
+@config '../../tailwind.config.ts';
 
 @custom-variant dark (&:is(.dark *));
 

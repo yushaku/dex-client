@@ -1,5 +1,5 @@
 import { Card, GradientCard } from '@/components/common'
-import { WalletButton } from '@/components/layout/header'
+import { WalletButton } from '@/components/layout/WalletButton'
 import TypeIt from 'typeit-react'
 
 export const HelloGuy = () => {

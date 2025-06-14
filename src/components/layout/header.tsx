@@ -1,12 +1,12 @@
 import { ShopCartList } from '@/pages/shop/components/shopCartList'
-import { cn, routes, shortenAddress } from '@/utils'
+import { routes } from '@/utils'
 import { Link, useLocation } from 'react-router-dom'
 
 import { NFTCartList } from './CartList'
 import { MobileSidebar } from './MobileSidebar'
 import { NotificationDropdown } from './Notification'
 import { SelectChain } from './SelectChain'
-import { useUser, useAuthModal } from '@account-kit/react'
+import { WalletButton } from './WalletButton'
 
 type Props = {
   theme: string
@@ -59,37 +59,6 @@ export const Header = (_prop: Props) => {
         <MobileSidebar />
       </div>
     </header>
-  )
-}
-
-export const WalletButton = (
-  props: React.DetailedHTMLProps<
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
-    HTMLButtonElement
-  >,
-) => {
-  const user = useUser()
-  const { openAuthModal } = useAuthModal()
-  // const { logout } = useLogout()
-
-  if (!user) {
-    return (
-      <button
-        onClick={() => openAuthModal?.()}
-        className={cn('rounded-lg bg-accent px-6 py-2', props.className)}
-      >
-        Connect Wallet
-      </button>
-    )
-  }
-
-  return (
-    <button
-      onClick={() => openAuthModal?.()}
-      className={cn('rounded-lg bg-accent px-6 py-2', props.className)}
-    >
-      {shortenAddress(user.address)}
-    </button>
   )
 }
 
