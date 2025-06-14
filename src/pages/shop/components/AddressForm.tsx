@@ -2,20 +2,24 @@ import { useCreateAddress } from '@/apis'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/utils'
 import {
-  Description,
   Dialog,
-  DialogBackdrop,
-  DialogPanel,
+  DialogContent,
+  DialogHeader,
   DialogTitle,
-  Field,
-  Fieldset,
-  Input,
-  Label,
-  Select,
-  Textarea,
-} from '@headlessui/react'
-import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/16/solid'
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { XMarkIcon } from '@heroicons/react/16/solid'
 import { ChangeEvent, useState } from 'react'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 export const AddressForm = ({ disabled = false }: { disabled?: boolean }) => {
   const { mutateAsync: createAddress, isPending } = useCreateAddress()
@@ -55,127 +59,102 @@ export const AddressForm = ({ disabled = false }: { disabled?: boolean }) => {
   }
 
   return (
-    <>
-      <Button
-        onClick={() => setIsOpen(true)}
-        title="Add new address"
-        className={cn('w-full', disabled && 'hidden')}
-      />
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button
+          onClick={() => setIsOpen(true)}
+          title="Add new address"
+          className={cn('w-full', disabled && 'hidden')}
+        />
+      </DialogTrigger>
 
-      <Dialog
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        className="relative z-50"
-      >
-        <DialogBackdrop className="fixed inset-0 bg-black/40" />
+      <DialogContent className="relative max-w-lg space-y-4 bg-layer p-12">
+        <DialogHeader>
+          <DialogTitle className="font-bold">Add new address</DialogTitle>
+        </DialogHeader>
 
-        <div className="fixed inset-0 flex w-screen items-center justify-center p-2">
-          <DialogPanel className="relative max-w-lg space-y-4 bg-layer p-12">
-            <DialogTitle className="font-bold">Add new address</DialogTitle>
-
-            <Fieldset className="space-y-6">
-              <div className="flex gap-2">
-                <Field>
-                  <Label className="text-sm/6 font-medium text-white">
-                    Recipient name
-                  </Label>
-                  <Input
-                    onChange={handleChange('recipient')}
-                    className={cn(
-                      'mt-3 block w-full rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white',
-                      'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25',
-                    )}
-                  />
-                </Field>
-
-                <Field>
-                  <Label className="text-sm/6 font-medium text-white">
-                    Phone number
-                  </Label>
-                  <Input
-                    onChange={handleChange('phone')}
-                    type="tel"
-                    className={cn(
-                      'mt-3 block w-full rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white',
-                      'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25',
-                    )}
-                  />
-                </Field>
-              </div>
-
-              <Field>
-                <Label className="text-sm/6 font-medium text-white">
-                  Street address
-                </Label>
-                <Input
-                  onChange={handleChange('address')}
-                  className={cn(
-                    'mt-3 block w-full rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white',
-                    'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25',
-                  )}
-                />
-              </Field>
-
-              <Field>
-                <Label className="text-sm/6 font-medium text-white">City</Label>
-                <Description className="text-sm/6 text-white/50">
-                  We currently only ship to HaNoi
-                </Description>
-                <div className="relative">
-                  <Select
-                    className={cn(
-                      'mt-3 block w-full appearance-none rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white',
-                      'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25',
-                      '*:text-black',
-                    )}
-                  >
-                    <option>Ha Noi</option>
-                  </Select>
-                  <ChevronDownIcon
-                    className="group pointer-events-none absolute right-2.5 top-2.5 size-4 fill-white/60"
-                    aria-hidden="true"
-                  />
-                </div>
-              </Field>
-
-              <Field>
-                <Label className="text-sm/6 font-medium text-white">
-                  Delivery notes
-                </Label>
-                <Description className="text-sm/6 text-white/50">
-                  If you have a tiger, we'd like to know about it.
-                </Description>
-                <Textarea
-                  onChange={handleChange('note')}
-                  className={cn(
-                    'mt-3 block w-full resize-none rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white',
-                    'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25',
-                  )}
-                  rows={3}
-                />
-              </Field>
-            </Fieldset>
-
-            <div className="absolute right-3 top-3">
-              <Button
-                onClick={() => setIsOpen(false)}
-                className="border-none p-3"
-              >
-                <XMarkIcon className="size-5" />
-              </Button>
+        <div className="space-y-6">
+          <div className="flex gap-2">
+            <div className="space-y-2">
+              <Label className="text-sm/6 font-medium text-white">
+                Recipient name
+              </Label>
+              <Input
+                onChange={handleChange('recipient')}
+                className="mt-3 block w-full rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white focus:outline-none"
+              />
             </div>
 
-            <Button
-              className="w-full"
-              variant="outline"
-              title={isPending ? 'Loading...' : 'Save'}
-              type="submit"
-              disabled={isPending}
-              onClick={handleSubmit}
+            <div className="space-y-2">
+              <Label className="text-sm/6 font-medium text-white">
+                Phone number
+              </Label>
+              <Input
+                onChange={handleChange('phone')}
+                type="tel"
+                className="mt-3 block w-full rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-sm/6 font-medium text-white">
+              Street address
+            </Label>
+            <Input
+              onChange={handleChange('address')}
+              className="mt-3 block w-full rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white focus:outline-none"
             />
-          </DialogPanel>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-sm/6 font-medium text-white">City</Label>
+            <p className="text-sm/6 text-white/50">
+              We currently only ship to HaNoi
+            </p>
+            <Select
+              value={from.city}
+              onValueChange={(value) => setForm({ ...from, city: value })}
+            >
+              <SelectTrigger className="mt-3 block w-full appearance-none rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white focus:outline-none">
+                <SelectValue placeholder="Select city" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Ha Noi">Ha Noi</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-sm/6 font-medium text-white">
+              Delivery notes
+            </Label>
+            <p className="text-sm/6 text-white/50">
+              If you have a tiger, we'd like to know about it.
+            </p>
+            <Textarea
+              onChange={handleChange('note')}
+              className="mt-3 block w-full resize-none rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white focus:outline-none"
+              rows={3}
+            />
+          </div>
         </div>
-      </Dialog>
-    </>
+
+        <div className="absolute right-3 top-3">
+          <Button onClick={() => setIsOpen(false)} className="border-none p-3">
+            <XMarkIcon className="size-5" />
+          </Button>
+        </div>
+
+        <Button
+          className="w-full"
+          variant="outline"
+          title={isPending ? 'Loading...' : 'Save'}
+          type="submit"
+          disabled={isPending}
+          onClick={handleSubmit}
+        />
+      </DialogContent>
+    </Dialog>
   )
 }

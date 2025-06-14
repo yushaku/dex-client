@@ -2,10 +2,10 @@ import { useTransactionStore } from '@/stores/transaction'
 import { TXN_STATUS, cn } from '@/utils'
 import {
   Dialog,
-  DialogBackdrop,
-  DialogPanel,
+  DialogContent,
+  DialogHeader,
   DialogTitle,
-} from '@headlessui/react'
+} from '@/components/ui/dialog'
 import { CircleCheckIcon, CircleXIcon, Clock2Icon, XIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '../common/Loading'
@@ -14,88 +14,86 @@ export const TxModalLoading = () => {
   const { popup, title, transactions, closeTransaction } = useTransactionStore()
 
   return (
-    <Dialog open={popup} onClose={closeTransaction} className="relative z-50">
-      <DialogBackdrop className="fixed inset-0 bg-black/80" />
-
-      <div className="fixed inset-0 flex w-screen items-center justify-center p-2">
-        <DialogPanel className="relative w-96 space-y-4 rounded-lg bg-layer p-5">
+    <Dialog open={popup} onOpenChange={closeTransaction}>
+      <DialogContent className="relative w-96 space-y-4 rounded-lg bg-layer p-5">
+        <DialogHeader>
           <DialogTitle className="text-lg font-bold text-lighter-accent">
             {title}
           </DialogTitle>
+        </DialogHeader>
 
-          <Button
-            variant="outline"
-            onClick={closeTransaction}
-            className="absolute right-3 top-2 border-none p-2"
-          >
-            <XIcon className="size-5 text-muted-foreground" />
-          </Button>
+        <Button
+          variant="outline"
+          onClick={closeTransaction}
+          className="absolute right-3 top-2 border-none p-2"
+        >
+          <XIcon className="size-5 text-muted-foreground" />
+        </Button>
 
-          <ul className="grid gap-3 pt-5">
-            {Object.entries(transactions).map((tx) => {
-              const [key, value] = tx
+        <ul className="grid gap-3 pt-5">
+          {Object.entries(transactions).map((tx) => {
+            const [key, value] = tx
 
-              return (
-                <li
-                  key={key}
-                  className="flex justify-between rounded-lg bg-background p-4"
+            return (
+              <li
+                key={key}
+                className="flex justify-between rounded-lg bg-background p-4"
+              >
+                <span className="text-text-secondary"> {value.desc} </span>
+
+                <span
+                  className={cn({
+                    hidden: value.status !== TXN_STATUS.PENDING,
+                  })}
                 >
-                  <span className="text-text-secondary"> {value.desc} </span>
+                  <Spinner className="size-5" />
+                </span>
 
-                  <span
-                    className={cn({
-                      hidden: value.status !== TXN_STATUS.PENDING,
-                    })}
-                  >
-                    <Spinner className="size-5" />
-                  </span>
+                <span
+                  className={cn({
+                    hidden: value.status !== TXN_STATUS.WAITING,
+                  })}
+                >
+                  <Spinner className="size-5" />
+                </span>
 
-                  <span
-                    className={cn({
-                      hidden: value.status !== TXN_STATUS.WAITING,
-                    })}
-                  >
-                    <Spinner className="size-5" />
-                  </span>
+                <span
+                  className={cn({
+                    hidden: value.status !== TXN_STATUS.SUCCESS,
+                  })}
+                >
+                  <CircleCheckIcon className="size-5 stroke-green-500" />
+                </span>
 
-                  <span
-                    className={cn({
-                      hidden: value.status !== TXN_STATUS.SUCCESS,
-                    })}
-                  >
-                    <CircleCheckIcon className="size-5 stroke-green-500" />
-                  </span>
+                <span
+                  className={cn({
+                    hidden: value.status !== TXN_STATUS.FAILED,
+                  })}
+                >
+                  <CircleXIcon className="size-5 stroke-red-500" />
+                </span>
 
-                  <span
-                    className={cn({
-                      hidden: value.status !== TXN_STATUS.FAILED,
-                    })}
-                  >
-                    <CircleXIcon className="size-5 stroke-red-500" />
-                  </span>
+                <span
+                  className={cn({
+                    hidden: value.status !== TXN_STATUS.START,
+                  })}
+                >
+                  <Clock2Icon className="size-5 fill-gray-400" />
+                </span>
+              </li>
+            )
+          })}
+        </ul>
 
-                  <span
-                    className={cn({
-                      hidden: value.status !== TXN_STATUS.START,
-                    })}
-                  >
-                    <Clock2Icon className="size-5 fill-gray-400" />
-                  </span>
-                </li>
-              )
-            })}
-          </ul>
-
-          {/* <Button */}
-          {/*   className="w-full" */}
-          {/*   variant="filled" */}
-          {/*   // title={isPending ? 'Loading...' : 'Confirm'} */}
-          {/*   type="submit" */}
-          {/*   // disabled={isPending} */}
-          {/*   onClick={() => { }} */}
-          {/* /> */}
-        </DialogPanel>
-      </div>
+        {/* <Button */}
+        {/*   className="w-full" */}
+        {/*   variant="filled" */}
+        {/*   // title={isPending ? 'Loading...' : 'Confirm'} */}
+        {/*   type="submit" */}
+        {/*   // disabled={isPending} */}
+        {/*   onClick={() => { }} */}
+        {/* /> */}
+      </DialogContent>
     </Dialog>
   )
 }

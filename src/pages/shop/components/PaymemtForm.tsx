@@ -11,14 +11,12 @@ import { useCartState } from '@/stores/shopCart'
 import { SHOP_PAYMENT_ADDRESS, cn, shortenAddress } from '@/utils'
 import { toastContractError } from '@/utils/error'
 import {
-  Description,
   Dialog,
-  DialogBackdrop,
-  DialogPanel,
+  DialogContent,
+  DialogHeader,
   DialogTitle,
-  Radio,
-  RadioGroup,
-} from '@headlessui/react'
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/16/solid'
 import { useEffect, useState } from 'react'
 import { parseEther, zeroAddress } from 'viem'
@@ -34,47 +32,44 @@ export const PaymentForm = () => {
   const [step, setStep] = useState<Step>('address')
 
   return (
-    <>
-      <Button onClick={() => setIsOpen(true)} title="Buy" className="w-full" />
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button
+          onClick={() => setIsOpen(true)}
+          title="Buy"
+          className="w-full"
+        />
+      </DialogTrigger>
 
-      <Dialog
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        className="relative z-50"
-      >
-        <DialogBackdrop className="fixed inset-0 bg-black/40" />
-        <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-          <DialogPanel className="relative min-w-[480px] max-w-xl space-y-4 bg-layer p-12">
-            <DialogTitle className="font-bold">Order Confirmation</DialogTitle>
-            <Description className="text-sm">
-              {step === 'address' && 'Please select your address'}
-            </Description>
+      <DialogContent className="relative min-w-[480px] max-w-xl space-y-4 bg-layer p-12">
+        <DialogHeader>
+          <DialogTitle className="font-bold">Order Confirmation</DialogTitle>
+        </DialogHeader>
 
-            <SelectAddress
-              isShow={step === 'address'}
-              selected={selected}
-              setSelected={(address) => setSelected(address)}
-              setStep={setStep}
-            />
+        <p className="text-sm">
+          {step === 'address' && 'Please select your address'}
+        </p>
 
-            <ConfirmTab
-              isShow={step === 'confirm'}
-              setStep={setStep}
-              address_id={selected?.address_id ?? 0}
-            />
+        <SelectAddress
+          isShow={step === 'address'}
+          selected={selected}
+          setSelected={(address) => setSelected(address)}
+          setStep={setStep}
+        />
 
-            <span className="absolute right-3 top-3">
-              <Button
-                onClick={() => setIsOpen(false)}
-                className="border-none p-3"
-              >
-                <XMarkIcon className="size-5" />
-              </Button>
-            </span>
-          </DialogPanel>
-        </div>
-      </Dialog>
-    </>
+        <ConfirmTab
+          isShow={step === 'confirm'}
+          setStep={setStep}
+          address_id={selected?.address_id ?? 0}
+        />
+
+        <span className="absolute right-3 top-3">
+          <Button onClick={() => setIsOpen(false)} className="border-none p-3">
+            <XMarkIcon className="size-5" />
+          </Button>
+        </span>
+      </DialogContent>
+    </Dialog>
   )
 }
 
@@ -284,17 +279,15 @@ const SelectAddress = ({
 
   return (
     <article className={cn('hidden', isShow && 'block')}>
-      <RadioGroup
-        value={selected}
-        onChange={setSelected}
-        aria-label="Server size"
-        className={cn('space-y-2')}
-      >
+      <div className="space-y-2">
         {addressList?.map((plan) => (
-          <Radio
+          <div
             key={plan.address_id}
-            value={plan}
-            className="group relative flex cursor-pointer rounded-lg bg-white/5 px-5 py-4 text-white shadow-md transition focus:outline-hidden data-checked:bg-white/10 data-focus:outline-1 data-focus:outline-white"
+            onClick={() => setSelected(plan)}
+            className={cn(
+              'group relative flex cursor-pointer rounded-lg bg-white/5 px-5 py-4 text-white shadow-md transition focus:outline-none hover:bg-white/10',
+              selected?.address_id === plan.address_id && 'bg-white/10',
+            )}
           >
             <div className="flex w-full items-center justify-between">
               <div className="text-sm/6">
@@ -312,9 +305,9 @@ const SelectAddress = ({
 
               <CheckCircleIcon className="size-6 fill-white opacity-0 transition group-data-checked:opacity-100" />
             </div>
-          </Radio>
+          </div>
         ))}
-      </RadioGroup>
+      </div>
 
       <div className="mt-4 flex justify-between gap-2">
         <AddressForm />
