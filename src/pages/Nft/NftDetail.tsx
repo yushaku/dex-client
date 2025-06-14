@@ -1,4 +1,4 @@
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui/button'
 import { NativeToken } from '@/components/common/NativeTokenBalance'
 import { LoadingPage } from '@/components/ui/LoadingPage'
 import { Card } from '@/components/common'
@@ -155,12 +155,12 @@ export const DetailNFT = () => {
                 {/* <span> = ${nft?.market?.floorAsk.price.amount.usd}</span> */}
               </h3>
               <p className="flex gap-4">
-                <Button
-                  icon={ShoppingCartIcon}
-                  title="Buy now"
-                  className="w-1/2"
-                />
-                <Button icon={TagIcon} title="Make Offer" className="w-1/2" />
+                <Button className="w-1/2">
+                  <ShoppingCartIcon className="size-5" /> Buy now
+                </Button>
+                <Button className="w-1/2">
+                  <TagIcon className="size-5" /> Make Offer
+                </Button>
               </p>
 
               <h4 className="border-gray-700">History</h4>

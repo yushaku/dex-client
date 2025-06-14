@@ -1,4 +1,4 @@
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui/button'
 import { useDebounce, useTokenMetadata } from '@/hooks'
 import { AssetsContext } from '@/hooks/useAssets'
 import { WrapAsset, useTokensState } from '@/stores/addictionTokens'
@@ -135,11 +135,11 @@ export const OrderToken = ({ asset, handleSetToken, className }: Props) => {
             </DialogTitle>
 
             <Button
-              variant="standard"
               onClick={() => setIsOpen(false)}
-              icon={XMarkIcon}
               className="absolute right-1 top-0 border-none p-3"
-            />
+            >
+              <XMarkIcon className="size-5" />
+            </Button>
 
             <input
               value={search}

@@ -1,4 +1,4 @@
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui/button'
 import Tilt from 'react-parallax-tilt'
 import { PUBLIC_NFTS_ADDRESS, cn } from '@/utils'
 import { TrashIcon } from '@heroicons/react/16/solid'
@@ -16,7 +16,7 @@ type Inputs = {
 type Props = { collectionAddress?: string }
 
 export const CreateNftTab = ({
-  collectionAddress = PUBLIC_NFTS_ADDRESS
+  collectionAddress = PUBLIC_NFTS_ADDRESS,
 }: Props) => {
   const [media, setMedia] = useState<File | null>()
   const { address: userAddress } = useAccount()
@@ -32,7 +32,7 @@ export const CreateNftTab = ({
     getValues,
     handleSubmit,
     setFocus,
-    formState: { errors }
+    formState: { errors },
   } = useForm<Inputs>()
 
   async function onSubmit(data: Inputs) {
@@ -43,7 +43,7 @@ export const CreateNftTab = ({
         address: collectionAddress,
         abi: NFT_MINTABLE_ABI,
         functionName: 'mintTo',
-        args: [userAddress, '']
+        args: [userAddress, ''],
       })
     }
 
@@ -51,7 +51,7 @@ export const CreateNftTab = ({
       name,
       description,
       media,
-      properties
+      properties,
     })
   }
 
@@ -72,7 +72,7 @@ export const CreateNftTab = ({
           required
           className={cn(
             'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-hidden',
-            { 'border-red-400': errors.name?.message }
+            { 'border-red-400': errors.name?.message },
           )}
           {...register('name', { required: true })}
         />
@@ -84,7 +84,7 @@ export const CreateNftTab = ({
             setMedia(e.target.files?.[0])
           }}
           className={cn(
-            'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-hidden'
+            'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-hidden',
           )}
         />
 
@@ -93,7 +93,7 @@ export const CreateNftTab = ({
           placeholder="description"
           className={cn(
             'w-full rounded-lg border-2 border-gray-700 bg-layer p-3  focus:border-gray-500 focus:outline-hidden',
-            { 'border-red-400': errors.description?.message }
+            { 'border-red-400': errors.description?.message },
           )}
           {...register('description', { required: true })}
         />

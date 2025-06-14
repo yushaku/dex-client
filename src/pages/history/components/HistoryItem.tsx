@@ -1,6 +1,6 @@
 import { OrderInfo, useDeleteOrders } from '@/apis'
 import { ConfirmModal } from '@/components/Modal'
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui/button'
 import { BSC, USDT } from '@/components/icons'
 import { Card } from '@/components/common'
 import { cn } from '@/utils'
@@ -20,7 +20,7 @@ export const HistoryItem = ({
   item,
   selected,
   handleCancel,
-  toggleSelected
+  toggleSelected,
 }: Props) => {
   const { mutate: deleteOrders } = useDeleteOrders()
   const [payin] = useState<'usdt' | 'native'>('native')
@@ -96,13 +96,13 @@ export const HistoryItem = ({
 
         <div className="mt-4 flex gap-2">
           <Button
-            title="Perchase"
             className={cn(
               'w-full',
-              item.status === 'pending' ? 'block' : 'hidden'
+              item.status === 'pending' ? 'block' : 'hidden',
             )}
-            icon={TrashIcon}
-          />
+          >
+            <TrashIcon className="size-5" /> Perchase
+          </Button>
 
           <ConfirmModal
             isPending={false}
@@ -111,33 +111,33 @@ export const HistoryItem = ({
               deleteOrders([item.order_id], {
                 onSuccess: async () => {
                   toast.info('Deleted successfully')
-                }
+                },
               })
             }}
             isDisabled={item.status !== 'pending'}
           />
 
           <Button
-            title="Cancel and refund order"
             variant="outline"
             className={cn(
               'w-full hover:bg-red-400',
-              item.status === 'paid' ? 'block' : 'hidden'
+              item.status === 'paid' ? 'block' : 'hidden',
             )}
-            icon={BanknotesIcon}
             onClick={() => handleCancel(item.order_id)}
-          />
+          >
+            <BanknotesIcon className="size-5" /> Cancel and refund
+          </Button>
 
           <Button
-            title="Remove"
             variant="outline"
             className={cn(
               'w-full',
-              item.status === 'cancelled' ? 'block' : 'hidden'
+              item.status === 'cancelled' ? 'block' : 'hidden',
             )}
-            icon={TrashIcon}
             onClick={() => deleteOrders([item.order_id])}
-          />
+          >
+            <TrashIcon className="size-5" /> Remove
+          </Button>
 
           {/* <Button */}
           {/*   title="Buy again <3" */}

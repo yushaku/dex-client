@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ERC721_ABI } from '@/abi/erc721'
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/common/Input'
 import { DotLoader } from '@/components/common/Loading'
 import { cn, readContract, routes, shortenAddress } from '@/utils'

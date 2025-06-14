@@ -1,7 +1,7 @@
 import { SHOP_PAYMENT_ABI } from '@/abi/shopPayment'
 import { useGetProducts } from '@/apis'
 import { useGetPrice } from '@/apis/price'
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui/button'
 import { BSC, USDT } from '@/components/icons'
 import { useCartState, useNotificationsState } from '@/stores'
 import { SHOP_PAYMENT_ADDRESS, TOPICS, cn, getTransactionLink } from '@/utils'
@@ -122,7 +122,6 @@ export const ShopPage = () => {
                 </div>
 
                 <Button
-                  icon={isAdded ? XMarkIcon : ShoppingCartIcon}
                   className={cn(
                     'animate absolute -bottom-6 right-5 z-50 opacity-0 delay-100 group-hover:bottom-5 group-hover:opacity-100',
                     isAdded ? 'bg-gray-500' : '',
@@ -134,7 +133,14 @@ export const ShopPage = () => {
                       add({ ...item, quantity: 1 })
                     }
                   }}
-                />
+                >
+                  {isAdded ? (
+                    <XMarkIcon className="size-5" />
+                  ) : (
+                    <ShoppingCartIcon className="size-5" />
+                  )}
+                  {isAdded ? 'Remove' : 'Add to cart'}
+                </Button>
 
                 <article className="absolute inset-0 w-full bg-linear-to-t from-[rgba(0,0,0,0.9)] to-[rgba(255,255,255,0.01)] group-hover:-bottom-5" />
               </li>

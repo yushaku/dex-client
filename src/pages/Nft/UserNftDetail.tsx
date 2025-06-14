@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui/button'
 import { NativeToken } from '@/components/common/NativeTokenBalance'
 import { Card } from '@/components/common'
 import { cn } from '@/utils'
@@ -85,10 +85,15 @@ export const UserNftDetail = () => {
               <p className="flex gap-4">
                 <Button
                   onClick={() => setIsOpenForm(!isOpenForm)}
-                  icon={isOpenForm ? XMarkIcon : ShoppingCartIcon}
-                  title={isOpenForm ? 'Close' : 'List For Sale'}
                   className={isOpenForm ? 'bg-background px-5' : 'w-full'}
-                />
+                >
+                  {isOpenForm ? (
+                    <XMarkIcon className="size-5" />
+                  ) : (
+                    <ShoppingCartIcon className="size-5" />
+                  )}
+                  {isOpenForm ? 'Close' : 'List For Sale'}
+                </Button>
               </p>
 
               <ListNftForm

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/utils'
 import {
   Dialog,
@@ -22,7 +22,6 @@ export const ConfirmModal = ({
   isDisabled = false,
   isPending,
   title,
-  icon,
   handleSubmit,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -30,12 +29,11 @@ export const ConfirmModal = ({
   return (
     <>
       <Button
-        variant="standard"
         onClick={() => setIsOpen(true)}
-        title={title}
-        icon={icon}
         className={cn('w-auto', isDisabled && 'hidden')}
-      />
+      >
+        {title}
+      </Button>
 
       <Dialog
         open={isOpen}
@@ -54,24 +52,25 @@ export const ConfirmModal = ({
 
             <div className="absolute right-3 top-2">
               <Button
-                variant="standard"
+                variant="outline"
                 onClick={() => setIsOpen(false)}
-                icon={XMarkIcon}
                 className="border-none p-3"
-              />
+              >
+                <XMarkIcon className="size-5" />
+              </Button>
             </div>
 
             <Button
               className="w-full"
-              variant="filled"
-              title={isPending ? 'Loading...' : 'Confirm'}
               type="submit"
               disabled={isPending}
               onClick={() => {
                 handleSubmit()
                 setIsOpen(false)
               }}
-            />
+            >
+              {isPending ? 'Loading...' : 'Confirm'}
+            </Button>
           </DialogPanel>
         </div>
       </Dialog>

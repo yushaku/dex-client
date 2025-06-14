@@ -1,7 +1,7 @@
 import { SHOP_PAYMENT_ABI } from '@/abi/shopPayment'
 import { orderKey, useDeleteOrders, useGetOrders } from '@/apis'
 import { LoadingModal } from '@/components/Modal'
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui/button'
 import { EmptyBox } from '@/components/common/EmptyBox'
 import { useNotificationsState } from '@/stores'
 import { SHOP_PAYMENT_ADDRESS, TOPICS, cn, getTransactionLink } from '@/utils'
@@ -133,8 +133,9 @@ export const HistoryPage = () => {
               selected.length === 0 && 'hidden',
             )}
             onClick={() => deleteOrders(selected)}
-            icon={TrashIcon}
-          />
+          >
+            <TrashIcon className="size-5" />
+          </Button>
         </div>
       </div>
 

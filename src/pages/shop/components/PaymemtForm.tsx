@@ -5,7 +5,7 @@ import {
   useGetAddresses,
 } from '@/apis'
 import { useGetPrice } from '@/apis/price'
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui/button'
 import { BSC, USDT } from '@/components/icons'
 import { useCartState } from '@/stores/shopCart'
 import { SHOP_PAYMENT_ADDRESS, cn, shortenAddress } from '@/utils'
@@ -65,11 +65,11 @@ export const PaymentForm = () => {
 
             <span className="absolute right-3 top-3">
               <Button
-                variant="standard"
                 onClick={() => setIsOpen(false)}
-                icon={XMarkIcon}
                 className="border-none p-3"
-              />
+              >
+                <XMarkIcon className="size-5" />
+              </Button>
             </span>
           </DialogPanel>
         </div>

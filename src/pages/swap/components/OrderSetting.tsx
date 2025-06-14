@@ -1,11 +1,11 @@
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui/button'
 import { useSettingState } from '@/stores'
 import { cn } from '@/utils'
 import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
-  DialogTitle
+  DialogTitle,
 } from '@headlessui/react'
 import { Cog6ToothIcon, XMarkIcon } from '@heroicons/react/16/solid'
 import { useState } from 'react'
@@ -20,7 +20,7 @@ export const OrderSetting = ({ disabled = false }: { disabled?: boolean }) => {
         onClick={() => setIsOpen(true)}
         className={cn(
           'ounded-md p-2 rounded-lg hover:bg-focus',
-          disabled && 'hidden'
+          disabled && 'hidden',
         )}
       >
         <Cog6ToothIcon className="size-5" />
@@ -40,11 +40,11 @@ export const OrderSetting = ({ disabled = false }: { disabled?: boolean }) => {
             </DialogTitle>
 
             <Button
-              variant="standard"
               onClick={() => setIsOpen(false)}
-              icon={XMarkIcon}
               className="absolute right-2 top-2 border-none p-3"
-            />
+            >
+              <XMarkIcon className="size-5" />
+            </Button>
 
             <div>
               <h6 className="mb-2">Slippage Tolerance</h6>
@@ -58,12 +58,12 @@ export const OrderSetting = ({ disabled = false }: { disabled?: boolean }) => {
                         onClick={() =>
                           updateSetting({
                             ...setting,
-                            slippage: num
+                            slippage: num,
                           })
                         }
                         className={cn(
                           'px-3 cursor-pointer hover:bg-focus py-1 rounded-lg',
-                          setting.slippage === num && 'bg-focus'
+                          setting.slippage === num && 'bg-focus',
                         )}
                       >
                         {num}%
@@ -78,7 +78,7 @@ export const OrderSetting = ({ disabled = false }: { disabled?: boolean }) => {
                     onChange={(e) => {
                       updateSetting({
                         ...setting,
-                        slippage: Number(e.target.value)
+                        slippage: Number(e.target.value),
                       })
                     }}
                     placeholder="0.0"
@@ -86,7 +86,7 @@ export const OrderSetting = ({ disabled = false }: { disabled?: boolean }) => {
                     className="no-spinner w-16 bg-transparent focus:outline-hidden"
                     style={{
                       WebkitAppearance: 'none',
-                      MozAppearance: 'textfield'
+                      MozAppearance: 'textfield',
                     }}
                   />
                   <span>%</span>
@@ -102,7 +102,7 @@ export const OrderSetting = ({ disabled = false }: { disabled?: boolean }) => {
                   onChange={(e) => {
                     updateSetting({
                       ...setting,
-                      deadline: Number(e.target.value)
+                      deadline: Number(e.target.value),
                     })
                   }}
                   placeholder="0.0"
@@ -110,7 +110,7 @@ export const OrderSetting = ({ disabled = false }: { disabled?: boolean }) => {
                   className="no-spinner w-full bg-transparent focus:outline-hidden"
                   style={{
                     WebkitAppearance: 'none',
-                    MozAppearance: 'textfield'
+                    MozAppearance: 'textfield',
                   }}
                 />
                 <span className="text-text-secondary">minutes</span>

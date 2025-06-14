@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from '@headlessui/react'
 import { CircleCheckIcon, CircleXIcon, Clock2Icon, XIcon } from 'lucide-react'
-import { Button } from '../common/Button'
+import { Button } from '@/components/ui/button'
 import { Spinner } from '../common/Loading'
 
 export const TxModalLoading = () => {
@@ -24,11 +24,12 @@ export const TxModalLoading = () => {
           </DialogTitle>
 
           <Button
-            variant="standard"
+            variant="outline"
             onClick={closeTransaction}
-            icon={XIcon}
             className="absolute right-3 top-2 border-none p-2"
-          />
+          >
+            <XIcon className="size-5 text-muted-foreground" />
+          </Button>
 
           <ul className="grid gap-3 pt-5">
             {Object.entries(transactions).map((tx) => {

@@ -1,5 +1,5 @@
 import { useGetPrice } from '@/apis/price'
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/common/Loading'
 import { NativeToken } from '@/components/common/NativeTokenBalance'
 import { USDT } from '@/components/icons'
@@ -27,11 +27,11 @@ export const ShopCartList = () => {
     <>
       <Button
         variant="outline"
-        icon={ShoppingBagIcon}
-        title={itemList.length.toString()}
         onClick={() => setToggle(!toggle)}
         className="text-sm font-semibold"
-      />
+      >
+        <ShoppingBagIcon className="size-5" /> {itemList.length}
+      </Button>
 
       <div
         onClick={() => setToggle(false)}
@@ -73,12 +73,11 @@ export const ShopCartList = () => {
 
               <article className={`absolute right-0 hidden group-hover:block`}>
                 <Button
-                  variant="filled"
-                  title=""
                   className="bg-red-400 px-3 hover:bg-red-500"
-                  icon={TrashIcon}
                   onClick={() => remove(item.product_id)}
-                />
+                >
+                  <TrashIcon className="size-5" />
+                </Button>
               </article>
             </li>
           ))}

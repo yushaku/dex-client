@@ -1,5 +1,5 @@
 import { useCreateAddress } from '@/apis'
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/utils'
 import {
   Description,
@@ -12,7 +12,7 @@ import {
   Input,
   Label,
   Select,
-  Textarea
+  Textarea,
 } from '@headlessui/react'
 import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/16/solid'
 import { ChangeEvent, useState } from 'react'
@@ -26,7 +26,7 @@ export const AddressForm = ({ disabled = false }: { disabled?: boolean }) => {
     phone: '',
     address: '',
     city: 'Ha Noi',
-    note: ''
+    note: '',
   })
 
   const handleChange =
@@ -42,14 +42,14 @@ export const AddressForm = ({ disabled = false }: { disabled?: boolean }) => {
       recipient_name: from.recipient,
       phone_number: from.phone,
       street: from.address,
-      city: from.city
+      city: from.city,
     })
     setForm({
       recipient: '',
       phone: '',
       address: '',
       city: 'Ha Noi',
-      note: ''
+      note: '',
     })
     setIsOpen(false)
   }
@@ -83,7 +83,7 @@ export const AddressForm = ({ disabled = false }: { disabled?: boolean }) => {
                     onChange={handleChange('recipient')}
                     className={cn(
                       'mt-3 block w-full rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white',
-                      'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25'
+                      'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25',
                     )}
                   />
                 </Field>
@@ -97,7 +97,7 @@ export const AddressForm = ({ disabled = false }: { disabled?: boolean }) => {
                     type="tel"
                     className={cn(
                       'mt-3 block w-full rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white',
-                      'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25'
+                      'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25',
                     )}
                   />
                 </Field>
@@ -111,7 +111,7 @@ export const AddressForm = ({ disabled = false }: { disabled?: boolean }) => {
                   onChange={handleChange('address')}
                   className={cn(
                     'mt-3 block w-full rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white',
-                    'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25'
+                    'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25',
                   )}
                 />
               </Field>
@@ -126,7 +126,7 @@ export const AddressForm = ({ disabled = false }: { disabled?: boolean }) => {
                     className={cn(
                       'mt-3 block w-full appearance-none rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white',
                       'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25',
-                      '*:text-black'
+                      '*:text-black',
                     )}
                   >
                     <option>Ha Noi</option>
@@ -149,7 +149,7 @@ export const AddressForm = ({ disabled = false }: { disabled?: boolean }) => {
                   onChange={handleChange('note')}
                   className={cn(
                     'mt-3 block w-full resize-none rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white',
-                    'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25'
+                    'focus:outline-hidden data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25',
                   )}
                   rows={3}
                 />
@@ -158,11 +158,11 @@ export const AddressForm = ({ disabled = false }: { disabled?: boolean }) => {
 
             <div className="absolute right-3 top-3">
               <Button
-                variant="standard"
                 onClick={() => setIsOpen(false)}
-                icon={XMarkIcon}
                 className="border-none p-3"
-              />
+              >
+                <XMarkIcon className="size-5" />
+              </Button>
             </div>
 
             <Button

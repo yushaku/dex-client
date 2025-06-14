@@ -1,6 +1,6 @@
 import { SHOP_PAYMENT_ABI } from '@/abi/shopPayment'
 import { OrderInfo, useDeliverOrders } from '@/apis'
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui/button'
 import { BSC, USDT } from '@/components/icons'
 import { Card } from '@/components/common'
 import { SHOP_PAYMENT_ADDRESS, cn } from '@/utils'
@@ -24,11 +24,11 @@ export const OrderItem = ({ item }: Props) => {
         address: SHOP_PAYMENT_ADDRESS,
         abi: SHOP_PAYMENT_ABI,
         functionName: 'forceCancelOrder',
-        args: [orderIds]
+        args: [orderIds],
       },
       {
-        onError: toastContractError
-      }
+        onError: toastContractError,
+      },
     )
   }
 
@@ -38,11 +38,11 @@ export const OrderItem = ({ item }: Props) => {
         address: SHOP_PAYMENT_ADDRESS,
         abi: SHOP_PAYMENT_ABI,
         functionName: 'deliverOrder',
-        args: [orderIds]
+        args: [orderIds],
       },
       {
-        onError: toastContractError
-      }
+        onError: toastContractError,
+      },
     )
   }
 
@@ -113,50 +113,46 @@ export const OrderItem = ({ item }: Props) => {
             id="BUTTONS LIST FOR PAID ORDER"
             className={cn(
               'mt-4 hidden gap-2 ',
-              item.status === 'paid' && 'flex'
+              item.status === 'paid' && 'flex',
             )}
           >
             <Button
-              loading={isCallContract}
-              title="Cancel and refund"
               variant="outline"
-              icon={TrashIcon}
               className={cn('w-full')}
               onClick={() => handleForceCancel([item.order_id])}
-            />
+            >
+              <TrashIcon className="size-5" /> Cancel and refund
+            </Button>
 
             <Button
-              loading={isDelivering}
-              title="Shipping"
               className={cn('w-full')}
-              icon={GiftIcon}
               onClick={() => deliverOrders([item.order_id])}
-            />
+            >
+              <GiftIcon className="size-5" /> Shipping
+            </Button>
           </div>
 
           <div
             id="BUTTONS LIST FOR DELIVERING ORDER"
             className={cn(
               'mt-4 hidden gap-2 ',
-              item.status === 'delivering' && 'flex'
+              item.status === 'delivering' && 'flex',
             )}
           >
             <Button
-              loading={isCallContract}
-              title="Cancel and refund"
               variant="outline"
-              icon={TrashIcon}
               className={cn('w-full')}
               onClick={() => handleForceCancel([item.order_id])}
-            />
+            >
+              <TrashIcon className="size-5" /> Cancel and refund
+            </Button>
 
             <Button
-              loading={isCallContract}
-              title="Delivered"
               className={cn('w-full')}
-              icon={CheckCircleIcon}
               onClick={() => handleDelivered([item.order_id])}
-            />
+            >
+              <CheckCircleIcon className="size-5" /> Delivered
+            </Button>
           </div>
         </div>
       </Card>

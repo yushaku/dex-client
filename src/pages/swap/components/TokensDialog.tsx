@@ -1,4 +1,4 @@
-import { Button } from '@/components/common/Button'
+import { Button } from '@/components/ui/button'
 import { WrapAsset } from '@/stores/addictionTokens'
 import { Asset, UNKNOWN_TOKEN, cn, getTokenLink } from '@/utils'
 import { formatNumber } from '@/utils'
@@ -56,11 +56,11 @@ export const TokensDialog = ({ asset, listAssets, handleSetToken }: Props) => {
             </DialogTitle>
 
             <Button
-              variant="standard"
               onClick={() => setIsOpen(false)}
-              icon={XMarkIcon}
               className="absolute right-1 top-0 border-none p-3"
-            />
+            >
+              <XMarkIcon className="size-5" />
+            </Button>
 
             <div id="token list">
               <ul className="scroll-container h-96 space-y-2 overflow-y-scroll">
