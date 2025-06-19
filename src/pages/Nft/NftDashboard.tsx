@@ -52,7 +52,7 @@ export const NftDashboard = () => {
 
             <Link
               to={`${routes.nfts}/${selected.address}`}
-              className="btn btn-outline flex justify-start items-center animate opacity-0 delay-300 group-hover:translate-x-5 group-hover:opacity-100"
+              className="flex justify-start items-center animate opacity-0 delay-300 group-hover:translate-x-5 group-hover:opacity-100 px-6 py-3 rounded-lg border border-gray-600 text-text-primary bg-layer hover:bg-focus"
             >
               <span>View collection</span>
               <ArrowRightIcon className="size-5" />

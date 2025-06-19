@@ -8,6 +8,7 @@ import { formatNumber } from '@/utils'
 import { formatEther, zeroAddress } from 'viem'
 import { mainnet } from 'viem/chains'
 import { useAccount, useBalance, useReadContracts, useSwitchChain } from 'wagmi'
+import { Button } from '@/components/ui/button'
 
 export const LidoStakeForm = () => {
   const { data: farmType, toggleFarmin } = useFarmState()
@@ -88,40 +89,37 @@ export const LidoStakeForm = () => {
       </article>
 
       <article className="flex gap-5">
-        <button
+        <Button
           onClick={() => {
             switchChain({ chainId: mainnet.id })
           }}
-          className={cn(
-            'btn btn-solid rounded-lg w-full',
-            chainId === mainnet.id && 'hidden',
-          )}
+          className={cn('flex-1', chainId === mainnet.id && 'hidden')}
+          variant="accent"
         >
           Connect to Ethereum
-        </button>
+        </Button>
 
-        <button
+        <Button
           onClick={() => toggleFarmin('ETH')}
-          className={cn(
-            'btn btn-solid w-full',
-            chainId !== mainnet.id && 'hidden',
-          )}
+          className={cn('flex-1', chainId !== mainnet.id && 'hidden')}
+          variant="accent"
         >
           Earn
-        </button>
+        </Button>
 
-        <button
+        <Button
           onClick={() => {
             toggleFarmin(null)
           }}
           className={cn(
-            'btn btn-outline w-full hidden',
+            'flex-1',
             farmType === 'ETH' && 'block',
             chainId !== mainnet.id && 'hidden',
           )}
+          variant="ghost"
         >
           Cancel
-        </button>
+        </Button>
       </article>
     </Card>
   )

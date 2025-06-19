@@ -252,14 +252,17 @@ export function TablePool() {
                   data-index={virtualRow.index}
                   ref={(node) => rowVirtualizer.measureElement(node)} //measure dynamic row height
                   key={row.id}
-                  className="group absolute flex w-full cursor-pointer py-2 hover:bg-focus"
-                  style={{
-                    transform: `translateY(${virtualRow.start}px)`, //this should always be a `style` as it changes on scroll
-                  }}
+                  className="group flex w-full cursor-pointer hover:bg-focus"
+                  // style={{
+                  //   transform: `translateY(${virtualRow.start}px)`, //this should always be a `style` as it changes on scroll
+                  // }}
                 >
                   {row.getVisibleCells().map((cell) => {
                     return (
-                      <TableCell key={cell.id} className="w-full text-left">
+                      <TableCell
+                        key={cell.id}
+                        className="w-full text-left flex items-center"
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext(),

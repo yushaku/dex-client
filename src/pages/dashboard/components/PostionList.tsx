@@ -3,7 +3,7 @@ import { useGetUniswapPositions } from '@/hooks'
 import { Link } from 'react-router-dom'
 import { ManualPosition } from './ManualPosition'
 
-export const PostionList = () => {
+export const PositionList = () => {
   const positions = useGetUniswapPositions()
   // const { address: userAddress, chainId = 1 } = useAccount()
 

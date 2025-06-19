@@ -144,33 +144,39 @@ export const YSKStakeForm = () => {
             }
           }}
           className={cn(
-            'btn btn-solid w-1/2',
+            'flex-1',
             isOpen && Number(amount) <= 0 && 'opacity-50',
           )}
           disabled={isOpen && Number(amount) <= 0}
+          variant="accent"
+          size="default"
         >
           Stake
         </Button>
 
-        <button
+        <Button
           onClick={() => {
             setIsOpen(false)
             toggleFarmin(null)
           }}
-          className={cn('btn btn-outline w-1/2', isOpen && 'hidden')}
+          className={cn('flex-1', isOpen && 'hidden')}
+          variant="outline"
+          size="default"
         >
           Claim
-        </button>
+        </Button>
 
-        <button
+        <Button
           onClick={() => {
             setIsOpen(false)
             toggleFarmin(null)
           }}
-          className={cn('btn btn-outline w-1/2 hidden', isOpen && 'block')}
+          className={cn('flex-1 hidden', isOpen && 'block')}
+          variant="destructive"
+          size="default"
         >
           Cancel
-        </button>
+        </Button>
       </article>
     </Card>
   )

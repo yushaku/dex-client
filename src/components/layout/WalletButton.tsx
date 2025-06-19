@@ -8,8 +8,9 @@ import {
 } from '@/components/ui/dialog'
 import { useState } from 'react'
 import { Button } from '../ui/button'
-import { toast } from 'react-toastify'
 import { useLogout } from '@account-kit/react'
+import { createAvatar } from '@/utils/avatar'
+import { LogOut } from 'lucide-react'
 
 export const WalletButton = (
   props: React.DetailedHTMLProps<
@@ -21,8 +22,6 @@ export const WalletButton = (
   const { openAuthModal } = useAuthModal()
   const { logout } = useLogout()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-
-  console.log({ user })
 
   if (!user) {
     return (
@@ -37,37 +36,53 @@ export const WalletButton = (
 
   return (
     <>
-      <button
+      <Button
+        variant="accent"
+        size="default"
         onClick={() => setIsDialogOpen(true)}
-        className={cn('rounded-lg bg-accent px-6 py-2', props.className)}
+        className={cn(props.className)}
       >
-        {shortenAddress(user.address)}
-      </button>
+        {user.email ? user.email : shortenAddress(user.address)}
+      </Button>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
+        <DialogContent className="rounded-lg">
           <DialogHeader>
-            <DialogTitle>Account</DialogTitle>
+            <DialogTitle className="flex items-center gap-2">
+              <div
+                style={createAvatar(user.address)}
+                className="size-10 rounded-full"
+              ></div>
+              <span>Account</span>
+            </DialogTitle>
           </DialogHeader>
+
           <div className="space-y-4">
             <p className="flex gap-2">
-              <span className="font-medium">Address:</span>
+              <span className="font-medium">Type:</span>
+              <span className="text-muted-foreground">
+                {user.type === 'eoa'
+                  ? 'Externally Owned Account'
+                  : 'Smart Account'}
+              </span>
+            </p>
+            <p className="flex gap-2">
+              <span className="font-medium">EVM Address:</span>
               <span className="text-muted-foreground">
                 {shortenAddress(user.address)}
               </span>
             </p>
 
-            <div className="flex gap-2">
-              <Button
-                className="flex-1 cursor-pointer"
-                onClick={() => {
-                  navigator.clipboard.writeText(user.address)
-                  toast.success('Address copied to clipboard')
-                }}
-              >
-                Copy address
-              </Button>
+            {user.solanaAddress && (
+              <p className="flex gap-2">
+                <span className="font-medium">Solana Address:</span>
+                <span className="text-muted-foreground">
+                  {shortenAddress(user.solanaAddress)}
+                </span>
+              </p>
+            )}
 
+            <div className="flex gap-2">
               <Button
                 className="flex-1 cursor-pointer"
                 onClick={() => {
@@ -75,6 +90,7 @@ export const WalletButton = (
                   setIsDialogOpen(false)
                 }}
               >
+                <LogOut className="size-4" />
                 Sign Out
               </Button>
             </div>

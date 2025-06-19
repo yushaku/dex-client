@@ -196,14 +196,16 @@ export const SwapPane = () => {
         </article>
 
         <article id="BUTTON_GROUP">
-          <button
+          <Button
             className={cn(
-              'mt-5 h-10 w-full rounded-lg bg-accent hover:bg-lighter-accent',
+              'mt-5 h-10 w-full',
               isSupport ? 'flex-center' : 'hidden',
               {
                 'bg-focus': isSwapping || !bestTrade,
               },
             )}
+            variant="accent"
+            size="lg"
             onClick={() => {
               if (!fromAsset || !toAsset || !bestTrade) return
 
@@ -221,7 +223,7 @@ export const SwapPane = () => {
             ) : (
               'Swap'
             )}
-          </button>
+          </Button>
 
           <WalletButton className={cn('w-full mt-5', chainId && 'hidden')} />
 

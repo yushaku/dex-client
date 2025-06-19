@@ -158,10 +158,12 @@ export const ManualPosition = ({
       </div>
 
       <div className={cn('mt-6 flex items-center gap-2', !show && 'hidden')}>
-        <Button className="w-full" variant="ghost">
+        <Button className="flex-1" variant="ghost">
           Remove
         </Button>
-        <Button className="w-full">Add</Button>
+        <Button className="flex-1" variant="outline">
+          Add
+        </Button>
         <Button
           onClick={() =>
             claim({
@@ -169,7 +171,8 @@ export const ManualPosition = ({
               callback: refetchReward,
             })
           }
-          className="w-full"
+          className="flex-1"
+          variant="outline"
         >
           Claim
         </Button>

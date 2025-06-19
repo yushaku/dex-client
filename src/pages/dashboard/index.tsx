@@ -5,7 +5,7 @@ import { ETHFarming } from './components/ETHFarming'
 import { HelloGuy } from './components/Hello'
 import { LidoStakeForm } from './components/LidoStaking'
 import { YSKStakeForm } from './components/YSKStaking'
-import { PostionList } from './components/PostionList'
+import { PositionList } from './components/PostionList'
 
 export const Dashboard = () => {
   const { address } = useAccount()
@@ -36,7 +36,7 @@ export const Dashboard = () => {
       </section>
 
       <ETHFarming />
-      <PostionList />
+      <PositionList />
       {/* <StakedValueLockChart /> */}
     </section>
   )

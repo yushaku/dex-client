@@ -9,15 +9,6 @@ layer(base);
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --breakpoint-*: initial;
-  --breakpoint-xs: 400px;
-  --breakpoint-sm: 640px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 1024px;
-  --breakpoint-xl: 1220px;
-  --breakpoint-2xl: 1220px;
-  --breakpoint-3xl: 1220px;
-
   --font-poppins: Poppins, sans-serif;
 
   --color-background: var(--background);
@@ -26,27 +17,19 @@ layer(base);
   --color-focus: var(--focus);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
-
   --color-accent: var(--accent);
   --color-accent-foreground: (var(--accent-foreground));
-
   --color-foreground: var(--foreground);
-
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
-
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
 
@@ -99,13 +82,19 @@ layer(base);
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
+
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-poppins bg-background text-foreground;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    box-sizing: border-box;
   }
 }
 
@@ -117,24 +106,13 @@ layer(base);
   @apply transition-all duration-500;
 }
 
-@utility btn {
-  @apply px-6 py-3 rounded-lg;
-}
-
-@utility btn-outline {
-  @apply border border-gray-600 text-text-primary bg-layer hover:bg-focus;
-}
-
-@utility btn-solid {
-  @apply bg-accent hover:bg-lighter-accent;
-}
-
 @layer utilities {
   /*--accent: 221 100% 61%;*/
   /*--background: 235 32% 12%;*/
   /*lighter-accent: hsl(217, 100%, 70%)*/
 
   :root {
+    --radius: 0.5rem;
     --layer: #1e2431;
     --focus: #2d3549;
     --text-primary: #f5f3f0;
@@ -202,22 +180,6 @@ layer(base);
     --chart-3: hsl(197 37% 24%);
     --chart-4: hsl(43 74% 66%);
     --chart-5: hsl(27 87% 67%);
-    --radius: 0.75rem;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply font-poppins bg-background text-foreground;
-  }
-
-  html {
-    scroll-behavior: smooth;
-    box-sizing: border-box;
   }
 }
 
@@ -322,15 +284,4 @@ iframe .header {
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-}
-/*
-  ---break---
-*/
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
 }
