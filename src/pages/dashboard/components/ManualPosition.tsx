@@ -96,7 +96,7 @@ export const ManualPosition = ({
 
   return (
     <Card>
-      <div className="flex h-80 gap-2">
+      <div className="flex max-h-80 gap-4">
         <Tilt
           tiltMaxAngleX={5}
           tiltMaxAngleY={5}
@@ -104,7 +104,6 @@ export const ManualPosition = ({
           glareMaxOpacity={0.1}
           scale={1.0}
           perspective={300}
-          className="animate parallax-effect size-full rounded-lg"
         >
           <img src={image} alt="" className="my-auto w-fit" />
         </Tilt>

@@ -11,6 +11,7 @@ import { Button } from '../ui/button'
 import { useLogout } from '@account-kit/react'
 import { createAvatar } from '@/utils/avatar'
 import { LogOut } from 'lucide-react'
+import { useAddPasskey } from '@account-kit/react'
 
 export const WalletButton = (
   props: React.DetailedHTMLProps<
@@ -22,6 +23,7 @@ export const WalletButton = (
   const { openAuthModal } = useAuthModal()
   const { logout } = useLogout()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const { addPasskey, isAddingPasskey } = useAddPasskey()
 
   if (!user) {
     return (
@@ -82,9 +84,21 @@ export const WalletButton = (
               </p>
             )}
 
-            <div className="flex gap-2">
+            <div className="pt-5 flex gap-2">
               <Button
-                className="flex-1 cursor-pointer"
+                disabled={isAddingPasskey}
+                onClick={() => {
+                  addPasskey()
+                }}
+                variant="accent"
+                className="flex-1"
+              >
+                Add Passkey
+              </Button>
+
+              <Button
+                variant="outline"
+                className="flex-1"
                 onClick={() => {
                   logout()
                   setIsDialogOpen(false)

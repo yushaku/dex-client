@@ -14,18 +14,16 @@ const uiConfig: AlchemyAccountsUIConfig = {
       [{ type: 'email' }],
       [
         { type: 'passkey' },
-        { type: 'social', authProviderId: 'google', mode: 'popup' },
-        { type: 'social', authProviderId: 'facebook', mode: 'popup' },
-        { type: 'social', authProviderId: 'twitch', mode: 'popup' },
-      ],
-      [
+        // { type: 'social', authProviderId: 'google', mode: 'popup' },
+        // { type: 'social', authProviderId: 'facebook', mode: 'popup' },
+        // { type: 'social', authProviderId: 'twitch', mode: 'popup' },
         {
           type: 'external_wallets',
           // walletConnect: { projectId: env.VITE_WALLET_CONNECT_ID },
         },
       ],
     ],
-    addPasskeyOnSignup: false,
+    addPasskeyOnSignup: true,
   },
 }
 
