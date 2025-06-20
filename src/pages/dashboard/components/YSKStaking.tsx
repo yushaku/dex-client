@@ -7,7 +7,7 @@ import { contracts } from '@/utils/contracts'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { erc20Abi, formatEther, zeroAddress } from 'viem'
-import { bscTestnet, mainnet } from 'viem/chains'
+import { bscTestnet } from 'viem/chains'
 import { useAccount, useReadContracts } from 'wagmi'
 
 export const YSKStakeForm = () => {
@@ -16,7 +16,7 @@ export const YSKStakeForm = () => {
   const debounceAmount = useDebounce(amount, 300)
   const { toggleFarmin } = useFarmState()
 
-  const { address, chainId } = useAccount()
+  const { address } = useAccount()
 
   const { data } = useReadContracts({
     contracts: [
@@ -35,12 +35,13 @@ export const YSKStakeForm = () => {
       },
     ],
     query: {
-      enabled: Boolean(address) && chainId === mainnet.id,
+      enabled: Boolean(address),
     },
   })
 
   const balance = data?.[0]?.result
   const total = data?.[1]?.result
+  const reward = 0n
 
   return (
     <Card className="h-fit w-full lg:w-1/2">
@@ -54,7 +55,7 @@ export const YSKStakeForm = () => {
             You are staking:
           </span>
           <strong className="inline-flex items-center gap-2 text-xl font-bold text-text-primary">
-            0
+            {formatNumber(formatEther(reward ?? 0n))}
             <img className="size-7" src="/logo.png" alt="logo" />
           </strong>
         </p>
@@ -159,9 +160,8 @@ export const YSKStakeForm = () => {
             setIsOpen(false)
             toggleFarmin(null)
           }}
-          className={cn('flex-1', isOpen && 'hidden')}
-          variant="outline"
-          size="default"
+          className={cn('flex-1', (isOpen || Number(reward) <= 0) && 'hidden')}
+          variant="ghost"
         >
           Claim
         </Button>
@@ -172,8 +172,7 @@ export const YSKStakeForm = () => {
             toggleFarmin(null)
           }}
           className={cn('flex-1 hidden', isOpen && 'block')}
-          variant="destructive"
-          size="default"
+          variant="ghost"
         >
           Cancel
         </Button>

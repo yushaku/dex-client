@@ -33,6 +33,11 @@ export const contracts = {
     [bscTestnet.id]: '0x7AFa15757A8012C3ECc0948154AD0f99c3b3c116',
   },
   uniswap: {
-    NFP: NONFUNGIBLE_POSITION_MANAGER_ADDRESSES,
+    NFP: {
+      [bscTestnet.id]: NONFUNGIBLE_POSITION_MANAGER_ADDRESSES[bsc.id],
+      [bsc.id]: NONFUNGIBLE_POSITION_MANAGER_ADDRESSES[bsc.id],
+      [mainnet.id]: NONFUNGIBLE_POSITION_MANAGER_ADDRESSES[mainnet.id],
+      [arbitrum.id]: NONFUNGIBLE_POSITION_MANAGER_ADDRESSES[arbitrum.id],
+    },
   },
 } as const

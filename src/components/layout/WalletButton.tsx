@@ -12,6 +12,8 @@ import { useLogout } from '@account-kit/react'
 import { createAvatar } from '@/utils/avatar'
 import { LogOut } from 'lucide-react'
 import { useAddPasskey } from '@account-kit/react'
+import { useEnsName } from 'wagmi'
+import { toast } from 'react-toastify'
 
 export const WalletButton = (
   props: React.DetailedHTMLProps<
@@ -24,6 +26,7 @@ export const WalletButton = (
   const { logout } = useLogout()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const { addPasskey, isAddingPasskey } = useAddPasskey()
+  const { data: ensAddress } = useEnsName({ address: user?.address })
 
   if (!user) {
     return (
@@ -44,7 +47,11 @@ export const WalletButton = (
         onClick={() => setIsDialogOpen(true)}
         className={cn(props.className)}
       >
-        {user.email ? user.email : shortenAddress(user.address)}
+        {user.email
+          ? user.email
+          : ensAddress
+            ? ensAddress
+            : shortenAddress(user.address)}
       </Button>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -70,7 +77,13 @@ export const WalletButton = (
             </p>
             <p className="flex gap-2">
               <span className="font-medium">EVM Address:</span>
-              <span className="text-muted-foreground">
+              <span
+                className="text-muted-foreground cursor-pointer"
+                onClick={() => {
+                  navigator.clipboard.writeText(user.address)
+                  toast.success('Address copied to clipboard')
+                }}
+              >
                 {shortenAddress(user.address)}
               </span>
             </p>
@@ -91,7 +104,7 @@ export const WalletButton = (
                   addPasskey()
                 }}
                 variant="accent"
-                className="flex-1"
+                className={cn('flex-1', user.type === 'eoa' && 'hidden')}
               >
                 Add Passkey
               </Button>

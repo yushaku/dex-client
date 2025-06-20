@@ -37,10 +37,13 @@ const STARTS_WITH = 'data:application/json;base64,'
 
 export function useGetUniswapPositions() {
   const { address: userAddress, chainId = 1 } = useAccount()
+  const npmAddress = getAddress(
+    contracts.uniswap.NFP[chainId as keyof typeof contracts.uniswap.NFP],
+  )
 
   const { data: balances = 0n } = useReadContract({
     abi: NPM_V3_ABI,
-    address: getAddress(contracts.uniswap.NFP[chainId]),
+    address: npmAddress,
     functionName: 'balanceOf',
     args: [userAddress ?? zeroAddress],
     query: {
@@ -52,7 +55,7 @@ export function useGetUniswapPositions() {
   const { data: tokenIds = [] } = useReadContracts({
     contracts: new Array(Number(balances)).fill(null).map((_, index) => ({
       abi: NPM_V3_ABI,
-      address: getAddress(contracts.uniswap.NFP[chainId]),
+      address: npmAddress,
       functionName: 'tokenOfOwnerByIndex',
       args: [userAddress ?? zeroAddress, index],
     })),
@@ -69,7 +72,7 @@ export function useGetUniswapPositions() {
   const { data: rawPositons = [] } = useReadContracts({
     contracts: tokens.map((index) => ({
       abi: NPM_V3_ABI,
-      address: getAddress(contracts.uniswap.NFP[chainId]),
+      address: getAddress(npmAddress),
       functionName: 'positions',
       args: [index],
     })),
@@ -82,7 +85,7 @@ export function useGetUniswapPositions() {
   const { data: baseImgs = [] } = useReadContracts({
     contracts: tokens.map((index) => ({
       abi: NPM_V3_ABI,
-      address: getAddress(contracts.uniswap.NFP[chainId]),
+      address: npmAddress,
       functionName: 'tokenURI',
       args: [index],
     })),
@@ -124,6 +127,9 @@ export function useGetUniswapPositions() {
 export function useClaim(autoClose = false) {
   const [pending, setPending] = useState(false)
   const { address: userAddress, chainId = 1 } = useAccount()
+  const npmAddress = getAddress(
+    contracts.uniswap.NFP[chainId as keyof typeof contracts.uniswap.NFP],
+  )
 
   const { startTxn, endTxn, closeTxnModal, writeTxn } = useTxn(chainId)
 
@@ -152,7 +158,7 @@ export function useClaim(autoClose = false) {
       })
 
       const txHash = await writeTxn(key, stakeId, {
-        address: getAddress(contracts.uniswap.NFP[chainId]),
+        address: npmAddress,
         abi: NPM_V3_ABI,
         functionName: 'collect',
         args: [
@@ -252,7 +258,11 @@ export function useRemoveLiquidity(autoClose = false) {
 
       if (shouldClaim) {
         const txHash = await writeTxn(key, stakeId, {
-          address: getAddress(contracts.uniswap.NFP[chainId]),
+          address: getAddress(
+            contracts.uniswap.NFP[
+              chainId as keyof typeof contracts.uniswap.NFP
+            ],
+          ),
           abi: NPM_V3_ABI,
           functionName: 'collect',
           args: [
@@ -393,7 +403,9 @@ export function useRemoveLiquidity(autoClose = false) {
       const txHash = await sendTxn(
         key,
         stakeId,
-        getAddress(contracts.uniswap.NFP[chainId]),
+        getAddress(
+          contracts.uniswap.NFP[chainId as keyof typeof contracts.uniswap.NFP],
+        ),
         data,
       )
 
@@ -475,7 +487,9 @@ export function useAddLiquidity() {
         const amountA = toWei(_amountA, tokenA.decimals)
         const amountB = toWei(_amountB, tokenB.decimals)
 
-        const NPM_V3_ADDRESS = getAddress(contracts.uniswap.NFP[chainId])
+        const NPM_V3_ADDRESS = getAddress(
+          contracts.uniswap.NFP[chainId as keyof typeof contracts.uniswap.NFP],
+        )
         const baseCurrencyAddress = getAddress(tokenA.wrapped.address)
         const quoteCurrencyAddress = getAddress(tokenB.wrapped.address)
 
