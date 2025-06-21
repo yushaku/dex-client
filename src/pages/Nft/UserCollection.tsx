@@ -1,124 +1,147 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { ERC721_ABI } from '@/abi/erc721'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/common/Input'
-import { DotLoader } from '@/components/common/Loading'
-import { cn, readContract, routes, shortenAddress } from '@/utils'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Address, isAddress } from 'viem'
 import { useAccount } from 'wagmi'
+import { useNFTCollections } from '@/hooks/NFTs'
+import { CollectionCard } from './components/CollectionCard'
+import { CollectionNFTsModal } from './components/CollectionNFTsModal'
+import { EmptyState } from './components/EmptyState'
+import { Button } from '@/components/ui/button'
+import { LoadingPage } from '@/components/ui/LoadingPage'
+import { RefreshCw, AlertCircle } from 'lucide-react'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { NFTContract } from '@/apis/alchemy'
 
 export const UserCollection = () => {
-  const [skeleton, setSkeleton] = useState({
-    address: '',
-    name: '',
-    loading: false,
-  })
-
-  const collections: any[] = []
   const { address: userAddress } = useAccount()
+  const {
+    collections,
+    loading,
+    error,
+    totalCount,
+    hasMore,
+    loadMore,
+    refetch,
+    isRefetching,
+    isFetchingNextPage,
+  } = useNFTCollections(userAddress)
 
-  return (
-    <section className="min-h-[85%]">
-      <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-3 xl:grid-cols-5">
-        <FormImport
-          className="col-span-2"
-          userAddress={userAddress}
-          whenSubmit={({ address, name }) =>
-            setSkeleton({ address, name, loading: true })
-          }
-          onSuccess={() => setSkeleton({ ...skeleton, loading: false })}
-        />
+  const [selectedCollection, setSelectedCollection] =
+    useState<NFTContract | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-        <article
-          hidden={skeleton.loading}
-          className={`${skeleton.loading ? 'block' : 'hidden'} relative h-52 w-full animate-pulse overflow-hidden rounded-lg bg-layer`}
-        >
-          <h3 className="absolute bottom-3 z-50 bg-gray-500/50 p-3 text-lg">
-            {skeleton.name} -
-            <span className="ml-3">{shortenAddress(skeleton.address)}</span>
-          </h3>
-          <DotLoader className="absolute right-1/2 top-1/2 z-10  translate-x-1/2" />
-        </article>
+  const handleCollectionClick = (collection: NFTContract) => {
+    setSelectedCollection(collection)
+    setIsModalOpen(true)
+  }
 
-        {collections?.map((nft) => {
-          return (
-            <Link
-              to={`${routes.myNFTs}/${nft.address}`}
-              key={nft.address}
-              className="relative h-52 w-full overflow-hidden rounded-lg bg-layer"
-            >
-              <h3 className="absolute bottom-3 z-50 bg-gray-500/50 p-3 text-lg">
-                {nft.name} -
-                <span className="ml-3">{shortenAddress(nft.address)}</span>
-              </h3>
-              <img
-                src="/gundams.jpg"
-                className="animate size-full hover:scale-110"
-              />
-            </Link>
-          )
-        })}
-      </div>
-    </section>
-  )
-}
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setSelectedCollection(null)
+  }
 
-type Props = React.FormHTMLAttributes<HTMLFormElement> & {
-  userAddress?: string
-  whenSubmit: (_data: { address: string; name: string }) => void
-  onSuccess: () => void
-}
+  if (!userAddress) {
+    return (
+      <section className="min-h-[85%]">
+        <EmptyState type="no-wallet" />
+      </section>
+    )
+  }
 
-const FormImport = ({
-  userAddress = '0x0',
-  whenSubmit,
-  onSuccess,
-  className,
-}: Props) => {
-  const [address, setAddress] = useState('0x')
-  const [error, setError] = useState('')
-  console.log(userAddress)
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-
-    if (isAddress(address)) {
-      const name = (await readContract({
-        address: address as Address,
-        abi: ERC721_ABI,
-        functionName: 'name',
-        args: [],
-      })) as string
-
-      if (!name) {
-        setError('This collection is not supported')
-      }
-
-      whenSubmit({ address, name })
-      // await importCollection({ address, name, userAddress, chainId })
-      onSuccess()
-      setAddress('0x')
-    } else {
-      setError('Hey! this is not an valid address')
-    }
+  if (loading && collections.length === 0) {
+    return <LoadingPage />
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className={cn('h-52 rounded-lg bg-layer p-3', className)}
-    >
-      <h3 className="text-lg">Import your collection</h3>
-      <Input
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
-        placeholder="Enter address"
-        className={`mt-5 ${error && 'border-red-500'}`}
+    <>
+      <section className="min-h-[85%] p-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-3xl font-bold text-text-primary">
+                My NFT Collections
+              </h1>
+              <p className="text-text-secondary mt-1">
+                {totalCount > 0
+                  ? `${totalCount} collections found`
+                  : 'No collections found'}
+              </p>
+            </div>
+            <Button
+              onClick={refetch}
+              disabled={isRefetching}
+              variant="outline"
+              size="sm"
+            >
+              <RefreshCw
+                className={`w-4 h-4 mr-2 ${isRefetching ? 'animate-spin' : ''}`}
+              />
+              Refresh
+            </Button>
+          </div>
+
+          {/* Error Alert */}
+          {error && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+
+          {/* Collections Grid */}
+          {collections.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {collections.map((collection, index) => (
+                <CollectionCard
+                  key={`${collection.network}-${collection.address}-${index}`}
+                  collection={collection}
+                  onClick={() => handleCollectionClick(collection)}
+                />
+              ))}
+            </div>
+          ) : !loading ? (
+            <EmptyState type="no-collections" />
+          ) : null}
+
+          {/* Load More Button */}
+          {hasMore && (
+            <div className="flex justify-center mt-8">
+              <Button
+                onClick={loadMore}
+                disabled={isFetchingNextPage}
+                variant="outline"
+              >
+                {isFetchingNextPage ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    Loading...
+                  </>
+                ) : (
+                  'Load More Collections'
+                )}
+              </Button>
+            </div>
+          )}
+
+          {/* Loading indicator for pagination */}
+          {isFetchingNextPage && collections.length > 0 && (
+            <div className="flex justify-center mt-6">
+              <div className="flex items-center space-x-2">
+                <RefreshCw className="w-4 h-4 animate-spin" />
+                <span className="text-sm text-gray-600">
+                  Loading more collections...
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Collection NFTs Modal */}
+      <CollectionNFTsModal
+        collection={selectedCollection}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
       />
-      <span className="mt-2 text-sm text-red-500">{error}</span>
-      <Button type="submit" title="Import" className="mt-5 w-full" />
-    </form>
+    </>
   )
 }

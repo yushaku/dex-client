@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { arbitrum, bsc, mainnet } from 'viem/chains'
 import { CollectionNft, NftDetail } from './type'
+import { useNFTCollections } from './useNFTCollections'
+import { useCollectionNFTs } from './useCollectionNFTs'
 
 const BASE_URL = 'https://stats-mainnet.magiceden.io'
 
@@ -68,3 +70,5 @@ export const useGetNfts = ({
     staleTime: Infinity,
   })
 }
+
+export { useNFTCollections, useCollectionNFTs }

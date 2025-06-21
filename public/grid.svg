@@ -116,8 +116,8 @@
 <feGaussianBlur stdDeviation="250" result="effect1_foregroundBlur_5830_236937"/>
 </filter>
 <radialGradient id="paint0_angular_5830_236937" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(451.105 503.847) rotate(167.988) scale(1148.68 349.099)">
-<stop offset="0.285549" stop-color="#8458B3"/>
-<stop offset="0.556778" stop-color="#F19E79"/>
+<stop offset="0.285549" stopColor="#8458B3"/>
+<stop offset="0.556778" stopColor="#F19E79"/>
 </radialGradient>
 <clipPath id="clip0_5830_236937">
 <rect width="1891.73" height="1891.69" fill="white" transform="matrix(0.964455 -0.264246 0.364912 0.931042 -362.213 148.125)"/>
